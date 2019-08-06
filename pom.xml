@@ -164,6 +164,12 @@
             <artifactId>hibernate-jpamodelgen</artifactId>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.1</version>
+		</dependency>
 
         <!-- Annotation processor that raising compilation errors whenever constraint 
             annotations are incorrectly used. -->
