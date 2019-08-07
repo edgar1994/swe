@@ -169,5 +169,10 @@ fabric.properties
 /.idea/misc.xml
 /.idea/vcs.xml
 
+/.idea/artifacts/swe_war.xml
+/.idea/artifacts/swe_war_exploded.xml
+/.idea/modules.xml
+/swe.iml
+
 # End of https://www.gitignore.io/api/maven,eclipse
-/kv.iml
+/.idea/resourceBundles.xml
