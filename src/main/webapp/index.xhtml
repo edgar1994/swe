@@ -4,12 +4,11 @@
 	  xmlns:ui="http://java.sun.com/jsf/facelets"
 	  xmlns:h="http://java.sun.com/jsf/html"
 	  xmlns:f="http://java.sun.com/jsf/core"
-	  xmlns:c="http://java.sun.com//jsp/jstl/core"
-	  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	  xmlns:p="http://primefaces.org/ui">
 <f:view locale="#{languageHandler.language}" />
 <h:head>
-	<title><ui:insert name="title">Test</ui:insert></title>
+	<title><ui:insert name="title">Mitarbiter Liste</ui:insert></title>
+	<link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
 	<h:form>
@@ -18,6 +17,37 @@
 			<h:commandButton value="Englisch" action='#{languageHandler.actionLanguage("en")}'/>
 		</div>
 	</h:form>
-	<p>#{msg.TESTMESSAGE}</p>
+	<div id="content">
+		<p:growl id="growl" showDetail="true" sticky="true"/>
+		<ui:insert name="content">
+			<h:dataTable id="mitarbeiterTabelle" var="mitarbeiter" value="#{mitarbeiterController.entityList}"
+						 rowClasses="odd,even" headerClass="header">
+				<h:column>
+					<f:facet name="header">#{msg['MITARBEITER.VORNAME']}</f:facet>
+					<h:outputText value="#{mitarbeiter.nachname}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">#{msg['MITARBEITER.NACHNAME']}</f:facet>
+					<h:outputText value="#{mitarbeiter.vorname}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">#{msg['MITARBEITER.ADRESSE']}</f:facet>
+					<h:outputText value="#{mitarbeiterController.formatedAdresse(mitarbeiter)}"/>
+				</h:column>
+				<h:column>
+					<div align="center">
+						<f:facet name="header">#{msg['MITARBEITER.LOESCHEN']}</f:facet>
+						<h:form>
+							<h:commandButton class="customerButton" action="#{mitarbeiterController.loeschen}"
+											 value="#{msg['MITARBEITER.LOESCHEN']}"/>
+						</h:form>
+					</div>
+				</h:column>
+			</h:dataTable>
+			<h:form>
+				<!--				<h:commandButton action="#{mitarbeiterController}" value="Neuer Kunde"/>-->
+			</h:form>
+		</ui:insert>
+	</div>
 </h:body>
 </html>

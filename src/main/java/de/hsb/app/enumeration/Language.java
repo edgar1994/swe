@@ -1,5 +1,8 @@
 package de.hsb.app.enumeration;
 
+/**
+ * Enumeration fuer Sprachen.
+ */
 public enum Language {
     DEUTSCH("de"),
     ENGLISCH("en");
