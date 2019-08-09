@@ -4,6 +4,7 @@ import de.hsb.app.model.Adresse;
 import de.hsb.app.model.Mitarbeiter;
 import de.hsb.app.repository.AbstractCrudRepository;
 import de.hsb.app.utils.AdressUtils;
+import de.hsb.app.utils.RedirectUtils;
 import org.primefaces.push.annotation.Singleton;
 
 import javax.annotation.Nonnull;
@@ -31,11 +32,21 @@ public class MitarbeiterController extends AbstractCrudRepository<Mitarbeiter> {
     /**
      * Loescht ein Element in der Liste.
      *
-     * @return
+     * @return  {@link RedirectUtils#MITARBEITERTABELLE_XHTML}.
      */
     public String loeschen(){
         this.delete();
-        return null;
+        return RedirectUtils.MITARBEITERTABELLE_XHTML;
+    }
+
+    /**
+     * Legt einen neuen Kunden an und leitet auf {@link RedirectUtils#MITARBEITERTABELLE_XHTML}.
+     *
+     * @return {@link RedirectUtils#MITARBEITERTABELLE_XHTML}
+     */
+    public String neu() {
+        this.setSelectedEntity(new Mitarbeiter());
+        return RedirectUtils.NEUERMITARBEITER_XHTML;
     }
 
     /**
@@ -46,6 +57,25 @@ public class MitarbeiterController extends AbstractCrudRepository<Mitarbeiter> {
      */
     public String formatedAdresse(Mitarbeiter mitarbeiter) {
         return AdressUtils.formatAdresse(mitarbeiter.getAdresse());
+    }
+
+    /**
+     * Abspeichern eines neuen Kunden. Nach Erfolg wird auf alleKunden redirected.
+     *
+     * @return alleKunden
+     */
+    public String speichern() {
+        this.save(this.getSelectedEntity());
+        return RedirectUtils.MITARBEITERTABELLE_XHTML;
+    }
+
+    /**
+     * Bricht den aktuellen Vorgang ab und leitet zurueck auf {@link RedirectUtils#MITARBEITERTABELLE_XHTML}.
+     *
+     * @return {@link RedirectUtils#MITARBEITERTABELLE_XHTML}
+     */
+    public String abbrechen() {
+        return RedirectUtils.MITARBEITERTABELLE_XHTML;
     }
 
     /**

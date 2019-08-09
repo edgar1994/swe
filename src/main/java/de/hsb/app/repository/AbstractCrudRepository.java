@@ -17,9 +17,9 @@ import java.util.List;
 @SessionScoped
 public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
 
-    protected DataModel<T> entityList;
+    private DataModel<T> entityList;
 
-    protected T selectedEntity;
+    private T selectedEntity;
 
     @PersistenceContext
     protected EntityManager em;
@@ -115,6 +115,31 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
     public DataModel<T> getEntityList() {
         this.entityList = new ListDataModel<>(this.findAll());
         return this.entityList;
+    }
+
+    /**
+     * Setter fuer {@link DataModel<T>}
+     *
+     * @param entityList {@link DataModel<T>}
+     */
+    public void setEntityList(DataModel<T> entityList) {
+        this.entityList = entityList;
+    }
+
+    /**
+     * Getter fuer {@link T}
+     */
+    public T getSelectedEntity() {
+        return selectedEntity;
+    }
+
+    /**
+     * Setter fuer {@link T}
+     *
+     * @param selectedEntity {@link T}
+     */
+    public void setSelectedEntity(T selectedEntity) {
+        this.selectedEntity = selectedEntity;
     }
 
 }

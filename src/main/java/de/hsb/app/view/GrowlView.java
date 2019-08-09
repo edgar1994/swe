@@ -9,11 +9,13 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class GrowlView {
 
+    private String summary;
+
     private String message;
 
     public void showAction() {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage("Successful", "Your message: " + message));
+        context.addMessage(null, new FacesMessage(summary, message));
     }
 
     public String getMessage() {
@@ -22,5 +24,31 @@ public class GrowlView {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    /**
+     * Setzt die Message fuer die {@link GrowlView}.
+     *
+     * @param message {@link String}
+     */
+    public void textMessage(String message) {
+        this.message = message;
+    }
+
+    /**
+     * Setzt die Summary fuer die {@link GrowlView}.
+     *
+     * @param summary {@link String}
+     */
+    public void textSummary(String summary) {
+        this.summary = summary;
     }
 }

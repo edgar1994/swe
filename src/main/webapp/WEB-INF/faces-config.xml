@@ -18,6 +18,40 @@
  Marker file indicating JSF 2.2 should be enabled in the application -->
 <faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+ <!-- Start Redirects -->
+ <!-- Von Index -->
+ <!-- Empty -->
+
+ <!-- Von mitarbeiterTabelle -->
+ <navigation-rule>
+  <display-name>mitarbeiterTabelle</display-name>
+  <from-view-id>/mitarbeiterTabelle.xhtml</from-view-id>
+  <navigation-case>
+   <from-action>#{mitarbeiterController.neu}</from-action>
+   <from-outcome>neuerMitarbeiter</from-outcome>
+   <to-view-id>/neuerMitarbeiter.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+
+ <!-- Von neuerMitarbeiter -->
+ <navigation-rule>
+  <display-name>neuerMitarbeiter</display-name>
+  <from-view-id>/neuerMitarbeiter.xhtml</from-view-id>
+  <navigation-case>
+   <from-action>#{mitarbeiterController.abbrechen}</from-action>
+   <from-outcome>mitarbeiterTabelle</from-outcome>
+   <to-view-id>/mitarbeiterTabelle.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-action>#{mitarbeiterController.speichern}</from-action>
+   <from-outcome>mitarbeiterTabelle</from-outcome>
+   <to-view-id>/mitarbeiterTabelle.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <!-- End Redirect -->
+
+ <!-- Mehrsprachigkeit -->
  <application>
   <locale-config>
    <default-locale>de</default-locale>

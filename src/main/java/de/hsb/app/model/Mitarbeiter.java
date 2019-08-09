@@ -34,6 +34,7 @@ public class Mitarbeiter {
     private Adresse adresse;
 
     public Mitarbeiter() {
+        adresse = new Adresse();
     }
 
     public Mitarbeiter(String vorname, String nachname, Adresse adresse) {
