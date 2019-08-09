@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui">
 <f:view locale="#{languageHandler.language}"/>
 <h:head>
-    <title><ui:insert name="title">#{msg['MITARBEITER.TITEL']}</ui:insert></title>
+    <title><ui:insert name="title">#{msg['USER.TITEL']}</ui:insert></title>
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
@@ -23,29 +23,29 @@
             <h:dataTable id="userTabelle" var="user" value="#{userController.entityList}"
                          rowClasses="odd,even" headerClass="header">
                 <h:column>
-                    <f:facet name="header">#{msg['MITARBEITER.NACHNAME']}</f:facet>
+                    <f:facet name="header">#{msg['USER.NACHNAME']}</f:facet>
                     <h:outputText value="#{user.nachname}"/>
                 </h:column>
                 <h:column>
-                    <f:facet name="header">#{msg['MITARBEITER.VORNAME']}</f:facet>
+                    <f:facet name="header">#{msg['USER.VORNAME']}</f:facet>
                     <h:outputText value="#{user.vorname}"/>
                 </h:column>
                 <h:column>
-                    <f:facet name="header">#{msg['MITARBEITER.ADRESSE']}</f:facet>
+                    <f:facet name="header">#{msg['USER.ADRESSE']}</f:facet>
                     <h:outputText value="#{userController.formatedAdresse(user)}"/>
                 </h:column>
                 <h:column>
                     <div align="center">
-                        <f:facet name="header">#{msg['MITARBEITER.LOESCHEN']}</f:facet>
+                        <f:facet name="header">#{msg['USER.LOESCHEN']}</f:facet>
                         <h:form>
                             <h:commandButton class="customerButton" action="#{userController.loeschen}"
-                                             value="#{msg['MITARBEITER.LOESCHEN']}"/>
+                                             value="#{msg['USER.LOESCHEN']}"/>
                         </h:form>
                     </div>
                 </h:column>
             </h:dataTable>
             <h:form>
-                <h:commandButton action="#{userController.neu}" value="#{msg['MITARBEITER.NEU']}"/>
+                <h:commandButton action="#{userController.neu}" value="#{msg['USER.NEU']}"/>
             </h:form>
         </ui:insert>
     </div>
