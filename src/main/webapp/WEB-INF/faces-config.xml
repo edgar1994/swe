@@ -23,30 +23,41 @@
  <!-- Von Index -->
  <!-- Empty -->
 
- <!-- Von mitarbeiterTabelle -->
+ <!-- Von userTabelle -->
  <navigation-rule>
-  <display-name>mitarbeiterTabelle</display-name>
-  <from-view-id>/mitarbeiterTabelle.xhtml</from-view-id>
+  <display-name>userTabelle</display-name>
+  <from-view-id>/userTabelle.xhtml</from-view-id>
   <navigation-case>
-   <from-action>#{mitarbeiterController.neu}</from-action>
-   <from-outcome>neuerMitarbeiter</from-outcome>
-   <to-view-id>/neuerMitarbeiter.xhtml</to-view-id>
+   <from-action>#{userController.neu}</from-action>
+   <from-outcome>neuerUser</from-outcome>
+   <to-view-id>/neuerUser.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
 
- <!-- Von neuerMitarbeiter -->
+ <!-- Von neuerUser -->
  <navigation-rule>
-  <display-name>neuerMitarbeiter</display-name>
-  <from-view-id>/neuerMitarbeiter.xhtml</from-view-id>
+  <display-name>neuerUser</display-name>
+  <from-view-id>/neuerUser.xhtml</from-view-id>
   <navigation-case>
-   <from-action>#{mitarbeiterController.abbrechen}</from-action>
-   <from-outcome>mitarbeiterTabelle</from-outcome>
-   <to-view-id>/mitarbeiterTabelle.xhtml</to-view-id>
+   <from-action>#{userController.abbrechen}</from-action>
+   <from-outcome>userTabelle</from-outcome>
+   <to-view-id>/userTabelle.xhtml</to-view-id>
   </navigation-case>
   <navigation-case>
-   <from-action>#{mitarbeiterController.speichern}</from-action>
-   <from-outcome>mitarbeiterTabelle</from-outcome>
-   <to-view-id>/mitarbeiterTabelle.xhtml</to-view-id>
+   <from-action>#{userController.speichern}</from-action>
+   <from-outcome>userTabelle</from-outcome>
+   <to-view-id>/userTabelle.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+
+ <!-- Von login -->
+ <navigation-rule>
+  <display-name>login</display-name>
+  <from-view-id>/login.xhtml</from-view-id>
+  <navigation-case>
+   <from-action>#{loginController.login}</from-action>
+   <from-outcome>/index.xhtml?faces-redirect=true</from-outcome>
+   <to-view-id>/index.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
  <!-- End Redirect -->

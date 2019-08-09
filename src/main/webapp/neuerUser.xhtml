@@ -5,7 +5,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+>
 <head>
     <title>#{msg['NEUERMITARBEITER.TITEL']}</title>
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
@@ -20,31 +22,32 @@
         <ui:insert name="content">
             <h:form>
                 <p:growl id="growl" showDetail="true" sticky="true"/>
-                <h:panelGrid var="mitarbeiter" value="#{mitarbeiterController.selectedEntity}" columns="2"
+                <h:panelGrid var="user" value="#{userController.selectedEntity}" columns="2"
                              headerClass="header"
                              footerClass="footer">
                     <p:outputLabel value="#{msg['NEUERMITARBEITER.VORNAME']}:"/>
-                    <p:inputText value="#{mitarbeiterController.selectedEntity.vorname}"/>
+                    <p:inputText value="#{userController.selectedEntity.vorname}"/>
                     <p:outputLabel value="#{msg['NEUERMITARBEITER.NACHNAME']}:"/>
-                    <p:inputText value="#{mitarbeiterController.selectedEntity.nachname}"/>
+                    <p:inputText value="#{userController.selectedEntity.nachname}"/>
                     <p:outputLabel value="#{msg['NEUERMITARBEITER.ADRESSE.STRASSE']}:"/>
-                    <p:inputText value="#{mitarbeiterController.selectedEntity.adresse.strasse}"/>
+                    <p:inputText value="#{userController.selectedEntity.adresse.strasse}"/>
                     <p:outputLabel value="#{msg['NEUERMITARBEITER.ADRESSE.PLZ']}:"/>
-                    <p:inputText value="#{mitarbeiterController.selectedEntity.adresse.plz}"/>
+                    <p:inputText value="#{userController.selectedEntity.adresse.plz}"/>
                     <p:outputLabel value="#{msg['NEUERMITARBEITER.ADRESSE.STADT']}:"/>
-                    <p:inputText value="#{mitarbeiterController.selectedEntity.adresse.stadt}"/>
+                    <p:inputText value="#{userController.selectedEntity.adresse.stadt}"/>
 
                     #{growlView.textSummary(msg['NEUERMITARBEITER.SUMMARY'])}
                     #{growlView.textMessage(msg['NEUERMITARBEITER.MESSAGE'])}
 
                 </h:panelGrid>
-                <h:commandButton action="#{mitarbeiterController.speichern}" value="#{msg['BUTTON.SPEICHERN']}"
+                <h:commandButton action="#{userController.speichern}" value="#{msg['BUTTON.SPEICHERN']}"
                                  actionListener="#{growlView.showAction}" update=":growl"/>
-                <h:commandButton action="#{mitarbeiterController.abbrechen}" value="#{msg['BUTTON.ABBRECHEN']}"
+                <h:commandButton action="#{userController.abbrechen}" value="#{msg['BUTTON.ABBRECHEN']}"
                                  immediate="true"/>
             </h:form>
         </ui:insert>
     </div>
 </h:form>
 </body>
+<f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 </html>

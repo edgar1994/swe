@@ -20,34 +20,35 @@
     <div id="content">
         <p:growl id="growl" showDetail="true" sticky="true"/>
         <ui:insert name="content">
-            <h:dataTable id="mitarbeiterTabelle" var="mitarbeiter" value="#{mitarbeiterController.entityList}"
+            <h:dataTable id="userTabelle" var="user" value="#{userController.entityList}"
                          rowClasses="odd,even" headerClass="header">
                 <h:column>
                     <f:facet name="header">#{msg['MITARBEITER.NACHNAME']}</f:facet>
-                    <h:outputText value="#{mitarbeiter.nachname}"/>
+                    <h:outputText value="#{user.nachname}"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">#{msg['MITARBEITER.VORNAME']}</f:facet>
-                    <h:outputText value="#{mitarbeiter.vorname}"/>
+                    <h:outputText value="#{user.vorname}"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">#{msg['MITARBEITER.ADRESSE']}</f:facet>
-                    <h:outputText value="#{mitarbeiterController.formatedAdresse(mitarbeiter)}"/>
+                    <h:outputText value="#{userController.formatedAdresse(user)}"/>
                 </h:column>
                 <h:column>
                     <div align="center">
                         <f:facet name="header">#{msg['MITARBEITER.LOESCHEN']}</f:facet>
                         <h:form>
-                            <h:commandButton class="customerButton" action="#{mitarbeiterController.loeschen}"
+                            <h:commandButton class="customerButton" action="#{userController.loeschen}"
                                              value="#{msg['MITARBEITER.LOESCHEN']}"/>
                         </h:form>
                     </div>
                 </h:column>
             </h:dataTable>
             <h:form>
-                <h:commandButton action="#{mitarbeiterController.neu}" value="#{msg['MITARBEITER.NEU']}"/>
+                <h:commandButton action="#{userController.neu}" value="#{msg['MITARBEITER.NEU']}"/>
             </h:form>
         </ui:insert>
     </div>
 </h:body>
+<f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 </html>

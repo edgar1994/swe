@@ -17,9 +17,9 @@
 			<h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
 		</div>
 		<div>
-			<a href="mitarbeiterTabelle.xhtml">#{msg['MITARBEITER.BEZEICHNUNG']}</a>
+			<a href="userTabelle.xhtml">#{msg['MITARBEITER.BEZEICHNUNG']}</a>
 		</div>
 	</h:form>
-
 </h:body>
+<f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 </html>

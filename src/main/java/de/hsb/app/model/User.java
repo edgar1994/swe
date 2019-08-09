@@ -1,6 +1,6 @@
 package de.hsb.app.model;
 
-import org.springframework.stereotype.Component;
+import de.hsb.app.enumeration.Rolle;
 
 import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
@@ -8,13 +8,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * {@link Mitarbeiter}-Model
+ * {@link User}-Model
  */
-@NamedQuery(name = "SelectMitarbeiter", query = "Select a from Mitarbeiter a")
+@NamedQuery(name = "SelectUser", query = "Select u from User u")
 @Entity
-@Component
-@ManagedBean(name = "mitarbeiter")
-public class Mitarbeiter {
+@ManagedBean(name = "user")
+public class User {
 
     @Id
     @GeneratedValue
@@ -33,14 +32,26 @@ public class Mitarbeiter {
     @NotNull
     private Adresse adresse;
 
-    public Mitarbeiter() {
+    @NotNull
+    private String username;
+
+    @NotNull
+    private String passwort;
+
+    @NotNull
+    private Rolle rolle;
+
+    public User() {
         adresse = new Adresse();
     }
 
-    public Mitarbeiter(String vorname, String nachname, Adresse adresse) {
+    public User(String vorname, String nachname, Adresse adresse, String username, String passwort, Rolle rolle) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.adresse = adresse;
+        this.username = username;
+        this.passwort = passwort;
+        this.rolle = rolle;
     }
 
     public int getId() {
@@ -74,4 +85,29 @@ public class Mitarbeiter {
     public void setAdresse(Adresse adresse) {
         this.adresse = adresse;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPasswort() {
+        return passwort;
+    }
+
+    public void setPasswort(String passwort) {
+        this.passwort = passwort;
+    }
+
+    public Rolle getRolle() {
+        return rolle;
+    }
+
+    public void setRolle(Rolle rolle) {
+        this.rolle = rolle;
+    }
+
 }
