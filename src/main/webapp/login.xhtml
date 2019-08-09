@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
+<f:view locale="#{languageHandler.language}"/>
+<h:head>
+    <title><ui:insert name="title">Login</ui:insert></title>
+    <link rel="stylesheet" href="resources/index.css" type="text/css"/>
+</h:head>
+<body>
+<h:form>
+    <div align="right">
+        <h:commandButton value="Deutsch" action='#{languageHandler.actionLanguage("de")}'/>
+        <h:commandButton value="Englisch" action='#{languageHandler.actionLanguage("en")}'/>
+    </div>
+    <p:panelGrid id="grid" columns="2">
+        <f:facet name="header">Anmeldung</f:facet>
+
+        <p:outputLabel value="Username:" for="username"/>
+        <h:panelGroup>
+            <p:inputText id="username" required="true"
+                         value="#{loginController.username}"/>
+            <p:message for="username" styleClass="message"/>
+        </h:panelGroup>
+
+        <p:outputLabel value="Passwort:" for="passwort"/>
+        <h:panelGroup>
+            <p:password id="passwort" required="true"
+                        value="#{loginController.passwort}"/>
+            <p:message for="passwort" styleClass="message"/>
+        </h:panelGroup>
+
+        <h:panelGroup/>
+        <p:commandButton action="#{loginController.login}" value="Login"/>
+    </p:panelGrid>
+</h:form>
+</body>
+</html>

@@ -45,7 +45,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
     @Override
     @Nonnull
     public List<T> findAll() {
-        return em.createQuery("SELECT a FROM ".concat(this.getClassName()).concat(" a "),
+        return em.createQuery("SELECT u FROM ".concat(this.getClassName()).concat(" u "),
                 this.getRepositoryClass()).getResultList();
     }
 
