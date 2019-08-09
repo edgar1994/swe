@@ -7,17 +7,17 @@
 >
 <f:view locale="#{languageHandler.language}" />
 <h:head>
-	<title><ui:insert name="title">Mitarbiter Liste</ui:insert></title>
+	<title><ui:insert name="title">#{msg['INDEX.TITEL']}</ui:insert></title>
 	<link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
 	<h:form>
 		<div align="right">
-			<h:commandButton value="Deutsch" action='#{languageHandler.actionLanguage("de")}'/>
-			<h:commandButton value="Englisch" action='#{languageHandler.actionLanguage("en")}'/>
+			<h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
+			<h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
 		</div>
 		<div>
-			<a href="mitarbeiterTabelle.xhtml">Mitarbeiter</a>
+			<a href="mitarbeiterTabelle.xhtml">#{msg['MITARBEITER.BEZEICHNUNG']}</a>
 		</div>
 	</h:form>
 
