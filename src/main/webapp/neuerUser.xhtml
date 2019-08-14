@@ -15,8 +15,10 @@
 <body>
 <h:form>
     <div align="right">
-        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}' immediate="true"/>
-        <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}' immediate="true"/>
+        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'
+                         immediate="true"/>
+        <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'
+                         immediate="true"/>
         <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
     </div>
     <div id="content">
@@ -36,9 +38,6 @@
                     <p:inputText value="#{userController.selectedEntity.adresse.plz}"/>
                     <p:outputLabel value="#{msg['NEUERUSER.ADRESSE.STADT']}:"/>
                     <p:inputText value="#{userController.selectedEntity.adresse.stadt}"/>
-
-                    #{growlView.textSummary(msg['NEUERUSER.SUMMARY'])}
-                    #{growlView.textMessage(msg['NEUERUSER.MESSAGE'])}
 
                 </h:panelGrid>
                 <h:commandButton
