@@ -100,6 +100,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Immutable List -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>22.0</version>
+        </dependency>
+
         <!-- Import the Common Annotations API (JSR-250), we use provided scope 
             as the API is included in JBoss WildFly -->
         <dependency>

@@ -2,6 +2,8 @@ package de.hsb.app.controller;
 
 import de.hsb.app.enumeration.Language;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -25,7 +27,7 @@ public class LanguageController {
     /**
      * Setter für language
      *
-     * @param language
+     * @param language {@link String}
      */
     public void setLanguage(String language) {
         this.language = language;
@@ -37,7 +39,8 @@ public class LanguageController {
      * @param language {@link Language}
      * @return null
      */
-    public String actionLanguage(final String language) {
+    @CheckForNull
+    public String actionLanguage(@Nonnull final String language) {
         FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale(language));
         this.language = language;
         return null;

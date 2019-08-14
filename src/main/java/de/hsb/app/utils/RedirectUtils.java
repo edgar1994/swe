@@ -1,5 +1,9 @@
 package de.hsb.app.utils;
 
+/**
+ * Wird normalerweise so nicht gemacht, aber aus Gruenden der wiederholten Nutzung wurden
+ * die Redirects hier aufgefuehrt.
+ */
 public class RedirectUtils {
 
     public static String USERTABELLE_XHTML = "userTabelle";

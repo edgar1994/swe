@@ -32,9 +32,11 @@ public class User {
     @NotNull
     private Adresse adresse;
 
+    @Size(min = 5, max = 15)
     @NotNull
     private String username;
 
+    @Size(min = 5)
     @NotNull
     private String passwort;
 

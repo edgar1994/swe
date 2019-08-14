@@ -1,5 +1,8 @@
 package de.hsb.app.utils;
 
+/**
+ * Utils Klasse um {@link String}n zu bearbeiten.
+ */
 public class StringUtils {
 
     /**

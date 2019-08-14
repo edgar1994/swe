@@ -6,6 +6,7 @@ import de.hsb.app.model.User;
 import de.hsb.app.repository.AbstractCrudRepository;
 import de.hsb.app.utils.RedirectUtils;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -51,6 +52,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      *
      * @return {@link RedirectUtils}
      */
+    @CheckForNull
     public String login() {
         Query query = em.createQuery("select u from User u " +
                 "where u.username = :username and u.passwort = :passwort ");
@@ -70,7 +72,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      *
      * @param cse {@link ComponentSystemEvent}
      */
-    public void checkLoggedIn(ComponentSystemEvent cse) {
+    public void checkLoggedIn(@Nonnull final ComponentSystemEvent cse) {
         FacesContext context = FacesContext.getCurrentInstance();
         if (user == null) {
             context.getApplication().getNavigationHandler().
@@ -84,6 +86,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      *
      * @return {@link RedirectUtils#LOGIN_XHTML}
      */
+    @Nonnull
     public String logout() {
         FacesContext.getCurrentInstance()
                 .getExternalContext().invalidateSession();
@@ -95,6 +98,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      *
      * @return {@link RedirectUtils#USERTABELLE_XHTML}
      */
+    @Nonnull
     public String speichern() {
         this.save(this.getSelectedEntity());
         return RedirectUtils.USERTABELLE_XHTML;
@@ -103,7 +107,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     /**
      * Prueft ob der angemeldete User admin ist.
      */
-    public boolean adminRole(Rolle rolle) {
+    public boolean adminRole(@Nonnull final Rolle rolle) {
         switch (rolle) {
             case USER:
             case KUNDE:
@@ -121,9 +125,20 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      *
      * @return {@link RedirectUtils#REGISTRIEREN_XHTML}
      */
+    @Nonnull
     public String registrieren() {
         setSelectedEntity(new User());
         return RedirectUtils.REGISTRIEREN_XHTML;
+    }
+
+    /**
+     * Bricht den aktuellen Vorgang ab und leitet zurueck auf {@link RedirectUtils#LOGIN_XHTML}.
+     *
+     * @return {@link RedirectUtils#LOGIN_XHTML}
+     */
+    @Nonnull
+    public String abbrechen() {
+        return RedirectUtils.LOGIN_XHTML;
     }
 
     /**

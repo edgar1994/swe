@@ -17,7 +17,7 @@ public interface CrudRepository<T> {
      * @return {@link Optional<T>}
      */
     @CheckForNull
-    T findById(final int id);
+    T findById(int id);
 
     /**
      * Finde alle {@link T}.
@@ -33,7 +33,7 @@ public interface CrudRepository<T> {
      * @param entity {@link T}.
      * @return boolean
      */
-    boolean save(@Nonnull final T entity);
+    boolean save(@Nonnull T entity);
 
     /**
      * Löscht {@link T} aus der Datenbank.

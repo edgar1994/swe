@@ -12,37 +12,43 @@
 </h:head>
 <body>
 <h:form>
+    <p:growl id="growl" showDetail="true" sticky="true"/>
     <div align="right">
-        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}' immediate="true"/>
-        <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}' immediate="true"/>
+        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'
+                         immediate="true"/>
+        <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'
+                         immediate="true"/>
         <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
     </div>
-    <p:panelGrid id="grid" columns="2">
-        <f:facet name="header">#{msg['LOGIN.ANMELDUNG']}</f:facet>
+    <div>
+        <p:panelGrid id="grid" columns="2">
+            <f:facet name="header">#{msg['LOGIN.ANMELDUNG']}</f:facet>
 
-        <p:outputLabel value="#{msg['LOGIN.USERNAME']}:" for="username"/>
-        <h:panelGroup>
-            <p:inputText id="username" required="true"
-                         value="#{loginController.username}"/>
-            <p:message for="username" styleClass="message"/>
-        </h:panelGroup>
+            <p:outputLabel value="#{msg['LOGIN.USERNAME']}:" for="username"/>
+            <h:panelGroup>
+                <p:inputText id="username" required="true"
+                             value="#{loginController.username}"/>
+                <p:message for="username" styleClass="message"/>
+            </h:panelGroup>
 
-        <p:outputLabel value="Passwort:" for="passwort"/>
-        <h:panelGroup>
-            <p:password id="passwort" required="true"
-                        value="#{loginController.passwort}"/>
-            <p:message for="passwort" styleClass="message"/>
-        </h:panelGroup>
+            <p:outputLabel value="#{msg['LOGIN.PASSWORT']}" for="passwort"/>
+            <h:panelGroup>
+                <p:password id="passwort" required="true"
+                            value="#{loginController.passwort}"/>
+                <p:message for="passwort" styleClass="message"/>
+            </h:panelGroup>
 
-        <h:panelGroup/>
-        <h:panelGroup>
-            <h:commandLink value="#{msg['LOGIN.REGISTRIEREN']}" action="#{loginController.registrieren}"
-                           immediate="true"/>
-        </h:panelGroup>
+            <h:panelGroup/>
+            <h:panelGroup>
+                <h:commandLink value="#{msg['LOGIN.REGISTRIEREN']}" action="#{loginController.registrieren}"
+                               immediate="true"/>
+            </h:panelGroup>
 
-        <h:panelGroup/>
-        <p:commandButton action="${loginController.login}" value="#{msg['LOGIN.LOGIN']}"/>
-    </p:panelGrid>
+            <h:panelGroup/>
+            <p:commandButton action="${loginController.login}" value="#{msg['LOGIN.LOGIN']}"/>
+        </p:panelGrid>
+
+    </div>
 </h:form>
 </body>
 </html>

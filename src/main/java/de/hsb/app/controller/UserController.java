@@ -21,9 +21,10 @@ public class UserController extends AbstractCrudRepository<User> {
     /**
      * Loescht ein Element in der Liste.
      *
-     * @return  {@link RedirectUtils#USERTABELLE_XHTML}.
+     * @return {@link RedirectUtils#USERTABELLE_XHTML}.
      */
-    public String loeschen(){
+    @Nonnull
+    public String loeschen() {
         this.delete();
         return RedirectUtils.USERTABELLE_XHTML;
     }
@@ -33,6 +34,7 @@ public class UserController extends AbstractCrudRepository<User> {
      *
      * @return {@link RedirectUtils#USERTABELLE_XHTML}
      */
+    @Nonnull
     public String neu() {
         this.setSelectedEntity(new User());
         return RedirectUtils.NEUERUSER_XHTML;
@@ -44,6 +46,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param user {@link User}
      * @return Straße Hausnummer, Stadt, Postleitzahl
      */
+    @Nonnull
     public String formatedAdresse(User user) {
         return AdressUtils.formatAdresse(user.getAdresse());
     }
@@ -53,6 +56,7 @@ public class UserController extends AbstractCrudRepository<User> {
      *
      * @return {@link RedirectUtils#USERTABELLE_XHTML}
      */
+    @Nonnull
     public String speichern() {
         this.save(this.getSelectedEntity());
         return RedirectUtils.USERTABELLE_XHTML;
@@ -63,6 +67,7 @@ public class UserController extends AbstractCrudRepository<User> {
      *
      * @return {@link RedirectUtils#USERTABELLE_XHTML}
      */
+    @Nonnull
     public String abbrechen() {
         return RedirectUtils.USERTABELLE_XHTML;
     }
@@ -88,8 +93,8 @@ public class UserController extends AbstractCrudRepository<User> {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
+    @Nonnull
     protected String getSelect() {
         return "SelectUser";
     }
