@@ -45,7 +45,9 @@
                 </h:column>
             </h:dataTable>
             <h:form>
-                <h:commandButton action="#{userController.neu}" value="#{msg['USER.NEU']}"/>
+                <h:commandButton rendered="#{loginController.adminRole(loginController.user.rolle)}"
+                                 action="#{userController.neu}"
+                                 value="#{msg['USER.NEU']}"/>
             </h:form>
         </ui:insert>
     </div>

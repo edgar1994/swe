@@ -4,6 +4,7 @@ public enum Rolle {
 
     ADMIN("ROLLE.ADMIN"),
     MITARBEITER("ROLLE.MITARBEITER"),
+    USER("ROLLE.USER"),
     KUNDE("ROLLE.KUNDE");
 
     private String rolle;

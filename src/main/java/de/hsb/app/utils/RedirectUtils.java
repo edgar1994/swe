@@ -9,4 +9,6 @@ public class RedirectUtils {
     public static String LOGIN_XHTML = "/login.xhtml?faces-redirect=true";
 
     public static String NEUERUSER_XHTML = "neuerUser";
+
+    public static String REGISTRIEREN_XHTML = "registrieren.xhtml";
 }

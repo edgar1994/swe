@@ -42,7 +42,8 @@ public class User {
     private Rolle rolle;
 
     public User() {
-        adresse = new Adresse();
+        this.rolle = Rolle.USER;
+        this.adresse = new Adresse();
     }
 
     public User(String vorname, String nachname, Adresse adresse, String username, String passwort, Rolle rolle) {

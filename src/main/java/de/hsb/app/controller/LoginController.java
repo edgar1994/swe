@@ -34,7 +34,8 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     /**
      * Erstellt daten beim Initialisieren.
      */
-//    @PostConstruct
+    // Fixme deaktiviert bis Postconstruct benötigt wird. (Feuert zwei mal)
+    // @PostConstruct
     public void init() {
         Adresse adresse = new Adresse("Strasse 21", "99999", "Stadt");
         this.save(new User("Aron", "O'Connor", adresse, "test",
@@ -48,7 +49,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     /**
      * Logged einen {@link User} ein.
      *
-     * @return
+     * @return {@link RedirectUtils}
      */
     public String login() {
         Query query = em.createQuery("select u from User u " +
@@ -88,6 +89,42 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
         FacesContext.getCurrentInstance()
                 .getExternalContext().invalidateSession();
         return RedirectUtils.LOGIN_XHTML;
+    }
+
+    /**
+     * Abspeichern eines neuen Kunden. Nach Erfolg wird auf {@link RedirectUtils#USERTABELLE_XHTML} redirected.
+     *
+     * @return {@link RedirectUtils#USERTABELLE_XHTML}
+     */
+    public String speichern() {
+        this.save(this.getSelectedEntity());
+        return RedirectUtils.USERTABELLE_XHTML;
+    }
+
+    /**
+     * Prueft ob der angemeldete User admin ist.
+     */
+    public boolean adminRole(Rolle rolle) {
+        switch (rolle) {
+            case USER:
+            case KUNDE:
+            case MITARBEITER:
+                return false;
+            case ADMIN:
+                return true;
+            default:
+                throw new IllegalArgumentException("Rolle Exestiert nicht.");
+        }
+    }
+
+    /**
+     * Legt einen Neuen {@link User} an und redirected auf {@link RedirectUtils#REGISTRIEREN_XHTML}
+     *
+     * @return {@link RedirectUtils#REGISTRIEREN_XHTML}
+     */
+    public String registrieren() {
+        setSelectedEntity(new User());
+        return RedirectUtils.REGISTRIEREN_XHTML;
     }
 
     /**

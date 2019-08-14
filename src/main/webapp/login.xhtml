@@ -7,19 +7,20 @@
 >
 <f:view locale="#{languageHandler.language}"/>
 <h:head>
-    <title><ui:insert name="title">Login</ui:insert></title>
+    <title><ui:insert name="title">#{msg['LOGIN.TITEL']}</ui:insert></title>
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <body>
 <h:form>
     <div align="right">
-        <h:commandButton value="Deutsch" action='#{languageHandler.actionLanguage("de")}'/>
-        <h:commandButton value="Englisch" action='#{languageHandler.actionLanguage("en")}'/>
+        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}' immediate="true"/>
+        <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}' immediate="true"/>
+        <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
     </div>
     <p:panelGrid id="grid" columns="2">
-        <f:facet name="header">Anmeldung</f:facet>
+        <f:facet name="header">#{msg['LOGIN.ANMELDUNG']}</f:facet>
 
-        <p:outputLabel value="Username:" for="username"/>
+        <p:outputLabel value="#{msg['LOGIN.USERNAME']}:" for="username"/>
         <h:panelGroup>
             <p:inputText id="username" required="true"
                          value="#{loginController.username}"/>
@@ -34,7 +35,13 @@
         </h:panelGroup>
 
         <h:panelGroup/>
-        <p:commandButton action="#{loginController.login}" value="Login"/>
+        <h:panelGroup>
+            <h:commandLink value="#{msg['LOGIN.REGISTRIEREN']}" action="#{loginController.registrieren}"
+                           immediate="true"/>
+        </h:panelGroup>
+
+        <h:panelGroup/>
+        <p:commandButton action="${loginController.login}" value="#{msg['LOGIN.LOGIN']}"/>
     </p:panelGrid>
 </h:form>
 </body>

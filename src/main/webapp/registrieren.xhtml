@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
+<h:head>
+    <title>#{msg['REGISTRIEREN.TITEL']}</title>
+    <link rel="stylesheet" href="resources/index.css" type="text/css"/>
+</h:head>
+<body>
+<h:form>
+    <div align="right">
+        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='${languageHandler.actionLanguage("de")}' immediate="true"/>
+        <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='${languageHandler.actionLanguage("en")}' immediate="true"/>
+        <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}' immediate="true"/>
+    </div>
+    <div id="content">
+        <ui:insert name="content">
+            <h:form>
+                <p:growl id="growl" showDetail="true" sticky="true"/>
+                <h:panelGrid var="user" value="#{userController.selectedEntity}" columns="2"
+                             headerClass="header"
+                             footerClass="footer">
+                    <p:outputLabel value="#{msg['REGISTRIEREN.USERNAME']}:"/>
+                    <p:inputText value="#{loginController.selectedEntity.username}" required="true" requiredMessage="#{msg['REGISTRIREN.REQUIRED.MESSAGE']}">
+                        <f:validator validatorId="usernameValidator"/>
+                    </p:inputText>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.PASSWORT']}:"/>
+                    <p:inputText value="#{loginController.selectedEntity.passwort}"/>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.VORNAME']}:"/>
+                    <p:inputText value="#{loginController.selectedEntity.vorname}"/>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.NACHNAME']}:"/>
+                    <p:inputText value="#{loginController.selectedEntity.nachname}"/>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.STRASSE']}:"/>
+                    <p:inputText value="#{loginController.selectedEntity.adresse.strasse}"/>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.PLZ']}:"/>
+                    <p:inputText value="#{loginController.selectedEntity.adresse.plz}"/>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.STADT']}:"/>
+                    <p:inputText value="#{loginController.selectedEntity.adresse.stadt}"/>
+
+                </h:panelGrid>
+                <h:commandButton
+                        action="#{loginController.speichern()}"
+                        value="#{msg['BUTTON.SPEICHERN']}"
+                        actionListener="#{growlView.showAction(msg['MESSAGE.SUMMARY.SUCCSESS'], msg['NEUERUSER.MESSAGE'])}"
+                        update=":growl"/>
+                <h:commandButton action="#{userController.abbrechen}" value="#{msg['BUTTON.ABBRECHEN']}"
+                                 immediate="true"/>
+            </h:form>
+        </ui:insert>
+    </div>
+</h:form>
+</body>
+</html>

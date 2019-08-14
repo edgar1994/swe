@@ -49,9 +49,9 @@ public class UserController extends AbstractCrudRepository<User> {
     }
 
     /**
-     * Abspeichern eines neuen Kunden. Nach Erfolg wird auf alleKunden redirected.
+     * Abspeichern eines neuen Kunden. Nach Erfolg wird auf {@link RedirectUtils#USERTABELLE_XHTML} redirected.
      *
-     * @return alleKunden
+     * @return {@link RedirectUtils#USERTABELLE_XHTML}
      */
     public String speichern() {
         this.save(this.getSelectedEntity());

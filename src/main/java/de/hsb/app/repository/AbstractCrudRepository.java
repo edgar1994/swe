@@ -17,9 +17,9 @@ import java.util.List;
 @SessionScoped
 public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
 
-    private DataModel<T> entityList;
+    protected DataModel<T> entityList;
 
-    private T selectedEntity;
+    protected T selectedEntity;
 
     @PersistenceContext
     protected EntityManager em;

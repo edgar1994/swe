@@ -13,8 +13,9 @@
 <h:body>
 	<h:form>
 		<div align="right">
-			<h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
-			<h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
+			<h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}' immediate="true"/>
+			<h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}' immediate="true"/>
+			<h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
 		</div>
 		<div>
             <a href="userTabelle.xhtml">#{msg['USER.BEZEICHNUNG']}</a>

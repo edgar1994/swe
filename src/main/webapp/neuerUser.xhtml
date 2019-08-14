@@ -15,8 +15,9 @@
 <body>
 <h:form>
     <div align="right">
-        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
-        <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
+        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}' immediate="true"/>
+        <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}' immediate="true"/>
+        <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
     </div>
     <div id="content">
         <ui:insert name="content">
@@ -40,8 +41,11 @@
                     #{growlView.textMessage(msg['NEUERUSER.MESSAGE'])}
 
                 </h:panelGrid>
-                <h:commandButton action="#{userController.speichern}" value="#{msg['BUTTON.SPEICHERN']}"
-                                 actionListener="#{growlView.showAction}" update=":growl"/>
+                <h:commandButton
+                        action="#{userController.speichern()}"
+                        value="#{msg['BUTTON.SPEICHERN']}"
+                        actionListener="#{growlView.showAction(msg['MESSAGE.SUMMARY.SUCCSESS'], msg['NEUERUSER.MESSAGE'])}"
+                        update=":growl"/>
                 <h:commandButton action="#{userController.abbrechen}" value="#{msg['BUTTON.ABBRECHEN']}"
                                  immediate="true"/>
             </h:form>
