@@ -56,7 +56,6 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                 "where u.username = :username and u.passwort = :passwort ");
         query.setParameter("username", username);
         query.setParameter("passwort", passwort);
-        System.out.println(username + " " + passwort);
         List<User> userList = query.getResultList();
         if (userList.size() == 1) {
             user = userList.get(0);
