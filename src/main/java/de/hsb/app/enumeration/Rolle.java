@@ -7,14 +7,14 @@ public enum Rolle {
     USER("ROLLE.USER"),
     KUNDE("ROLLE.KUNDE");
 
-    private String rolle;
+    private final String ROLLE;
 
-    Rolle(String rolle) {
-        this.rolle = rolle;
+    Rolle(final String rolle) {
+        this.ROLLE = rolle;
     }
 
-    public String getLanguage() {
-        return rolle;
+    public String getRolle() {
+        return this.ROLLE;
     }
 
 

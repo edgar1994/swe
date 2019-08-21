@@ -23,4 +23,5 @@
 	</h:form>
 </h:body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
+<f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
 </html>

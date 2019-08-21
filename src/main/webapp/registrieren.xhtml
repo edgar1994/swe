@@ -24,28 +24,28 @@
                 <h:panelGrid var="user" value="#{userController.selectedEntity}" columns="2"
                              headerClass="header"
                              footerClass="footer">
-                    <p:outputLabel value="#{msg['REGISTRIEREN.USERNAME']}:"/>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.USERNAME']}"/>
                     <p:inputText value="#{loginController.selectedEntity.username}" required="true" requiredMessage="#{msg['REGISTRIREN.REQUIRED.MESSAGE']}">
                         <f:validator validatorId="usernameValidator"/>
                     </p:inputText>
-                    <p:outputLabel value="#{msg['REGISTRIEREN.PASSWORT']}:"/>
-                    <p:inputText value="#{loginController.selectedEntity.passwort}"/>
-                    <p:outputLabel value="#{msg['REGISTRIEREN.VORNAME']}:"/>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.PASSWORT']}"/>
+                    <p:password value="#{loginController.selectedEntity.passwort}"/>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.VORNAME']}"/>
                     <p:inputText value="#{loginController.selectedEntity.vorname}"/>
-                    <p:outputLabel value="#{msg['REGISTRIEREN.NACHNAME']}:"/>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.NACHNAME']}"/>
                     <p:inputText value="#{loginController.selectedEntity.nachname}"/>
-                    <p:outputLabel value="#{msg['REGISTRIEREN.STRASSE']}:"/>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.STRASSE']}"/>
                     <p:inputText value="#{loginController.selectedEntity.adresse.strasse}"/>
-                    <p:outputLabel value="#{msg['REGISTRIEREN.PLZ']}:"/>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.PLZ']}"/>
                     <p:inputText value="#{loginController.selectedEntity.adresse.plz}"/>
-                    <p:outputLabel value="#{msg['REGISTRIEREN.STADT']}:"/>
+                    <p:outputLabel value="#{msg['REGISTRIEREN.STADT']}"/>
                     <p:inputText value="#{loginController.selectedEntity.adresse.stadt}"/>
 
                 </h:panelGrid>
                 <h:commandButton
                         action="#{loginController.speichern()}"
                         value="#{msg['BUTTON.SPEICHERN']}"
-                        actionListener="#{growlView.showAction(msg['MESSAGE.SUMMARY.SUCCSESS'], msg['NEUERUSER.MESSAGE'])}"
+                        actionListener="#{growlView.showAction(msg['NEUERUSER.MESSAGE.SUMMARY'], msg['NEUERUSER.MESSAGE'])}"
                         update=":growl"/>
                 <h:commandButton action="#{userController.abbrechen}" value="#{msg['BUTTON.ABBRECHEN']}"
                                  immediate="true"/>

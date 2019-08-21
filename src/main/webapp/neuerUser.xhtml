@@ -8,10 +8,10 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
 >
-<head>
+<h:head>
     <title>#{msg['NEUERUSER.TITEL']}</title>
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
-</head>
+</h:head>
 <body>
 <h:form>
     <div align="right">
@@ -26,6 +26,18 @@
                 <h:panelGrid var="user" value="#{userController.selectedEntity}" columns="2"
                              headerClass="header"
                              footerClass="footer">
+                    <h:outputLabel value="#{msg['NEUERUSER.ROLLE']}" for="rolle"/>
+                    <h:panelGroup>
+                        <h:selectOneMenu id="rolle" value="#{userController.selectedEntity.rolle}">
+                            <f:selectItems var="form" value="#{userController.getRolleValues()}" itemValue="#{form}"
+                                           itemLabel="#{msg[form.rolle]}"/>
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+                    <p:outputLabel value="#{msg['NEUERUSER.USERNAME']}"/>
+                    <p:inputText value="#{userController.selectedEntity.username}" required="true"
+                                 requiredMessage="#{msg['NEUERUSER.USERNAME.MESSAGE']}">
+                        <f:validator validatorId="usernameValidator"/>
+                    </p:inputText>
                     <p:outputLabel value="#{msg['NEUERUSER.VORNAME']}:"/>
                     <p:inputText value="#{userController.selectedEntity.vorname}"/>
                     <p:outputLabel value="#{msg['NEUERUSER.NACHNAME']}:"/>
@@ -37,14 +49,11 @@
                     <p:outputLabel value="#{msg['NEUERUSER.ADRESSE.STADT']}:"/>
                     <p:inputText value="#{userController.selectedEntity.adresse.stadt}"/>
 
-                    #{growlView.textSummary(msg['NEUERUSER.SUMMARY'])}
-                    #{growlView.textMessage(msg['NEUERUSER.MESSAGE'])}
-
                 </h:panelGrid>
                 <h:commandButton
                         action="#{userController.speichern()}"
                         value="#{msg['BUTTON.SPEICHERN']}"
-                        actionListener="#{growlView.showAction(msg['MESSAGE.SUMMARY.SUCCSESS'], msg['NEUERUSER.MESSAGE'])}"
+                        actionListener="#{growlView.showAction(msg['NEUERUSER.MESSAGE.SUMMARY'], msg['NEUERUSER.MESSAGE.TEXT'])}"
                         update=":growl"/>
                 <h:commandButton action="#{userController.abbrechen}" value="#{msg['BUTTON.ABBRECHEN']}"
                                  immediate="true"/>
@@ -54,4 +63,5 @@
 </h:form>
 </body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
+<f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
 </html>

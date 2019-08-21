@@ -1,5 +1,6 @@
 package de.hsb.app.controller;
 
+import de.hsb.app.enumeration.Rolle;
 import de.hsb.app.model.User;
 import de.hsb.app.repository.AbstractCrudRepository;
 import de.hsb.app.utils.AdressUtils;
@@ -19,12 +20,22 @@ import javax.faces.bean.SessionScoped;
 public class UserController extends AbstractCrudRepository<User> {
 
     /**
+     * Sucht den zu bearbeitenden {@link User} raus und redirected auf {@link RedirectUtils#NEUERUSER_XHTML}
+     *
+     * @return {@link RedirectUtils#NEUERUSER_XHTML}
+     */
+    public String bearbeiten() {
+        selectedEntity = entityList.getRowData();
+        return RedirectUtils.NEUERUSER_XHTML;
+    }
+
+    /**
      * Loescht ein Element in der Liste.
      *
      * @return  {@link RedirectUtils#USERTABELLE_XHTML}.
      */
     public String loeschen(){
-        this.delete();
+        delete();
         return RedirectUtils.USERTABELLE_XHTML;
     }
 
@@ -34,8 +45,17 @@ public class UserController extends AbstractCrudRepository<User> {
      * @return {@link RedirectUtils#USERTABELLE_XHTML}
      */
     public String neu() {
-        this.setSelectedEntity(new User());
+        setSelectedEntity(new User());
         return RedirectUtils.NEUERUSER_XHTML;
+    }
+
+    /**
+     * Liefert ein Array aller {@link Rolle}n zurueck.
+     *
+     * @return Rolle[]
+     */
+    public static Rolle[] getRolleValues() {
+        return Rolle.values();
     }
 
     /**
@@ -44,7 +64,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param user {@link User}
      * @return Straße Hausnummer, Stadt, Postleitzahl
      */
-    public String formatedAdresse(User user) {
+    public static String formatedAdresse(User user) {
         return AdressUtils.formatAdresse(user.getAdresse());
     }
 
@@ -54,7 +74,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @return {@link RedirectUtils#USERTABELLE_XHTML}
      */
     public String speichern() {
-        this.save(this.getSelectedEntity());
+        save(getSelectedEntity());
         return RedirectUtils.USERTABELLE_XHTML;
     }
 
@@ -63,7 +83,7 @@ public class UserController extends AbstractCrudRepository<User> {
      *
      * @return {@link RedirectUtils#USERTABELLE_XHTML}
      */
-    public String abbrechen() {
+    public static String abbrechen() {
         return RedirectUtils.USERTABELLE_XHTML;
     }
 
