@@ -11,7 +11,10 @@ import org.primefaces.push.annotation.Singleton;
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * UserController
@@ -111,8 +114,26 @@ public class UserController extends AbstractCrudRepository<User> {
      * @return {@link RedirectUtils#USERTABELLE_XHTML}
      */
     public String speichern() {
+        this.getSelectedEntity().setPasswort("passwort+");
         this.save(this.getSelectedEntity());
         return RedirectUtils.USERTABELLE_XHTML;
+    }
+
+    public List<User> findAllUserForGruppenerstellung() {
+        return this.findAll().stream().filter(user -> user.getRolle().equals(Rolle.KUNDE) ||
+                user.getRolle().equals(Rolle.MITARBEITER) || user.getRolle().equals(Rolle.ADMIN))
+                .collect(Collectors.toList());
+    }
+
+    public DataModel<User> entityListForGruppenerstellung() {
+        final List<User> userList = this.findAllUserForGruppenerstellung();
+        if (!userList.isEmpty()) {
+            if (this.entityList == null) {
+                this.entityList = new ListDataModel<>();
+            }
+            this.entityList.setWrappedData(userList);
+        }
+        return this.entityList;
     }
 
     /**

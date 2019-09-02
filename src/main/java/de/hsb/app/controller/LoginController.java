@@ -36,7 +36,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      *
      * @return {@link RedirectUtils#LOGIN_XHTML}
      */
-    public static String logout() {
+    public String logout() {
         FacesContext.getCurrentInstance()
                 .getExternalContext().invalidateSession();
         return RedirectUtils.LOGIN_XHTML;

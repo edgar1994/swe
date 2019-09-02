@@ -16,69 +16,82 @@
     limitations under the License.
 
  Marker file indicating JSF 2.2 should be enabled in the application -->
-<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+<faces-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
 
- <!-- Start Redirects -->
- <!-- Von Index -->
- <!-- Empty -->
+    <!-- Start Redirects -->
+    <!-- Von Index -->
+    <!-- Empty -->
 
- <!-- Von userTabelle -->
- <navigation-rule>
-  <display-name>userTabelle</display-name>
-  <from-view-id>/userTabelle.xhtml</from-view-id>
-  <navigation-case>
-   <from-action>#{userController.neu}</from-action>
-   <from-outcome>neuerUser</from-outcome>
-   <to-view-id>/neuerUser.xhtml</to-view-id>
-  </navigation-case>
- </navigation-rule>
+    <!-- Von userTabelle -->
+    <navigation-rule>
+        <display-name>userTabelle</display-name>
+        <from-view-id>/userTabelle.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{userController.neu}</from-action>
+            <from-outcome>neuerUser</from-outcome>
+            <to-view-id>/neuerUser.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
- <!-- Von neuerUser -->
- <navigation-rule>
-  <display-name>neuerUser</display-name>
-  <from-view-id>/neuerUser.xhtml</from-view-id>
-  <navigation-case>
-   <from-action>#{userController.abbrechen}</from-action>
-   <from-outcome>userTabelle</from-outcome>
-   <to-view-id>/userTabelle.xhtml</to-view-id>
-  </navigation-case>
-  <navigation-case>
-   <from-action>#{userController.speichern}</from-action>
-   <from-outcome>userTabelle</from-outcome>
-   <to-view-id>/userTabelle.xhtml</to-view-id>
-  </navigation-case>
- </navigation-rule>
+    <!-- Von neuerUser -->
+    <navigation-rule>
+        <display-name>neuerUser</display-name>
+        <from-view-id>/neuerUser.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{userController.abbrechen}</from-action>
+            <from-outcome>userTabelle</from-outcome>
+            <to-view-id>/userTabelle.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{userController.speichern}</from-action>
+            <from-outcome>userTabelle</from-outcome>
+            <to-view-id>/userTabelle.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
- <!-- Von login -->
- <navigation-rule>
-  <display-name>login</display-name>
-  <from-view-id>/login.xhtml</from-view-id>
-  <navigation-case>
-   <from-action>#{loginController.login}</from-action>
-   <from-outcome>/index.xhtml?faces-redirect=true</from-outcome>
-   <to-view-id>/index.xhtml</to-view-id>
-  </navigation-case>
-  <navigation-case>
-   <from-action>#{loginController.registrieren}</from-action>
-   <from-outcome>registrieren.xhtml</from-outcome>
-   <to-view-id>/registrieren.xhtml</to-view-id>
-  </navigation-case>
- </navigation-rule>
- <!-- End Redirect -->
+    <!-- Von login -->
+    <navigation-rule>
+        <display-name>login</display-name>
+        <from-view-id>/login.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{loginController.login}</from-action>
+            <from-outcome>/index.xhtml?faces-redirect=true</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{loginController.registrieren}</from-action>
+            <from-outcome>registrieren.xhtml</from-outcome>
+            <to-view-id>/registrieren.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
- <!-- Mehrsprachigkeit -->
- <application>
-  <locale-config>
-   <default-locale>de</default-locale>
-   <supported-locale>de</supported-locale>
-   <supported-locale>en</supported-locale>
-  </locale-config>
-  <message-bundle>messages</message-bundle>
-  <resource-bundle>
-   <base-name>de.hsb.app.i18n.messages</base-name>
-   <var>msg</var>
-  </resource-bundle>
-  <message-bundle>de.hsb.app.i18n.messages</message-bundle>
- </application>
+    <!-- Von Gruppentabelle -->
+    <navigation-rule>
+        <display-name>gruppeTabelle</display-name>
+        <from-view-id>/gruppeTabelle.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{gruppeController.neu}</from-action>
+            <from-outcome>neueGruppe.xhtml</from-outcome>
+            <to-view-id>/neueGruppe.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- End Redirect -->
+
+    <!-- Mehrsprachigkeit -->
+    <application>
+        <locale-config>
+            <default-locale>de</default-locale>
+            <supported-locale>de</supported-locale>
+            <supported-locale>en</supported-locale>
+        </locale-config>
+        <message-bundle>messages</message-bundle>
+        <resource-bundle>
+            <base-name>de.hsb.app.i18n.messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
+        <message-bundle>de.hsb.app.i18n.messages</message-bundle>
+    </application>
 </faces-config>

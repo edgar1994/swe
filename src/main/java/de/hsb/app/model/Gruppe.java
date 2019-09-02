@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
@@ -32,18 +31,9 @@ public class Gruppe {
     private User leiter;
 
     @NotNull
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Ticket> ticket;
-
-    @NotNull
     @NotEmpty
     @ManyToMany(cascade = CascadeType.ALL)
     private List<User> mitglieder;
-
-    @Future
-    @Temporal(TemporalType.DATE)
-    @NotNull
-    private Date abschlussdatum;
 
     @Temporal(TemporalType.DATE)
     @NotNull
@@ -53,7 +43,6 @@ public class Gruppe {
     private String titel;
 
     public Gruppe() {
-        this.ticket = Collections.emptyList();
         this.mitglieder = Collections.emptyList();
         this.erstellungsdatum = Date.from(Instant.now());
     }
@@ -61,9 +50,7 @@ public class Gruppe {
     public Gruppe(final User leiter, final List<Ticket> ticket, final List<User> mitglieder, final Date abschlussdatum,
                   final String titel) {
         this.leiter = leiter;
-        this.ticket = ticket;
         this.mitglieder = mitglieder;
-        this.abschlussdatum = abschlussdatum;
         this.erstellungsdatum = Date.from(Instant.now());
         this.titel = titel;
     }
@@ -84,28 +71,12 @@ public class Gruppe {
         this.leiter = leiter;
     }
 
-    public List<Ticket> getTicket() {
-        return this.ticket;
-    }
-
-    public void setTicket(final List<Ticket> ticket) {
-        this.ticket = ticket;
-    }
-
     public List<User> getMitglieder() {
         return this.mitglieder;
     }
 
     public void setMitglieder(final List<User> mitglieder) {
         this.mitglieder = mitglieder;
-    }
-
-    public Date getAbschlussdatum() {
-        return this.abschlussdatum;
-    }
-
-    public void setAbschlussdatum(final Date abschlussdatum) {
-        this.abschlussdatum = abschlussdatum;
     }
 
     public Date getErstellungsdatum() {
