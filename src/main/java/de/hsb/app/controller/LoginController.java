@@ -32,6 +32,17 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     private User user;
 
     /**
+     * Logged einen {@link User} aus.
+     *
+     * @return {@link RedirectUtils#LOGIN_XHTML}
+     */
+    public static String logout() {
+        FacesContext.getCurrentInstance()
+                .getExternalContext().invalidateSession();
+        return RedirectUtils.LOGIN_XHTML;
+    }
+
+    /**
      * Erstellt daten beim Initialisieren.
      */
     // Fixme deaktiviert bis Postconstruct benötigt wird. (Feuert zwei mal)
@@ -91,17 +102,6 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     }
 
     /**
-     * Logged einen {@link User} aus.
-     *
-     * @return {@link RedirectUtils#LOGIN_XHTML}
-     */
-    public static String logout() {
-        FacesContext.getCurrentInstance()
-                .getExternalContext().invalidateSession();
-        return RedirectUtils.LOGIN_XHTML;
-    }
-
-    /**
      * Abspeichern eines neuen Kunden. Nach Erfolg wird auf {@link RedirectUtils#USERTABELLE_XHTML} redirected.
      *
      * @return {@link RedirectUtils#USERTABELLE_XHTML}
@@ -151,8 +151,8 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      */
     @Nonnull
     @Override
-    protected String getClassName() {
-        return "User";
+    protected String getQueryCommand() {
+        return User.NAMED_QUERY_QUERY;
     }
 
     /**
@@ -161,7 +161,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     @Nonnull
     @Override
     protected String getSelect() {
-        return "SelectUser";
+        return User.NAMED_QUERY_NAME;
     }
 
     public String getUsername() {

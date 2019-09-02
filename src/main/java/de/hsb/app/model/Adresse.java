@@ -1,6 +1,6 @@
 package de.hsb.app.model;
 
-import javax.annotation.ManagedBean;
+import javax.faces.bean.ManagedBean;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,14 +11,17 @@ import javax.validation.constraints.Size;
 /**
  * {@link Adresse}-Model
  */
-@NamedQuery(name = "SelectAdresse", query = "Select a from Adresse a")
+@NamedQuery(name = Adresse.NAMED_QUERY_NAME, query = Adresse.NAMED_QUERY_QUERY)
 @Entity
-@ManagedBean("adresse")
+@ManagedBean(name = "adresse")
 public class Adresse {
+
+    public static final String NAMED_QUERY_NAME = "SelectAdresse";
+
+    public static final String NAMED_QUERY_QUERY = "Select a from Adresse a";
 
     @Id
     @GeneratedValue
-    @NotNull
     private int id;
 
     @NotNull
@@ -36,41 +39,41 @@ public class Adresse {
     public Adresse() {
     }
 
-    public Adresse(String strasse, String plz, String stadt) {
+    public Adresse(final String strasse, final String plz, final String stadt) {
         this.strasse = strasse;
         this.plz = plz;
         this.stadt = stadt;
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
     public String getStrasse() {
-        return strasse;
+        return this.strasse;
     }
 
-    public void setStrasse(String strasse) {
+    public void setStrasse(final String strasse) {
         this.strasse = strasse;
     }
 
     public String getPlz() {
-        return plz;
+        return this.plz;
     }
 
-    public void setPlz(String plz) {
+    public void setPlz(final String plz) {
         this.plz = plz;
     }
 
     public String getStadt() {
-        return stadt;
+        return this.stadt;
     }
 
-    public void setStadt(String stadt) {
+    public void setStadt(final String stadt) {
         this.stadt = stadt;
     }
 }

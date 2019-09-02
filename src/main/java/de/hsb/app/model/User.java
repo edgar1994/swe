@@ -10,14 +10,17 @@ import javax.validation.constraints.Size;
 /**
  * {@link User}-Model
  */
-@NamedQuery(name = "SelectUser", query = "Select u from User u")
+@NamedQuery(name = User.NAMED_QUERY_NAME, query = User.NAMED_QUERY_QUERY)
 @Entity
 @ManagedBean(name = "user")
 public class User {
 
+    public static final String NAMED_QUERY_NAME = "SelectUser";
+
+    public static final String NAMED_QUERY_QUERY = "Select u from User u";
+
     @Id
     @GeneratedValue
-    @NotNull
     int id;
 
     @Size(min = 3, max = 30)
@@ -46,7 +49,7 @@ public class User {
         this.adresse = new Adresse();
     }
 
-    public User(String vorname, String nachname, Adresse adresse, String username, String passwort, Rolle rolle) {
+    public User(final String vorname, final String nachname, final Adresse adresse, final String username, final String passwort, final Rolle rolle) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.adresse = adresse;
@@ -56,58 +59,58 @@ public class User {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
     public String getVorname() {
-        return vorname;
+        return this.vorname;
     }
 
-    public void setVorname(String vorname) {
+    public void setVorname(final String vorname) {
         this.vorname = vorname;
     }
 
     public String getNachname() {
-        return nachname;
+        return this.nachname;
     }
 
-    public void setNachname(String nachname) {
+    public void setNachname(final String nachname) {
         this.nachname = nachname;
     }
 
     public Adresse getAdresse() {
-        return adresse;
+        return this.adresse;
     }
 
-    public void setAdresse(Adresse adresse) {
+    public void setAdresse(final Adresse adresse) {
         this.adresse = adresse;
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
     public String getPasswort() {
-        return passwort;
+        return this.passwort;
     }
 
-    public void setPasswort(String passwort) {
+    public void setPasswort(final String passwort) {
         this.passwort = passwort;
     }
 
     public Rolle getRolle() {
-        return rolle;
+        return this.rolle;
     }
 
-    public void setRolle(Rolle rolle) {
+    public void setRolle(final Rolle rolle) {
         this.rolle = rolle;
     }
 

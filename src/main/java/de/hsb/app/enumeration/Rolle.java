@@ -1,5 +1,8 @@
 package de.hsb.app.enumeration;
 
+/**
+ * Enumeration fuer {@link Rolle}.
+ */
 public enum Rolle {
 
     ADMIN("ROLLE.ADMIN"),

@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view locale="#{languageHandler.language}"/>
+<h:head>
+    <title><ui:insert name="title">#{msg['GRUPPENTABELLE.TITEL']}</ui:insert></title>
+    <link rel="stylesheet" href="resources/index.css" type="text/css"/>
+</h:head>
+<h:body>
+    <h:form>
+        <div align="right">
+            <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
+            <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
+            <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
+        </div>
+    </h:form>
+    <div id="content">
+        <p:growl id="growl" showDetail="true" sticky="true"/>
+        <ui:insert name="content">
+            <h:dataTable id="gruppeTabelle" var="gruppe"
+                         value="#{gruppeController.userAwareEntityList(loginController.user)}"
+                         rowClasses="odd,even" headerClass="header">
+                <h:column>
+                    <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENTITEL']}</f:facet>
+                    <h:outputText value="#{gruppe.titel}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
+                    <h:outputText value="#{userController.formatedName(gruppe.leiter)}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
+                    <h:outputText value="#{gruppe.mitglieder.size()}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">#{msg['GRUPPENTABELLE.KUNDE']}</f:facet>
+                    <h:outputText
+                            value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder))}"/>
+                </h:column>
+            </h:dataTable>
+        </ui:insert>
+    </div>
+</h:body>
+<f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
+<f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
+</html>

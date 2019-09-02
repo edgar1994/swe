@@ -35,8 +35,8 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      */
     @Override
     @CheckForNull
-    public T findById(int id) {
-        return em.find(this.getRepositoryClass(), id);
+    public T findById(final int id) {
+        return this.em.find(this.getRepositoryClass(), id);
     }
 
     /**
@@ -45,8 +45,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
     @Override
     @Nonnull
     public List<T> findAll() {
-        return em.createQuery("SELECT u FROM ".concat(this.getClassName()).concat(" u "),
-                this.getRepositoryClass()).getResultList();
+        return this.em.createQuery(this.getQueryCommand()).getResultList();
     }
 
     /**
@@ -55,14 +54,14 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
     @Override
     public boolean save(@Nonnull T entity) {
         try {
-            utx.begin();
-            entity = em.merge(entity);
-            em.persist(entity);
-            utx.commit();
+            this.utx.begin();
+            entity = this.em.merge(entity);
+            this.em.persist(entity);
+            this.utx.commit();
             return true;
-        } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
+        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-            logger.error("Speichern fehlgeschlagen -> ", e);
+            this.logger.error("Speichern fehlgeschlagen -> ", e);
             return false;
         }
     }
@@ -73,31 +72,35 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
     @Override
     public boolean delete() {
         try {
-            selectedEntity = entityList.getRowData();
-            utx.begin();
-            selectedEntity = em.merge(selectedEntity);
-            em.remove(selectedEntity);
-            entityList.setWrappedData(em.createNamedQuery(this.getSelect()).getResultList());
-            utx.commit();
+            this.selectedEntity = this.entityList.getRowData();
+            this.utx.begin();
+            this.selectedEntity = this.em.merge(this.selectedEntity);
+            this.em.remove(this.selectedEntity);
+            this.entityList.setWrappedData(this.em.createNamedQuery(this.getSelect()).getResultList());
+            this.utx.commit();
             return true;
-        } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
+        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-            logger.error("Löschen fehlgeschlagen -> ", e);
+            this.logger.error("Löschen fehlgeschlagen -> ", e);
             return false;
         }
     }
 
     /**
-     * {@inheritDoc}
+     * Liefert die {@link Class<T>} zurueck.
+     *
+     * @return {@link Class<T>}
      */
     @Nonnull
     protected abstract Class<T> getRepositoryClass();
 
     /**
-     * {@inheritDoc}
+     * Liefert den QueryCommand. Sollte die Form "Select v from {@link T} v" haben.
+     *
+     * @return "Select v from {@link T} v"
      */
     @Nonnull
-    protected abstract String getClassName();
+    protected abstract String getQueryCommand();
 
     /**
      * Liefert ein {@link String} zurueck. Der {@link String} sollte die Form Select{@link T} haben.
@@ -122,7 +125,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      *
      * @param entityList {@link DataModel<T>}
      */
-    public void setEntityList(DataModel<T> entityList) {
+    public void setEntityList(final DataModel<T> entityList) {
         this.entityList = entityList;
     }
 
@@ -130,7 +133,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      * Getter fuer {@link T}
      */
     public T getSelectedEntity() {
-        return selectedEntity;
+        return this.selectedEntity;
     }
 
     /**
@@ -138,7 +141,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      *
      * @param selectedEntity {@link T}
      */
-    public void setSelectedEntity(T selectedEntity) {
+    public void setSelectedEntity(final T selectedEntity) {
         this.selectedEntity = selectedEntity;
     }
 

@@ -5,11 +5,13 @@ import de.hsb.app.model.User;
 import de.hsb.app.repository.AbstractCrudRepository;
 import de.hsb.app.utils.AdressUtils;
 import de.hsb.app.utils.RedirectUtils;
+import de.hsb.app.utils.UserUtils;
 import org.primefaces.push.annotation.Singleton;
 
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import java.util.List;
 
 /**
  * UserController
@@ -18,36 +20,6 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean(name = "userController")
 @SessionScoped
 public class UserController extends AbstractCrudRepository<User> {
-
-    /**
-     * Sucht den zu bearbeitenden {@link User} raus und redirected auf {@link RedirectUtils#NEUERUSER_XHTML}
-     *
-     * @return {@link RedirectUtils#NEUERUSER_XHTML}
-     */
-    public String bearbeiten() {
-        selectedEntity = entityList.getRowData();
-        return RedirectUtils.NEUERUSER_XHTML;
-    }
-
-    /**
-     * Loescht ein Element in der Liste.
-     *
-     * @return  {@link RedirectUtils#USERTABELLE_XHTML}.
-     */
-    public String loeschen(){
-        delete();
-        return RedirectUtils.USERTABELLE_XHTML;
-    }
-
-    /**
-     * Legt einen neuen Kunden an und leitet auf {@link RedirectUtils#USERTABELLE_XHTML}.
-     *
-     * @return {@link RedirectUtils#USERTABELLE_XHTML}
-     */
-    public String neu() {
-        setSelectedEntity(new User());
-        return RedirectUtils.NEUERUSER_XHTML;
-    }
 
     /**
      * Liefert ein Array aller {@link Rolle}n zurueck.
@@ -59,13 +31,78 @@ public class UserController extends AbstractCrudRepository<User> {
     }
 
     /**
+     * Bricht den aktuellen Vorgang ab und leitet zurueck auf {@link RedirectUtils#USERTABELLE_XHTML}.
+     *
+     * @return {@link RedirectUtils#USERTABELLE_XHTML}
+     */
+    public static String abbrechen() {
+        return RedirectUtils.USERTABELLE_XHTML;
+    }
+
+    /**
      * Formatiert die Adresse nach folgenden Format: Straße Hausnummer, Stadt, Postleitzahl.
      *
      * @param user {@link User}
      * @return Straße Hausnummer, Stadt, Postleitzahl
      */
-    public static String formatedAdresse(User user) {
+    public static String formatedAdresse(@Nonnull final User user) {
         return AdressUtils.formatAdresse(user.getAdresse());
+    }
+
+    /**
+     * Liefert den Vor- und Nachnamen im Format "Nachname, Vorname" zurueck.
+     *
+     * @param user {@link User}
+     * @return "Nachname, Vorname"
+     */
+    public static String formatedName(@Nonnull final User user) {
+        return UserUtils.getNachnameVornameString(user);
+    }
+
+    /**
+     * Sucht den ersten {@link User} mit der {@link Rolle} "{@link Rolle#KUNDE}" und liefert diesen zurueck.
+     * Gibt es keinen Kunden in der Liste wird {@link UserUtils#DUMMY_USER_KUNDE} zurueckgeliefert.
+     *
+     * @param userList {@link List<User>}
+     * @return User mit {@link Rolle#KUNDE} || {@link UserUtils#DUMMY_USER_KUNDE}
+     */
+    public static User getKundeUser(@Nonnull final List<User> userList) {
+        for (final User user : userList) {
+            if (Rolle.KUNDE.equals(user.getRolle())) {
+                return user;
+            }
+        }
+        return UserUtils.DUMMY_USER_KUNDE;
+    }
+
+    /**
+     * Sucht den zu bearbeitenden {@link User} raus und redirected auf {@link RedirectUtils#NEUERUSER_XHTML}
+     *
+     * @return {@link RedirectUtils#NEUERUSER_XHTML}
+     */
+    public String bearbeiten() {
+        this.selectedEntity = this.entityList.getRowData();
+        return RedirectUtils.NEUERUSER_XHTML;
+    }
+
+    /**
+     * Loescht ein Element in der Liste.
+     *
+     * @return {@link RedirectUtils#USERTABELLE_XHTML}.
+     */
+    public String loeschen() {
+        this.delete();
+        return RedirectUtils.USERTABELLE_XHTML;
+    }
+
+    /**
+     * Legt einen neuen Kunden an und leitet auf {@link RedirectUtils#USERTABELLE_XHTML}.
+     *
+     * @return {@link RedirectUtils#USERTABELLE_XHTML}
+     */
+    public String neu() {
+        this.setSelectedEntity(new User());
+        return RedirectUtils.NEUERUSER_XHTML;
     }
 
     /**
@@ -74,16 +111,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @return {@link RedirectUtils#USERTABELLE_XHTML}
      */
     public String speichern() {
-        save(getSelectedEntity());
-        return RedirectUtils.USERTABELLE_XHTML;
-    }
-
-    /**
-     * Bricht den aktuellen Vorgang ab und leitet zurueck auf {@link RedirectUtils#USERTABELLE_XHTML}.
-     *
-     * @return {@link RedirectUtils#USERTABELLE_XHTML}
-     */
-    public static String abbrechen() {
+        this.save(this.getSelectedEntity());
         return RedirectUtils.USERTABELLE_XHTML;
     }
 
@@ -101,16 +129,16 @@ public class UserController extends AbstractCrudRepository<User> {
      */
     @Override
     @Nonnull
-    protected String getClassName() {
-        return "User";
+    protected String getQueryCommand() {
+        return User.NAMED_QUERY_QUERY;
     }
 
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
+    @Nonnull
     protected String getSelect() {
-        return "SelectUser";
+        return User.NAMED_QUERY_NAME;
     }
 }
