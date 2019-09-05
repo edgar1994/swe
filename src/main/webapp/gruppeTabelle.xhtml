@@ -43,7 +43,7 @@
                                 value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder))}"/>
                     </h:column>
                 </h:dataTable>
-                <h:commandButton action="#{gruppeController.neu}" value="#{msg['BUTTON.NEU']}"/>
+                <h:commandButton action="#{gruppeController.neu(loginController.user)}" value="#{msg['BUTTON.NEU']}"/>
             </ui:insert>
         </h:form>
     </div>

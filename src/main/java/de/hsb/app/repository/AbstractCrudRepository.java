@@ -2,6 +2,7 @@ package de.hsb.app.repository;
 
 import de.hsb.app.interfaces.CrudRepository;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -27,8 +28,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
     @Resource
     protected UserTransaction utx;
 
-    @Resource
-    protected Logger logger;
+    protected Logger logger = LoggerFactory.getLogger(AbstractCrudRepository.class);
 
     /**
      * {@inheritDoc}

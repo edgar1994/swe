@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class UserController extends AbstractCrudRepository<User> {
      *
      * @return Rolle[]
      */
-    public static Rolle[] getRolleValues() {
+    public Rolle[] getRolleValues() {
         return Rolle.values();
     }
 
@@ -38,7 +39,7 @@ public class UserController extends AbstractCrudRepository<User> {
      *
      * @return {@link RedirectUtils#USERTABELLE_XHTML}
      */
-    public static String abbrechen() {
+    public String abbrechen() {
         return RedirectUtils.USERTABELLE_XHTML;
     }
 
@@ -48,7 +49,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param user {@link User}
      * @return Straße Hausnummer, Stadt, Postleitzahl
      */
-    public static String formatedAdresse(@Nonnull final User user) {
+    public String formatedAdresse(@Nonnull final User user) {
         return AdressUtils.formatAdresse(user.getAdresse());
     }
 
@@ -58,7 +59,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param user {@link User}
      * @return "Nachname, Vorname"
      */
-    public static String formatedName(@Nonnull final User user) {
+    public String formatedName(@Nonnull final User user) {
         return UserUtils.getNachnameVornameString(user);
     }
 
@@ -69,7 +70,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param userList {@link List<User>}
      * @return User mit {@link Rolle#KUNDE} || {@link UserUtils#DUMMY_USER_KUNDE}
      */
-    public static User getKundeUser(@Nonnull final List<User> userList) {
+    public User getKundeUser(@Nonnull final List<User> userList) {
         for (final User user : userList) {
             if (Rolle.KUNDE.equals(user.getRolle())) {
                 return user;
@@ -119,12 +120,35 @@ public class UserController extends AbstractCrudRepository<User> {
         return RedirectUtils.USERTABELLE_XHTML;
     }
 
-    public List<User> findAllUserForGruppenerstellung() {
+    /**
+     * Findet alle {@link User} fuer die Gruppenerstellung.
+     *
+     * @return List<User> fuer die Gruppenerstellung
+     * @deprecated Lambda erst ab 1.8 verwendbar
+     */
+    @Deprecated
+    @Nonnull
+    private List<User> findAllUserForGruppenerstellungTest() {
         return this.findAll().stream().filter(user -> user.getRolle().equals(Rolle.KUNDE) ||
                 user.getRolle().equals(Rolle.MITARBEITER) || user.getRolle().equals(Rolle.ADMIN))
                 .collect(Collectors.toList());
     }
 
+    private List<User> findAllUserForGruppenerstellung() {
+        final Query query = this.em.createQuery("select u from  User u where u.rolle = :mitarbeiter or " +
+                "u.rolle = :admin or u.rolle = :kunde");
+        query.setParameter("mitarbeiter", Rolle.MITARBEITER);
+        query.setParameter("admin", Rolle.ADMIN);
+        query.setParameter("kunde", Rolle.KUNDE);
+        return query.getResultList();
+    }
+
+    /**
+     * Erstellt anhand aller gefundenen {@link User}n fuer die Gruppenerstellung das entsprechende
+     * {@link DataModel<User>}.
+     *
+     * @return DataModel<User>
+     */
     public DataModel<User> entityListForGruppenerstellung() {
         final List<User> userList = this.findAllUserForGruppenerstellung();
         if (!userList.isEmpty()) {
@@ -162,4 +186,5 @@ public class UserController extends AbstractCrudRepository<User> {
     protected String getSelect() {
         return User.NAMED_QUERY_NAME;
     }
+
 }

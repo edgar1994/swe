@@ -15,9 +15,9 @@
 <body>
 <h:form>
     <div align="right">
-        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'
-                         immediate="true"/>
         <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'
+                         immediate="true"/>
+        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'
                          immediate="true"/>
         <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
     </div>
@@ -47,13 +47,24 @@
                         <f:facet name="header">#{msg['USER.ADRESSE']}</f:facet>
                         <h:outputText value="#{userController.formatedAdresse(user)}"/>
                     </h:column>
+                    <h:column>
+                        <f:facet name="header">#{msg['NEUEGRRUPPE.IMPROJEKT']}</f:facet>
+                        <h:commandButton action="#{gruppeController.fuegeUserHinzu(user)}"
+                                         value="#{msg['BUTTON.ADD']}"
+                                         immediate="true"
+                                         rendered="#{!gruppeController.istHinzugefuegt(user)}"/>
+                        <h:commandButton action="#{gruppeController.entferneUser(user)}"
+                                         value="#{msg['BUTTON.REMOVE']}"
+                                         immediate="true"
+                                         rendered="#{gruppeController.istHinzugefuegt(user)}"/>
+                    </h:column>
                 </h:dataTable>
                 <h:commandButton
                         action="#{gruppeController.speichern(loginController.user)}"
                         value="#{msg['BUTTON.SPEICHERN']}"
                         actionListener="#{growlView.showAction(msg['NEUERUSER.MESSAGE.SUMMARY'], msg['NEUERUSER.MESSAGE.TEXT'])}"
                         update=":growl"/>
-                <h:commandButton action="#{userController.abbrechen}" value="#{msg['BUTTON.ABBRECHEN']}"
+                <h:commandButton action="#{gruppeController.abbrechen}" value="#{msg['BUTTON.ABBRECHEN']}"
                                  immediate="true"/>
             </h:form>
         </ui:insert>
@@ -61,5 +72,4 @@
 </h:form>
 </body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
-<f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
 </html>
