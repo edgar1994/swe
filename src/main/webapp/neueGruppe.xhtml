@@ -47,6 +47,12 @@
                         <f:facet name="header">#{msg['USER.ADRESSE']}</f:facet>
                         <h:outputText value="#{userController.formatedAdresse(user)}"/>
                     </h:column>
+                    <h:column>
+                        <f:facet name="header">#{msg['NEUEGRRUPPE.IMPROJEKT']}</f:facet>
+                        <h:commandButton action="#{gruppeController.fuegeUserHinzu(user)}"
+                                         value="#{msg[gruppeController.istHinzugefuegtFuerButton(user)]}"
+                                         immediate="true"/>
+                    </h:column>
                 </h:dataTable>
                 <h:commandButton
                         action="#{gruppeController.speichern(loginController.user)}"

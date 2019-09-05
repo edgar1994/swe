@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
+import javax.transaction.*;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -27,10 +28,18 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return {@link RedirectUtils#GRUPPETABELLE_XHTML}
      */
     @Nonnull
-    public static String abbrechen() {
+    public String abbrechen() {
         return RedirectUtils.GRUPPETABELLE_XHTML;
     }
 
+    /**
+     * Setzt die {@link Gruppe}n-Liste nach Sichtbarkeit, des uebergeben {@link User}s.
+     * Sollte bevorzugterweise der eingeloggte User sein.
+     *
+     * @param loggedUser {@link User}
+     * @return DataModel<Gruppe>
+     */
+    @Nonnull
     public DataModel<Gruppe> userAwareEntityList(@Nonnull final User loggedUser) {
         final List<Gruppe> gruppeList = this.userAwareCreateDefaultGruppenListe(loggedUser);
         if (!gruppeList.isEmpty()) {
@@ -105,7 +114,19 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      */
     @Nonnull
     public String loeschen() {
-        this.delete();
+        try {
+            this.selectedEntity = this.entityList.getRowData();
+            this.utx.begin();
+            this.selectedEntity = this.em.merge(this.selectedEntity);
+            this.em.detach(this.selectedEntity.getMitglieder());
+            this.em.detach(this.selectedEntity.getLeiter());
+            this.em.remove(this.selectedEntity);
+            this.entityList.setWrappedData(this.em.createNamedQuery(this.getSelect()).getResultList());
+            this.utx.commit();
+        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
+                RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
+            this.logger.error("Löschen fehlgeschlagen -> ", e);
+        }
         return RedirectUtils.GRUPPETABELLE_XHTML;
     }
 

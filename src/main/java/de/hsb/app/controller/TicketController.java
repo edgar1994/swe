@@ -43,7 +43,7 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
      * @return {@link RedirectUtils#TICKETTABELLE_XHTML}
      */
     @Nonnull
-    public static String abbrechen() {
+    public String abbrechen() {
         return RedirectUtils.TICKETTABELLE_XHTML;
     }
 
