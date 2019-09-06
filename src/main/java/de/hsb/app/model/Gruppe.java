@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @NamedQuery(name = Gruppe.NAMED_QUERY_NAME, query = Gruppe.NAMED_QUERY_QUERY)
 @Entity
@@ -33,7 +33,7 @@ public class Gruppe {
     @NotNull
     @NotEmpty
     @ManyToMany(cascade = CascadeType.ALL)
-    private List<User> mitglieder;
+    private Set<User> mitglieder;
 
     @Temporal(TemporalType.DATE)
     @NotNull
@@ -43,12 +43,11 @@ public class Gruppe {
     private String titel;
 
     public Gruppe() {
-        this.mitglieder = Collections.emptyList();
+        this.mitglieder = Collections.emptySet();
         this.erstellungsdatum = Date.from(Instant.now());
     }
 
-    public Gruppe(final User leiter, final List<Ticket> ticket, final List<User> mitglieder, final Date abschlussdatum,
-                  final String titel) {
+    public Gruppe(final User leiter, final Set<User> mitglieder, final String titel) {
         this.leiter = leiter;
         this.mitglieder = mitglieder;
         this.erstellungsdatum = Date.from(Instant.now());
@@ -71,11 +70,11 @@ public class Gruppe {
         this.leiter = leiter;
     }
 
-    public List<User> getMitglieder() {
+    public Set<User> getMitglieder() {
         return this.mitglieder;
     }
 
-    public void setMitglieder(final List<User> mitglieder) {
+    public void setMitglieder(final Set<User> mitglieder) {
         this.mitglieder = mitglieder;
     }
 
@@ -94,4 +93,5 @@ public class Gruppe {
     public void setTitel(final String name) {
         this.titel = name;
     }
+
 }
