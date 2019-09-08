@@ -2,10 +2,13 @@ package de.hsb.app.model;
 
 import de.hsb.app.enumeration.Rolle;
 
+import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * {@link User}-Model
@@ -31,8 +34,7 @@ public class User {
     @NotNull
     private String nachname;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @NotNull
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Adresse adresse;
 
     @NotNull
@@ -44,17 +46,22 @@ public class User {
     @NotNull
     private Rolle rolle;
 
+    @ManyToMany(mappedBy = "mitglieder", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Gruppe> gruppen;
+
     public User() {
         this.rolle = Rolle.USER;
         this.adresse = new Adresse();
+        this.gruppen = new HashSet<>();
     }
 
-    public User(final String vorname, final String nachname, final Adresse adresse, final String username, final String passwort, final Rolle rolle) {
+    public User(final String vorname, final String nachname, final Adresse adresse, final String username, final String passwort, final Rolle rolle, final Set<Gruppe> gruppen) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.adresse = adresse;
         this.username = username;
         this.passwort = passwort;
+        this.gruppen = gruppen;
         this.rolle = rolle;
     }
 
@@ -112,6 +119,36 @@ public class User {
 
     public void setRolle(final Rolle rolle) {
         this.rolle = rolle;
+    }
+
+    public Set<Gruppe> getGruppen() {
+        return this.gruppen;
+    }
+
+    public void setGruppen(final Set<Gruppe> gruppen) {
+        this.gruppen = gruppen;
+    }
+
+    /**
+     * Add-Methode zum sicherstellen, dass die Beziehung zwischen {@link User} zur {@link Gruppe} und {@link Gruppe}
+     * zum {@link User} gesetzt wird.
+     *
+     * @param gruppe {@link Gruppe}
+     */
+    public void addGruppe(@Nonnull final Gruppe gruppe) {
+        this.gruppen.add(gruppe);
+        gruppe.getMitglieder().add(this);
+    }
+
+    /**
+     * Remove-Methode zum sicherstellen, dass die Beziehung zwischen {@link User} zur {@link Gruppe} und {@link Gruppe}
+     * zum {@link User} entfernt wird.
+     *
+     * @param gruppe {@link User}
+     */
+    public void removeGruppe(@Nonnull final Gruppe gruppe) {
+        this.gruppen.remove(gruppe);
+        gruppe.getMitglieder().remove(this);
     }
 
 }

@@ -13,6 +13,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.persistence.Query;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -21,7 +22,6 @@ import java.util.List;
 @ManagedBean(name = "loginController")
 @SessionScoped
 public class LoginController extends AbstractCrudRepository<User> implements Serializable {
-
 
     private static final long serialVersionUID = 1L;
 
@@ -50,11 +50,11 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     public void init() {
         final Adresse adresse = new Adresse("Strasse 21", "99999", "Stadt");
         this.save(new User("Aron", "O'Connor", adresse, "test",
-                "passwort+", Rolle.KUNDE));
+                "passwort+", Rolle.KUNDE, new HashSet<>()));
         this.save(new User("Edgar", "Grischenko", adresse, "edgar",
-                "passwort+", Rolle.ADMIN));
+                "passwort+", Rolle.ADMIN, new HashSet<>()));
         this.save(new User("Mitarbeiter1", "Nachname1", adresse, "mitarbeiter1",
-                "passwort+", Rolle.MITARBEITER));
+                "passwort+", Rolle.MITARBEITER, new HashSet<>()));
     }
 
     /**
@@ -134,6 +134,9 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      */
     public String registrieren() {
         this.setSelectedEntity(new User());
+        if (this.findAll().isEmpty()) {
+            this.selectedEntity.setRolle(Rolle.ADMIN);
+        }
         return RedirectUtils.REGISTRIEREN_XHTML;
     }
 

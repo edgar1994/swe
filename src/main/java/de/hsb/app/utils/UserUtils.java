@@ -4,14 +4,15 @@ import de.hsb.app.enumeration.Rolle;
 import de.hsb.app.model.User;
 
 import javax.annotation.Nonnull;
+import java.util.HashSet;
 
 public class UserUtils {
 
     public static final User DUMMY_USER_KUNDE = new User("Kunde", "Kein", AdressUtils.EMPTY_ADRESSE, "   ", "   ",
-            Rolle.KUNDE);
+            Rolle.KUNDE, new HashSet<>());
 
     public static final User DUMMY_USER_MITARBEITER = new User("Mitarbeiter", "Kein", AdressUtils.EMPTY_ADRESSE, "   ",
-            "   ", Rolle.MITARBEITER);
+            "   ", Rolle.MITARBEITER, new HashSet<>());
 
 
     /**

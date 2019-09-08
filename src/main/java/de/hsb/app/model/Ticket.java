@@ -1,7 +1,6 @@
 package de.hsb.app.model;
 
 import de.hsb.app.enumeration.Status;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
@@ -39,7 +38,6 @@ public class Ticket {
     private String titel;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @NotEmpty
     @NotNull
     private List<User> bearbeiter;
 

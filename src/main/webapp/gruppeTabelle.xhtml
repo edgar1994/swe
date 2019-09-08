@@ -18,12 +18,17 @@
             <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
         </div>
     </h:form>
+    <div>
+        <a href="index.xhtml">Mainpage</a>
+        <a href="userTabelle.xhtml">#{msg['USER.BEZEICHNUNG']}</a>
+        <a href="gruppeTabelle.xhtml">#{msg['GRUPPENTABELLE.TITEL']}</a>
+    </div>
     <div id="content">
         <h:form>
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
                 <h:dataTable id="gruppeTabelle" var="gruppe"
-                             value="#{gruppeController.userAwareEntityList(loginController.user)}"
+                             value="#{gruppeController.entityListForGruppenerstellung(loginController.user)}"
                              rowClasses="odd,even" headerClass="header">
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENTITEL']}</f:facet>
@@ -41,6 +46,11 @@
                         <f:facet name="header">#{msg['GRUPPENTABELLE.KUNDE']}</f:facet>
                         <h:outputText
                                 value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder))}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">#{msg['GRUPPENTABELLE.LOESCHEN']}</f:facet>
+                        <h:commandButton action="#{gruppeController.deleteGruppe()}"
+                                         value="#{msg['BUTTON.LOESCHEN']}"/>
                     </h:column>
                 </h:dataTable>
                 <h:commandButton action="#{gruppeController.neu(loginController.user)}" value="#{msg['BUTTON.NEU']}"/>

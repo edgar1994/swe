@@ -111,6 +111,15 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
     protected abstract String getSelect();
 
     /**
+     * Prueft ob die EntityList gesetzt wurde und initialisiert sie wenn nicht.
+     */
+    protected void checkEntityList() {
+        if (this.entityList == null) {
+            this.entityList = new ListDataModel<>();
+        }
+    }
+
+    /**
      * Getter fuer {@link DataModel<T>}.
      *
      * @return {@link DataModel<T>}

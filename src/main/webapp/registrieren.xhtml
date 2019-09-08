@@ -13,9 +13,16 @@
 <body>
 <h:form>
     <div align="right">
-        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='${languageHandler.actionLanguage("de")}' immediate="true"/>
-        <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='${languageHandler.actionLanguage("en")}' immediate="true"/>
+        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='${languageHandler.actionLanguage("de")}'
+                         immediate="true"/>
+        <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='${languageHandler.actionLanguage("en")}'
+                         immediate="true"/>
         <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}' immediate="true"/>
+    </div>
+    <div>
+        <a href="index.xhtml">Mainpage</a>
+        <a href="userTabelle.xhtml">#{msg['USER.BEZEICHNUNG']}</a>
+        <a href="gruppeTabelle.xhtml">#{msg['GRUPPENTABELLE.TITEL']}</a>
     </div>
     <div id="content">
         <ui:insert name="content">
@@ -25,7 +32,8 @@
                              headerClass="header"
                              footerClass="footer">
                     <p:outputLabel value="#{msg['REGISTRIEREN.USERNAME']}"/>
-                    <p:inputText value="#{loginController.selectedEntity.username}" required="true" requiredMessage="#{msg['REGISTRIREN.REQUIRED.MESSAGE']}">
+                    <p:inputText value="#{loginController.selectedEntity.username}" required="true"
+                                 requiredMessage="#{msg['REGISTRIREN.REQUIRED.MESSAGE']}">
                         <f:validator validatorId="usernameValidator"/>
                     </p:inputText>
                     <p:outputLabel value="#{msg['REGISTRIEREN.PASSWORT']}"/>

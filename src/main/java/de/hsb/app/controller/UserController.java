@@ -8,13 +8,14 @@ import de.hsb.app.utils.RedirectUtils;
 import de.hsb.app.utils.UserUtils;
 import org.primefaces.push.annotation.Singleton;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -59,18 +60,23 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param user {@link User}
      * @return "Nachname, Vorname"
      */
-    public String formatedName(@Nonnull final User user) {
-        return UserUtils.getNachnameVornameString(user);
+    public String formatedName(@CheckForNull final User user) {
+        if (user != null) {
+            return UserUtils.getNachnameVornameString(user);
+        } else {
+            return UserUtils.getNachnameVornameString(UserUtils.DUMMY_USER_KUNDE);
+        }
     }
 
     /**
      * Sucht den ersten {@link User} mit der {@link Rolle} "{@link Rolle#KUNDE}" und liefert diesen zurueck.
      * Gibt es keinen Kunden in der Liste wird {@link UserUtils#DUMMY_USER_KUNDE} zurueckgeliefert.
      *
-     * @param userList {@link List<User>}
+     * @param userList {@link Set<User>}
      * @return User mit {@link Rolle#KUNDE} || {@link UserUtils#DUMMY_USER_KUNDE}
      */
-    public User getKundeUser(@Nonnull final List<User> userList) {
+    @Nonnull
+    public User getKundeUser(@Nonnull final Set<User> userList) {
         for (final User user : userList) {
             if (Rolle.KUNDE.equals(user.getRolle())) {
                 return user;
@@ -152,9 +158,7 @@ public class UserController extends AbstractCrudRepository<User> {
     public DataModel<User> entityListForGruppenerstellung() {
         final List<User> userList = this.findAllUserForGruppenerstellung();
         if (!userList.isEmpty()) {
-            if (this.entityList == null) {
-                this.entityList = new ListDataModel<>();
-            }
+            this.checkEntityList();
             this.entityList.setWrappedData(userList);
         }
         return this.entityList;

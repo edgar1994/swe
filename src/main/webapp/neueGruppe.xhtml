@@ -21,6 +21,11 @@
                          immediate="true"/>
         <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
     </div>
+    <div>
+        <a href="index.xhtml">Mainpage</a>
+        <a href="userTabelle.xhtml">#{msg['USER.BEZEICHNUNG']}</a>
+        <a href="gruppeTabelle.xhtml">#{msg['GRUPPENTABELLE.TITEL']}</a>
+    </div>
     <div id="content">
         <ui:insert name="content">
             <h:form>
@@ -60,7 +65,7 @@
                     </h:column>
                 </h:dataTable>
                 <h:commandButton
-                        action="#{gruppeController.speichern(loginController.user)}"
+                        action="#{gruppeController.speichern}"
                         value="#{msg['BUTTON.SPEICHERN']}"
                         actionListener="#{growlView.showAction(msg['NEUERUSER.MESSAGE.SUMMARY'], msg['NEUERUSER.MESSAGE.TEXT'])}"
                         update=":growl"/>
