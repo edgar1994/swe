@@ -9,13 +9,7 @@ import de.hsb.app.utils.UserUtils;
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.model.DataModel;
-import javax.persistence.Query;
 import javax.transaction.*;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Controller fuer {@link Gruppe}.
@@ -24,47 +18,74 @@ import java.util.List;
 @SessionScoped
 public class GruppeController extends AbstractCrudRepository<Gruppe> {
 
-    private List<User> zuHinzufuegendeUser;
-
     /**
-     * Fuegt einen {@link User} der {@link List}e "zuHinzufuegendeUser" hinzu, wenn dieser User nicht bereits in der
-     * {@link List} vorhanden ist.
+     * Entfernt einen {@link User} aus der Mitglieder-Liste der ausgewaehlten {@link Gruppe}.
+     * Redirected auf {@link RedirectUtils#NEUEGRUPPE_XHTML}
      *
-     * @param userToAdd {@link User}
+     * @param zuEntfernenderUser {@link User}
      */
-    public void fuegeUserHinzu(@Nonnull final User userToAdd) {
-        boolean add = true;
-        for (final User user : this.zuHinzufuegendeUser) {
-            add &= !UserUtils.compareUserById(user, userToAdd);
-        }
-        if (add) {
-            this.zuHinzufuegendeUser.add(userToAdd);
-        }
+    public String entferneUser(@Nonnull final User zuEntfernenderUser) {
+        this.selectedEntity.getMitglieder().removeIf(user -> !UserUtils.compareUserById(this.selectedEntity.getLeiter(),
+                user) && UserUtils.compareUserById(user, zuEntfernenderUser));
+        return RedirectUtils.NEUEGRUPPE_XHTML;
     }
 
     /**
-     * Entfernt einen {@link User} der {@link List}e "zuHinzufuegendeUser" hinzu, wenn dieser User nicht bereits in der
-     * {@link List} vorhanden ist.
+     * Erstellt eine neue {@link Gruppe} setzt den uebergenen {@link User} loggedUser als Leiter und fuegt ihn als
+     * Mitglied hinzu. Redirected auf {@link RedirectUtils#NEUEGRUPPE_XHTML}.
      *
-     * @param userToDelete {@link User}
+     * @param eingeloggterUser {@link User}
+     * @return {@link RedirectUtils#NEUEGRUPPE_XHTML}
      */
-    public void entferneUser(@Nonnull final User userToDelete) {
-        this.zuHinzufuegendeUser.removeIf(user -> this.zuHinzufuegendeUser != null &&
-                !this.zuHinzufuegendeUser.isEmpty() && UserUtils.compareUserById(user, userToDelete));
+    @Nonnull
+    public String neu(@Nonnull final User eingeloggterUser) {
+        this.selectedEntity = new Gruppe();
+        this.selectedEntity.setLeiter(eingeloggterUser);
+        this.selectedEntity.addUser(eingeloggterUser);
+        return RedirectUtils.NEUEGRUPPE_XHTML;
     }
 
     /**
-     * Liefert einen {@link String} zureuck der "Hinzufuegen" oder "Enternen" entsprechnd der message.properties.
+     * Fuegt einen {@link User} der {@link Gruppe} hinzu. Redirected auf {@link RedirectUtils#NEUEGRUPPE_XHTML}.
      *
-     * @return NEUEGRUPPE.REMOVE || NEUEGRUPPE.ADD
+     * @param zuHinzuzufuegenderUser {@link User}
+     * @return {@link RedirectUtils#NEUEGRUPPE_XHTML}
      */
-    public boolean istHinzugefuegt(@Nonnull final User userToCheck) {
-        for (final User user : this.zuHinzufuegendeUser) {
-            if (UserUtils.compareUserById(user, userToCheck)) {
-                return true;
-            }
+    public String fuegeUserHinzu(@Nonnull final User zuHinzuzufuegenderUser) {
+        this.selectedEntity.addUser(zuHinzuzufuegenderUser);
+        return RedirectUtils.NEUEGRUPPE_XHTML;
+    }
+
+    /**
+     * Speichert eine {@link Gruppe}. Redirected auf {@link RedirectUtils#GRUPPETABELLE_XHTML}
+     *
+     * @return {@link RedirectUtils#GRUPPETABELLE_XHTML}
+     */
+    public String speichern() {
+        try {
+            this.utx.begin();
+            this.selectedEntity = this.em.merge(this.selectedEntity);
+            this.em.persist(this.selectedEntity);
+            this.utx.commit();
+        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
+                RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
+            this.logger.error("Speichern fehlgeschlagen -> ", e);
         }
-        return false;
+        return RedirectUtils.GRUPPETABELLE_XHTML;
+    }
+
+    /**
+     * Prueft ob ein {@link User} bereits Mitglied der {@link Gruppe} ist.
+     *
+     * @param user {@link User}
+     * @return boolean
+     */
+    public boolean istHinzugefuegt(@Nonnull final User user) {
+        boolean hinzugefuegt = false;
+        for (final User hinzugefuegteUser : this.selectedEntity.getMitglieder()) {
+            hinzugefuegt |= UserUtils.compareUserById(hinzugefuegteUser, user);
+        }
+        return hinzugefuegt;
     }
 
     /**
@@ -72,144 +93,15 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      *
      * @return {@link RedirectUtils#GRUPPETABELLE_XHTML}
      */
-    @Nonnull
     public String abbrechen() {
         return RedirectUtils.GRUPPETABELLE_XHTML;
     }
 
     /**
-     * Setzt die {@link Gruppe}n-Liste nach Sichtbarkeit, des uebergeben {@link User}s.
-     * Sollte bevorzugterweise der eingeloggte User sein.
-     *
-     * @param loggedUser {@link User}
-     * @return DataModel<Gruppe>
-     */
-    @Nonnull
-    public DataModel<Gruppe> userAwareEntityList(@Nonnull final User loggedUser) {
-        final List<Gruppe> gruppeList = this.findAll();
-        if (!gruppeList.isEmpty()) {
-            this.entityList.setWrappedData(gruppeList);
-        }
-        return this.entityList;
-    }
-
-    /**
-     * Sucht alle Gruppen heraus die für den Benutzer sichbar seien duerfen.
-     *
-     * @param loggedUser {@link User}
-     * @return List<Gruppe>
-     */
-    private List<Gruppe> userAwareCreateDefaultGruppenListe(@Nonnull final User loggedUser) {
-        final List<Gruppe> gruppeList;
-
-        switch (loggedUser.getRolle()) {
-            case USER:
-            case MITARBEITER:
-            case KUNDE:
-                final Query query = this.em.createQuery("select gr from  Gruppe gr join gr.mitglieder m where m.id = :userId");
-                query.setParameter("userId", loggedUser.getId());
-                gruppeList = query.getResultList();
-                break;
-            case ADMIN:
-                gruppeList = this.findAll();
-                break;
-            default:
-                throw new IllegalArgumentException("Rolle Exestiert nicht.");
-        }
-
-        return gruppeList;
-    }
-
-    /**
-     * Sucht die zu bearbeitende {@link Gruppe} raus und redirected auf {@link RedirectUtils#NEUEGRUPPE_XHTML}
-     *
-     * @return {@link RedirectUtils#NEUEGRUPPE_XHTML}
-     */
-    @Nonnull
-    public String bearbeiten() {
-        this.selectedEntity = this.entityList.getRowData();
-        return RedirectUtils.NEUEGRUPPE_XHTML;
-    }
-
-    /**
-     * Abspeichern einer neuen {@link Gruppe}. Nach Erfolg wird auf {@link RedirectUtils#GRUPPETABELLE_XHTML} redirected.
-     *
-     * @return {@link RedirectUtils#GRUPPETABELLE_XHTML}
-     */
-    @Nonnull
-    public String speichern(@Nonnull User user) {
-        this.getSelectedEntity().setMitglieder(this.zuHinzufuegendeUser);
-        this.getSelectedEntity().setErstellungsdatum(Date.from(Instant.now()));
-        switch (user.getRolle()) {
-            case ADMIN:
-            case MITARBEITER:
-                this.getSelectedEntity().setLeiter(user);
-                break;
-            case KUNDE:
-            case USER:
-            default:
-                throw new IllegalArgumentException(String.format("User mit der Rolle '%s' darf keine Gruppe erstellen.",
-                        user.getRolle()));
-        }
-        try {
-            this.utx.begin();
-//            this.selectedEntity = this.em.merge(this.selectedEntity);
-//            this.zuHinzufuegendeUser = this.em.merge(this.zuHinzufuegendeUser.toArray());
-            user = this.em.merge(user);
-//            this.em.persist(this.selectedEntity);
-//            this.em.persist(this.zuHinzufuegendeUser);
-            this.em.persist(user);
-//            this.entityList.setWrappedData(this.em.createNamedQuery(this.getQueryCommand()).getResultList());
-            this.utx.commit();
-        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException | RollbackException
-                | HeuristicMixedException | HeuristicRollbackException e) {
-            e.printStackTrace();
-        }
-        return RedirectUtils.GRUPPETABELLE_XHTML;
-    }
-
-    /**
-     * Loescht ein Element in der Liste.
-     *
-     * @return {@link RedirectUtils#GRUPPETABELLE_XHTML}.
-     */
-    @Nonnull
-    public String loeschen() {
-        try {
-            this.selectedEntity = this.entityList.getRowData();
-            this.utx.begin();
-            this.selectedEntity = this.em.merge(this.selectedEntity);
-            this.em.detach(this.selectedEntity.getMitglieder());
-            this.em.detach(this.selectedEntity.getLeiter());
-            this.em.remove(this.selectedEntity);
-            this.entityList.setWrappedData(this.em.createNamedQuery(this.getSelect()).getResultList());
-            this.utx.commit();
-        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
-                RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-            this.logger.error("Löschen fehlgeschlagen -> ", e);
-        }
-        return RedirectUtils.GRUPPETABELLE_XHTML;
-    }
-
-    /**
-     * Legt ein neues Projekt an und redirected auf {@link RedirectUtils#NEUEGRUPPE_XHTML}.
-     *
-     * @param user {@link User}
-     * @return {@link RedirectUtils#NEUEGRUPPE_XHTML}
-     */
-    @Nonnull
-    public String neu(@Nonnull final User user) {
-        this.setSelectedEntity(new Gruppe());
-        this.zuHinzufuegendeUser = new ArrayList<>();
-        this.zuHinzufuegendeUser.add(user);
-        return RedirectUtils.NEUEGRUPPE_XHTML;
-    }
-
-    /**
      * {@inheritDoc}
      */
-    @Override
     @Nonnull
+    @Override
     protected Class<Gruppe> getRepositoryClass() {
         return Gruppe.class;
     }
@@ -217,8 +109,8 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     /**
      * {@inheritDoc}
      */
-    @Override
     @Nonnull
+    @Override
     protected String getQueryCommand() {
         return Gruppe.NAMED_QUERY_QUERY;
     }
@@ -226,18 +118,10 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     /**
      * {@inheritDoc}
      */
-    @Override
     @Nonnull
+    @Override
     protected String getSelect() {
         return Gruppe.NAMED_QUERY_NAME;
-    }
-
-    public List<User> getZuHinzufuegendeUser() {
-        return this.zuHinzufuegendeUser;
-    }
-
-    public void setZuHinzufuegendeUser(final List<User> zuHinzufuegendeUser) {
-        this.zuHinzufuegendeUser = zuHinzufuegendeUser;
     }
 
 }

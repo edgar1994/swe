@@ -60,7 +60,7 @@
                     </h:column>
                 </h:dataTable>
                 <h:commandButton
-                        action="#{gruppeController.speichern(loginController.user)}"
+                        action="#{gruppeController.speichern}"
                         value="#{msg['BUTTON.SPEICHERN']}"
                         actionListener="#{growlView.showAction(msg['NEUERUSER.MESSAGE.SUMMARY'], msg['NEUERUSER.MESSAGE.TEXT'])}"
                         update=":growl"/>

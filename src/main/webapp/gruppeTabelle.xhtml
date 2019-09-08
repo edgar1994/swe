@@ -22,27 +22,7 @@
         <h:form>
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
-                <h:dataTable id="gruppeTabelle" var="gruppe"
-                             value="#{gruppeController.userAwareEntityList(loginController.user)}"
-                             rowClasses="odd,even" headerClass="header">
-                    <h:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENTITEL']}</f:facet>
-                        <h:outputText value="#{gruppe.titel}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
-                        <h:outputText value="#{userController.formatedName(gruppe.leiter)}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
-                        <h:outputText value="#{gruppe.mitglieder.size()}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.KUNDE']}</f:facet>
-                        <h:outputText
-                                value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder))}"/>
-                    </h:column>
-                </h:dataTable>
+
                 <h:commandButton action="#{gruppeController.neu(loginController.user)}" value="#{msg['BUTTON.NEU']}"/>
             </ui:insert>
         </h:form>

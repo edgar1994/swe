@@ -13,6 +13,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.persistence.Query;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -50,11 +51,11 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     public void init() {
         final Adresse adresse = new Adresse("Strasse 21", "99999", "Stadt");
         this.save(new User("Aron", "O'Connor", adresse, "test",
-                "passwort+", Rolle.KUNDE));
+                "passwort+", Rolle.KUNDE, new HashSet<>()));
         this.save(new User("Edgar", "Grischenko", adresse, "edgar",
-                "passwort+", Rolle.ADMIN));
+                "passwort+", Rolle.ADMIN, new HashSet<>()));
         this.save(new User("Mitarbeiter1", "Nachname1", adresse, "mitarbeiter1",
-                "passwort+", Rolle.MITARBEITER));
+                "passwort+", Rolle.MITARBEITER, new HashSet<>()));
     }
 
     /**
