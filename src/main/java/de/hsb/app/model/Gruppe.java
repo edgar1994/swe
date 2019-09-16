@@ -23,8 +23,7 @@ public class Gruppe {
     @GeneratedValue
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private User leiter;
+    private int leiterId;
 
     @NotNull
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -43,8 +42,8 @@ public class Gruppe {
         this.erstellungsdatum = Date.from(Instant.now());
     }
 
-    public Gruppe(final User leiter, final Set<User> mitglieder, final String titel) {
-        this.leiter = leiter;
+    public Gruppe(int leiterId, Set<User> mitglieder, String titel) {
+        this.leiterId = leiterId;
         this.mitglieder = mitglieder;
         this.erstellungsdatum = Date.from(Instant.now());
         this.titel = titel;
@@ -54,23 +53,23 @@ public class Gruppe {
         return this.id;
     }
 
-    public void setId(final int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public User getLeiter() {
-        return this.leiter;
+    public int getLeiterId() {
+        return this.leiterId;
     }
 
-    public void setLeiter(final User leiter) {
-        this.leiter = leiter;
+    public void setLeiterId(int leiterId) {
+        this.leiterId = leiterId;
     }
 
     public Set<User> getMitglieder() {
         return this.mitglieder;
     }
 
-    public void setMitglieder(final Set<User> mitglieder) {
+    public void setMitglieder(Set<User> mitglieder) {
         this.mitglieder = mitglieder;
     }
 
@@ -78,7 +77,7 @@ public class Gruppe {
         return this.erstellungsdatum;
     }
 
-    public void setErstellungsdatum(final Date erstellungsdatum) {
+    public void setErstellungsdatum(Date erstellungsdatum) {
         this.erstellungsdatum = erstellungsdatum;
     }
 
@@ -86,7 +85,7 @@ public class Gruppe {
         return this.titel;
     }
 
-    public void setTitel(final String name) {
+    public void setTitel(String name) {
         this.titel = name;
     }
 
@@ -96,7 +95,7 @@ public class Gruppe {
      *
      * @param user {@link User}
      */
-    public void addUser(@Nonnull final User user) {
+    public void addUser(@Nonnull User user) {
         this.mitglieder.add(user);
         user.getGruppen().add(this);
     }
@@ -107,7 +106,7 @@ public class Gruppe {
      *
      * @param user {@link User}
      */
-    public void removeUser(@Nonnull final User user) {
+    public void removeUser(@Nonnull User user) {
         this.mitglieder.remove(user);
         user.getGruppen().remove(this);
     }

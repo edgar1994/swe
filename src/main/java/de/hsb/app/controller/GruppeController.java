@@ -1,11 +1,8 @@
 package de.hsb.app.controller;
 
-import de.hsb.app.enumeration.Rolle;
-import de.hsb.app.model.Adresse;
 import de.hsb.app.model.Gruppe;
 import de.hsb.app.model.User;
 import de.hsb.app.repository.AbstractCrudRepository;
-import de.hsb.app.utils.GruppeUtils;
 import de.hsb.app.utils.RedirectUtils;
 import de.hsb.app.utils.UserUtils;
 
@@ -16,7 +13,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.persistence.Query;
 import javax.transaction.*;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,20 +29,10 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param zuEntfernenderUser {@link User}
      */
     @Nonnull
-    public String entferneUser(@Nonnull final User zuEntfernenderUser) {
-        this.selectedEntity.getMitglieder().removeIf(user -> !UserUtils.compareUserById(this.selectedEntity.getLeiter(),
-                user) && UserUtils.compareUserById(user, zuEntfernenderUser));
+    public String entferneUser(@Nonnull User zuEntfernenderUser) {
+        this.selectedEntity.getMitglieder().removeIf(user -> this.selectedEntity.getLeiterId() !=
+                zuEntfernenderUser.getId() && UserUtils.compareUserById(user, zuEntfernenderUser));
         return RedirectUtils.NEUEGRUPPE_XHTML;
-    }
-
-    /**
-     * Entfernt alle {@link User} und den {@link Gruppe}n-Leiter aus der {@link Gruppe}.
-     */
-    private void entferneAlleUser() {
-        this.selectedEntity.getMitglieder().forEach(user -> user.getGruppen().removeIf(
-                gruppe -> GruppeUtils.compareGruppeById(this.selectedEntity, gruppe)));
-        this.selectedEntity.getMitglieder().removeAll(this.selectedEntity.getMitglieder());
-        this.selectedEntity.setLeiter(null);
     }
 
     /**
@@ -58,20 +44,16 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
         try {
             this.utx.begin();
             this.selectedEntity = this.entityList.getRowData();
-            for (final User user : this.selectedEntity.getMitglieder()) {
+            for (User user : this.selectedEntity.getMitglieder()) {
                 this.selectedEntity.removeUser(user);
             }
-            final User user = new User("999", "999", new Adresse("999", "999", "999"),
-                    "999", "999", Rolle.USER, Collections.emptySet());
-            this.selectedEntity.setLeiter(user);
-            this.em.persist(user);
 
             this.selectedEntity = this.em.merge(this.selectedEntity);
             this.em.persist(this.selectedEntity);
             this.em.remove(this.selectedEntity);
             this.entityList.setWrappedData(this.em.createNamedQuery("SelectGruppe").getResultList());
             this.utx.commit();
-        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
+        } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
             this.logger.error("Löschen fehlgeschlagen -> ", e);
         }
@@ -86,15 +68,15 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return {@link RedirectUtils#NEUEGRUPPE_XHTML}
      */
     @CheckForNull
-    public String neu(@Nonnull final User eingeloggterUser) {
+    public String neu(@Nonnull User eingeloggterUser) {
         try {
             this.utx.begin();
             this.selectedEntity = new Gruppe();
-            this.selectedEntity.setLeiter(eingeloggterUser);
+            this.selectedEntity.setLeiterId(eingeloggterUser.getId());
             this.selectedEntity.addUser(eingeloggterUser);
             this.utx.commit();
             return RedirectUtils.NEUEGRUPPE_XHTML;
-        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
+        } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
             this.logger.error("Speichern fehlgeschlagen -> ", e);
             return null;
@@ -108,7 +90,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return {@link RedirectUtils#NEUEGRUPPE_XHTML}
      */
     @Nonnull
-    public String fuegeUserHinzu(@Nonnull final User zuHinzuzufuegenderUser) {
+    public String fuegeUserHinzu(@Nonnull User zuHinzuzufuegenderUser) {
         this.selectedEntity.addUser(zuHinzuzufuegenderUser);
         return RedirectUtils.NEUEGRUPPE_XHTML;
     }
@@ -131,9 +113,9 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return List<Gruppe>
      */
     @Nonnull
-    public List<Gruppe> userAwareFindeAlleGruppen(@Nonnull final User user) {
-        final Query query = this.em.createQuery("select gr from Gruppe gr join fetch gr.mitglieder m " +
-                "where m.id = :userId or gr.leiter.id = :userId");
+    public List<Gruppe> userAwareFindeAlleGruppen(@Nonnull User user) {
+        Query query = this.em.createQuery("select gr from Gruppe gr join fetch gr.mitglieder m " +
+                "where m.id = :userId");
         query.setParameter("userId", user.getId());
         return query.getResultList();
     }
@@ -144,8 +126,8 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      *
      * @return DataModel<User>
      */
-    public DataModel<Gruppe> entityListForGruppenerstellung(@Nonnull final User user) {
-        final List<Gruppe> gruppeList = this.userAwareFindeAlleGruppen(user);
+    public DataModel<Gruppe> entityListForGruppenerstellung(@Nonnull User user) {
+        List<Gruppe> gruppeList = this.userAwareFindeAlleGruppen(user);
         if (!gruppeList.isEmpty()) {
             this.checkEntityList();
             this.entityList.setWrappedData(gruppeList);
@@ -159,9 +141,9 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param user {@link User}
      * @return boolean
      */
-    public boolean istHinzugefuegt(@Nonnull final User user) {
+    public boolean istHinzugefuegt(@Nonnull User user) {
         boolean hinzugefuegt = false;
-        for (final User hinzugefuegteUser : this.selectedEntity.getMitglieder()) {
+        for (User hinzugefuegteUser : this.selectedEntity.getMitglieder()) {
             hinzugefuegt |= UserUtils.compareUserById(hinzugefuegteUser, user);
         }
         return hinzugefuegt;

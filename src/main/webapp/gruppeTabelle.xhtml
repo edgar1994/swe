@@ -36,7 +36,7 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
-                        <h:outputText value="#{userController.formatedName(gruppe.leiter)}"/>
+                        <h:outputText value="#{userController.formatedName(userController.findById(gruppe.leiterId))}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
