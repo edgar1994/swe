@@ -3,6 +3,7 @@ package de.hsb.app.controller;
 import de.hsb.app.model.Gruppe;
 import de.hsb.app.model.User;
 import de.hsb.app.repository.AbstractCrudRepository;
+import de.hsb.app.utils.GruppeUtils;
 import de.hsb.app.utils.RedirectUtils;
 import de.hsb.app.utils.UserUtils;
 
@@ -13,7 +14,10 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.persistence.Query;
 import javax.transaction.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Controller fuer {@link Gruppe}.
@@ -40,18 +44,25 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      *
      * @return {@link RedirectUtils#GRUPPETABELLE_XHTML}
      */
-    public String deleteGruppe() {
+    @Nonnull
+    public String deleteGruppe(@Nonnull User loggedUser) {
         try {
             this.utx.begin();
-            this.selectedEntity = this.entityList.getRowData();
+            // Fixme Workaround
+            List<Gruppe> gruppen = this.userAwareFindeAlleGruppen(loggedUser);
+            for (Gruppe gruppe : gruppen) {
+                if (GruppeUtils.compareGruppeById(gruppe, this.entityList.getRowData())) {
+                    this.selectedEntity = gruppe;
+                }
+            }
             for (User user : this.selectedEntity.getMitglieder()) {
                 this.selectedEntity.removeUser(user);
             }
-
             this.selectedEntity = this.em.merge(this.selectedEntity);
-            this.em.persist(this.selectedEntity);
+            this.em.merge(this.selectedEntity);
             this.em.remove(this.selectedEntity);
-            this.entityList.setWrappedData(this.em.createNamedQuery("SelectGruppe").getResultList());
+            this.em.flush();
+            this.entityList.setWrappedData(this.userAwareFindeAlleGruppen(loggedUser));
             this.utx.commit();
         } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
@@ -112,12 +123,31 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param user {@link User}
      * @return List<Gruppe>
      */
-    @Nonnull
-    public List<Gruppe> userAwareFindeAlleGruppen(@Nonnull User user) {
-        Query query = this.em.createQuery("select gr from Gruppe gr join fetch gr.mitglieder m " +
-                "where m.id = :userId");
-        query.setParameter("userId", user.getId());
-        return query.getResultList();
+    @CheckForNull
+    private List<Gruppe> userAwareFindeAlleGruppen(@Nonnull User user) {
+        switch (user.getRolle()) {
+            case KUNDE:
+            case MITARBEITER:
+                List<Gruppe> gruppen = new ArrayList<>();
+                // Fixme Alle
+                Query query = this.em.createQuery("select gr from Gruppe gr join fetch gr.mitglieder m " +
+                        "where m.id = :userId");
+                query.setParameter("userId", user.getId());
+                Set<Integer> gruppenIds = new HashSet<>();
+                for (Gruppe gruppe : (List<Gruppe>) query.getResultList()) {
+                    gruppenIds.add(gruppe.getId());
+                }
+                for (int id : gruppenIds) {
+                    gruppen.add(this.findById(id));
+                }
+                return gruppen;
+            case ADMIN:
+                return this.findAll();
+            case USER:
+            default:
+                throw new IllegalArgumentException(String.format("Rolle %s darf keine Gruppen haben.", user.getRolle()));
+
+        }
     }
 
 
