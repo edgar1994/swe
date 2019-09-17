@@ -2,6 +2,7 @@ package de.hsb.app.controller;
 
 import de.hsb.app.enumeration.Rolle;
 import de.hsb.app.model.Adresse;
+import de.hsb.app.model.Gruppe;
 import de.hsb.app.model.User;
 import de.hsb.app.repository.AbstractCrudRepository;
 import de.hsb.app.utils.RedirectUtils;
@@ -48,7 +49,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     // Fixme deaktiviert bis Postconstruct benötigt wird. (Feuert zwei mal)
     // @PostConstruct
     public void init() {
-        final Adresse adresse = new Adresse("Strasse 21", "99999", "Stadt");
+        Adresse adresse = new Adresse("Strasse 21", "99999", "Stadt");
         this.save(new User("Aron", "O'Connor", adresse, "test",
                 "passwort+", Rolle.KUNDE, new HashSet<>()));
         this.save(new User("Edgar", "Grischenko", adresse, "edgar",
@@ -63,11 +64,11 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      * @return {@link RedirectUtils}
      */
     public String login() {
-        final Query query = this.em.createQuery("select u from User u " +
+        Query query = this.em.createQuery("select u from User u " +
                 "where u.username = :username and u.passwort = :passwort ");
         query.setParameter("username", this.username);
         query.setParameter("passwort", this.passwort);
-        final List<User> userList = query.getResultList();
+        List<User> userList = query.getResultList();
         if (userList.size() == 1) {
             this.user = userList.get(0);
             return RedirectUtils.LOGIN_INDEX_XHTML;
@@ -77,14 +78,42 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     }
 
     public void updateCurrentUser() {
-        final Query query = this.em.createQuery("select u from User u " +
+        Query query = this.em.createQuery("select u from User u " +
                 "where u.username = :username and u.passwort = :passwort ");
         query.setParameter("username", this.username);
         query.setParameter("passwort", this.passwort);
-        final List<User> userList = query.getResultList();
+        List<User> userList = query.getResultList();
         if (userList.size() == 1) {
             this.user = userList.get(0);
         }
+    }
+
+    /**
+     * Prueft ob der {@link User} die Berechtigung ({@link Rolle#MITARBEITER}) hat um eine neue {@link Gruppe}.
+     *
+     * @param cse {@link ComponentSystemEvent}
+     */
+    public void userAwareNewGroup(ComponentSystemEvent cse) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (this.user == null) {
+            context.getApplication().getNavigationHandler().
+                    handleNavigation(context, null,
+                            RedirectUtils.LOGIN_INDEX_XHTML);
+        }
+        switch (this.user.getRolle()) {
+            case MITARBEITER:
+                break;
+            case ADMIN:
+            case KUNDE:
+            case USER:
+                context.getApplication().getNavigationHandler().
+                        handleNavigation(context, null,
+                                RedirectUtils.LOGIN_INDEX_XHTML);
+                break;
+            default:
+                throw new IllegalArgumentException(String.format("Rolle %s exestiert nicht", this.user.getRolle()));
+        }
+
     }
 
     /**
@@ -92,8 +121,8 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      *
      * @param cse {@link ComponentSystemEvent}
      */
-    public void checkLoggedIn(final ComponentSystemEvent cse) {
-        final FacesContext context = FacesContext.getCurrentInstance();
+    public void checkLoggedIn(ComponentSystemEvent cse) {
+        FacesContext context = FacesContext.getCurrentInstance();
         if (this.user == null) {
             context.getApplication().getNavigationHandler().
                     handleNavigation(context, null,
@@ -171,7 +200,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
         return this.username;
     }
 
-    public void setUsername(final String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -179,7 +208,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
         return this.passwort;
     }
 
-    public void setPasswort(final String passwort) {
+    public void setPasswort(String passwort) {
         this.passwort = passwort;
     }
 
@@ -187,7 +216,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
         return this.user;
     }
 
-    public void setUser(final User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

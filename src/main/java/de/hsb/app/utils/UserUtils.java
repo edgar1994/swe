@@ -22,7 +22,7 @@ public class UserUtils {
      * @return "Nachname, Vorname"
      */
     @Nonnull
-    public static String getNachnameVornameString(@Nonnull final User user) {
+    public static String getNachnameVornameString(@Nonnull User user) {
         return user.getNachname().concat(", ").concat(user.getVorname());
     }
 
@@ -33,7 +33,7 @@ public class UserUtils {
      * @param userToCheck {@link User} zu pruefen
      * @return boolean
      */
-    public static boolean compareUserById(@Nonnull final User user, @Nonnull final User userToCheck) {
+    public static boolean compareUserById(@Nonnull User user, @Nonnull User userToCheck) {
         return user.getId() == userToCheck.getId();
     }
 
@@ -44,7 +44,7 @@ public class UserUtils {
      * @param userToCheck {@link User} zu pruefen
      * @return boolean
      */
-    public static boolean compareUser(@Nonnull final User user, @Nonnull final User userToCheck) {
+    public static boolean compareUserByFields(@Nonnull User user, @Nonnull User userToCheck) {
         boolean same;
         same = user.getRolle().equals(userToCheck.getRolle());
         same &= user.getNachname().equals(userToCheck.getNachname());
@@ -52,6 +52,57 @@ public class UserUtils {
         same &= user.getUsername().equals(userToCheck.getUsername());
         same &= AdressUtils.compareAdresseById(user.getAdresse(), userToCheck.getAdresse());
         return same;
+    }
+
+    /**
+     * Prueft die Id die zweier {@link User}.
+     *
+     * @param userId      UserId
+     * @param userToCheck {@link User} to check
+     * @return boolean
+     */
+    public static boolean compareUserById(int userId, @Nonnull User userToCheck) {
+        return userToCheck.getId() == userId;
+    }
+
+    /**
+     * Prueft ob der uebergebene {@link User} die {@link Rolle#MITARBEITER}} hat.
+     *
+     * @param userToCheck {@link User} to check
+     * @return boolean
+     */
+    public static boolean isEmployee(@Nonnull User userToCheck) {
+        return Rolle.MITARBEITER.equals(userToCheck.getRolle());
+    }
+
+    /**
+     * Prueft ob der uebergebene {@link User} die {@link Rolle#ADMIN}} hat.
+     *
+     * @param userToCheck {@link User} to check
+     * @return boolean
+     */
+    public static boolean isAdmin(@Nonnull User userToCheck) {
+        return Rolle.ADMIN.equals(userToCheck.getRolle());
+    }
+
+    /**
+     * Prueft ob der uebergebene {@link User} die {@link Rolle#KUNDE}} hat.
+     *
+     * @param userToCheck {@link User} to check
+     * @return boolean
+     */
+    public static boolean isCustomer(@Nonnull User userToCheck) {
+        return Rolle.KUNDE.equals(userToCheck.getRolle());
+    }
+
+    /**
+     * Prueft ob der uebergebene {@link User} die {@link Rolle#USER}} hat.
+     *
+     * @param userToCheck {@link User} to check
+     * @return boolean
+     */
+    public static boolean isUser(@Nonnull User userToCheck) {
+        return Rolle.USER.equals(userToCheck.getRolle());
     }
 
 }
