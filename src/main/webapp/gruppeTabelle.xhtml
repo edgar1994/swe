@@ -47,7 +47,7 @@
                         <h:outputText
                                 value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder))}"/>
                     </h:column>
-                    <h:column>
+                    <h:column rendered="#{gruppeController.userAwareDeleteGroup(loginController.user, gruppe)}">
                         <f:facet name="header">#{msg['GRUPPENTABELLE.LOESCHEN']}</f:facet>
                         <h:commandButton action="#{gruppeController.deleteGruppe(loginController.user)}"
                                          value="#{msg['BUTTON.LOESCHEN']}"
