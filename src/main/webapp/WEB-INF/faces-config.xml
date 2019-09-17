@@ -29,7 +29,7 @@
         <display-name>userTabelle</display-name>
         <from-view-id>/userTabelle.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{userController.neu}</from-action>
+            <from-action>#{userController.newUser}</from-action>
             <from-outcome>neuerUser</from-outcome>
             <to-view-id>/neuerUser.xhtml</to-view-id>
         </navigation-case>
@@ -40,12 +40,12 @@
         <display-name>neuerUser</display-name>
         <from-view-id>/neuerUser.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{userController.abbrechen}</from-action>
+            <from-action>#{userController.cancel}</from-action>
             <from-outcome>userTabelle</from-outcome>
             <to-view-id>/userTabelle.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-action>#{userController.speichern}</from-action>
+            <from-action>#{userController.save}</from-action>
             <from-outcome>userTabelle</from-outcome>
             <to-view-id>/userTabelle.xhtml</to-view-id>
         </navigation-case>

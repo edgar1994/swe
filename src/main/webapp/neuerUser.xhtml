@@ -58,11 +58,11 @@
 
                 </h:panelGrid>
                 <h:commandButton
-                        action="#{userController.speichern()}"
+                        action="#{userController.save()}"
                         value="#{msg['BUTTON.SPEICHERN']}"
                         actionListener="#{growlView.showAction(msg['NEUERUSER.MESSAGE.SUMMARY'], msg['NEUERUSER.MESSAGE.TEXT'])}"
                         update=":growl"/>
-                <h:commandButton action="#{userController.abbrechen}" value="#{msg['BUTTON.ABBRECHEN']}"
+                <h:commandButton action="#{userController.cancel}" value="#{msg['BUTTON.ABBRECHEN']}"
                                  immediate="true"/>
             </h:form>
         </ui:insert>
