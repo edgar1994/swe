@@ -156,13 +156,16 @@ public class UserController extends AbstractCrudRepository<User> {
     }
 
     /**
-     * Erstellt anhand aller gefundenen {@link User}n fuer die Gruppenerstellung das entsprechende
-     * {@link DataModel<User>}.
+     * Erstellt anhand aller gefundenen {@link User} fuer die Gruppenerstellung das entsprechende
+     * {@link DataModel<User>}. Der eingeloggte {@link User} wird nicht mit Aufgeführt, da dieser bereits in der
+     * {@link de.hsb.app.model.Gruppe} als Leiter gesetzt ist. Er kann nicht entfernt werden.
      *
+     * @param loggedUser eingeloggter {@link User}
      * @return DataModel<User>
      */
-    public DataModel<User> entityListForGruppenerstellung() {
+    public DataModel<User> entityListForGruppenerstellung(@Nonnull User loggedUser) {
         List<User> userList = this.findAllUserForGruppenerstellung();
+        userList.removeIf(user -> UserUtils.compareUserById(loggedUser, user));
         if (!userList.isEmpty()) {
             this.checkEntityList();
             this.entityList.setWrappedData(userList);

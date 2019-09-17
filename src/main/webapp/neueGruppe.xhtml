@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
@@ -33,12 +31,13 @@
                 <h:panelGrid var="gruppe" value="#{gruppeController.selectedEntity}" columns="2"
                              headerClass="header"
                              footerClass="footer">
-                    <h:outputLabel value="#{msg['NEUEGRUPPE.TITEL']}" for="titel"/>
+                    <h:outputLabel value="#{msg['NEUEGRUPPE.TABLE.TITEL']}" for="titel"/>
                     <p:inputText id="titel" value="#{gruppeController.selectedEntity.titel}" required="true"
                                  requiredMessage="#{msg['NEUEGRUPPE.TITEL.MESSAGE']}">
                     </p:inputText>
                 </h:panelGrid>
-                <h:dataTable id="userTabelle" var="user" value="#{userController.entityListForGruppenerstellung()}"
+                <h:dataTable id="userTabelle" var="user"
+                             value="#{userController.entityListForGruppenerstellung(loginController.user)}"
                              rowClasses="odd,even" headerClass="header">
                     <h:column>
                         <f:facet name="header">#{msg['USER.NACHNAME']}</f:facet>
@@ -54,12 +53,12 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['NEUEGRRUPPE.IMPROJEKT']}</f:facet>
-                        <h:commandButton action="#{gruppeController.fuegeUserHinzu(user)}"
-                                         value="#{msg['BUTTON.ADD']}"
+                        <h:commandButton action="#{gruppeController.addUser(user)}"
+                                         value="#{msg['NEUEGRUPPE.BUTTON.ADD']}"
                                          immediate="true"
                                          rendered="#{!gruppeController.isAdded(user)}"/>
-                        <h:commandButton action="#{gruppeController.deleteUser(user)}"
-                                         value="#{msg['BUTTON.REMOVE']}"
+                        <h:commandButton action="#{gruppeController.removeUser(user)}"
+                                         value="#{msg['NEUEGRUPPE.BUTTON.REMOVE']}"
                                          immediate="true"
                                          rendered="#{gruppeController.isAdded(user)}"/>
                     </h:column>

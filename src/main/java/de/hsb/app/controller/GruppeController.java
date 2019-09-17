@@ -30,12 +30,12 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * Entfernt einen {@link User} aus der Mitglieder-Liste der ausgewaehlten {@link Gruppe}.
      * Redirected auf {@link RedirectUtils#NEUEGRUPPE_XHTML}
      *
-     * @param userToDelete Zu loeschenden {@link User}
+     * @param userToRmove Zu entfernenden {@link User}
      */
     @Nonnull
-    public String deleteUser(@Nonnull User userToDelete) {
+    public String removeUser(@Nonnull User userToRmove) {
         this.selectedEntity.getMitglieder().removeIf(user -> !UserUtils.compareUserById(this.selectedEntity.getLeiterId(),
-                userToDelete) && UserUtils.compareUserById(user, userToDelete));
+                userToRmove) && UserUtils.compareUserById(user, userToRmove));
         return RedirectUtils.NEUEGRUPPE_XHTML;
     }
 
@@ -68,28 +68,33 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
 
     /**
      * Loescht eine {@link Gruppe} und redirected auf {@link RedirectUtils#GRUPPETABELLE_XHTML}.
+     * Ist der {@link User} dazu nicht berechtigt wird die ausgewaehlte {@link Gruppe} nicht geloescht und er bleibt auf
+     * der gleichen Seite.
      *
      * @return {@link RedirectUtils#GRUPPETABELLE_XHTML}
      */
     @Nonnull
     public String deleteGruppe(@Nonnull User loggedUser) {
-        try {
-            this.utx.begin();
-            this.selectedEntity = this.userAwareFindGruppeToDeleteByLoggedUserAndRowData(loggedUser,
-                    this.entityList.getRowData());
-            for (User user : this.selectedEntity.getMitglieder()) {
-                this.selectedEntity.removeUser(user);
+        this.selectedEntity = this.userAwareFindGruppeToDeleteByLoggedUserAndRowData(loggedUser,
+                this.entityList.getRowData());
+        if (this.userAwareDeleteGroup(loggedUser, this.selectedEntity)) {
+            try {
+                this.utx.begin();
+                for (User user : this.selectedEntity.getMitglieder()) {
+                    this.selectedEntity.removeUser(user);
+                }
+                this.selectedEntity = this.em.merge(this.selectedEntity);
+                this.em.remove(this.selectedEntity);
+                this.em.flush();
+                this.entityList.setWrappedData(this.userAwareFindAllGruppen(loggedUser));
+                this.utx.commit();
+            } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
+                    RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
+                this.logger.error("Löschen fehlgeschlagen -> ", e);
             }
-            this.selectedEntity = this.em.merge(this.selectedEntity);
-            this.em.remove(this.selectedEntity);
-            this.em.flush();
-            this.entityList.setWrappedData(this.userAwareFindAllGruppen(loggedUser));
-            this.utx.commit();
-        } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
-                RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-            this.logger.error("Löschen fehlgeschlagen -> ", e);
+            return RedirectUtils.GRUPPETABELLE_XHTML;
         }
-        return RedirectUtils.GRUPPETABELLE_XHTML;
+        return RedirectUtils.NEUEGRUPPE_XHTML;
     }
 
     /**
@@ -100,7 +105,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return {@link RedirectUtils#NEUEGRUPPE_XHTML}
      */
     @CheckForNull
-    public String neu(@Nonnull User eingeloggterUser) {
+    public String newGroup(@Nonnull User eingeloggterUser) {
         try {
             this.utx.begin();
             this.selectedEntity = new Gruppe();
@@ -122,7 +127,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return {@link RedirectUtils#NEUEGRUPPE_XHTML}
      */
     @Nonnull
-    public String fuegeUserHinzu(@Nonnull User userToAdd) {
+    public String addUser(@Nonnull User userToAdd) {
         this.selectedEntity.addUser(userToAdd);
         return RedirectUtils.NEUEGRUPPE_XHTML;
     }

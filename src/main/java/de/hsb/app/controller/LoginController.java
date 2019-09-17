@@ -6,6 +6,7 @@ import de.hsb.app.model.Gruppe;
 import de.hsb.app.model.User;
 import de.hsb.app.repository.AbstractCrudRepository;
 import de.hsb.app.utils.RedirectUtils;
+import de.hsb.app.utils.UserUtils;
 
 import javax.annotation.Nonnull;
 import javax.faces.application.FacesMessage;
@@ -193,6 +194,16 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
             default:
                 throw new IllegalArgumentException("Rolle Exestiert nicht.");
         }
+    }
+
+    /**
+     * Checked ob der angemeldete {@link User} {@link Rolle#KUNDE} oder {@link Rolle#USER} hat.
+     *
+     * @param loggedUser eingeloggter {@link User}
+     * @return boolean
+     */
+    public boolean isKundeOrUser(@Nonnull User loggedUser) {
+        return UserUtils.isCustomer(loggedUser) || UserUtils.isUser(loggedUser);
     }
 
     /**

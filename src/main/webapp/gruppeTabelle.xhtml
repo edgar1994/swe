@@ -47,16 +47,17 @@
                         <h:outputText
                                 value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder))}"/>
                     </h:column>
-                    <h:column rendered="#{gruppeController.userAwareDeleteGroup(loginController.user, gruppe)}">
+                    <h:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
                         <f:facet name="header">#{msg['GRUPPENTABELLE.LOESCHEN']}</f:facet>
                         <h:commandButton action="#{gruppeController.deleteGruppe(loginController.user)}"
-                                         value="#{msg['BUTTON.LOESCHEN']}"
+                                         value="#{msg['BUTTON.REMOVE']}"
                                          rendered="#{gruppeController.userAwareDeleteGroup(loginController.user, gruppe)}"/>
                         <h:outputText value="#{msg['GRUPPENTABELLE.NURLEITER']}"
                                       rendered="#{!gruppeController.userAwareDeleteGroup(loginController.user, gruppe)}"/>
                     </h:column>
                 </h:dataTable>
-                <h:commandButton action="#{gruppeController.neu(loginController.user)}" value="#{msg['BUTTON.NEU']}"
+                <h:commandButton action="#{gruppeController.newGroup(loginController.user)}"
+                                 value="#{msg['GRUPPENTABELLE.BUTTON.NEU']}"
                                  rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
             </ui:insert>
         </h:form>

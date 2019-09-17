@@ -72,7 +72,23 @@
         <display-name>gruppeTabelle</display-name>
         <from-view-id>/gruppeTabelle.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{gruppeController.neu}</from-action>
+            <from-action>#{gruppeController.newGroup}</from-action>
+            <from-outcome>neueGruppe.xhtml</from-outcome>
+            <to-view-id>/neueGruppe.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- Von Gruppentabelle -->
+    <navigation-rule>
+        <display-name>neueGruppe</display-name>
+        <from-view-id>/neueGruppe.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{gruppeController.addUser(loginController.user)}</from-action>
+            <from-outcome>neueGruppe.xhtml</from-outcome>
+            <to-view-id>/neueGruppe.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{gruppeController.removeUser(loginController.user)}</from-action>
             <from-outcome>neueGruppe.xhtml</from-outcome>
             <to-view-id>/neueGruppe.xhtml</to-view-id>
         </navigation-case>
