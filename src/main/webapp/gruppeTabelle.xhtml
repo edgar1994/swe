@@ -50,14 +50,18 @@
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.LOESCHEN']}</f:facet>
                         <h:commandButton action="#{gruppeController.deleteGruppe(loginController.user)}"
-                                         value="#{msg['BUTTON.LOESCHEN']}"/>
+                                         value="#{msg['BUTTON.LOESCHEN']}"
+                                         rendered="#{gruppeController.userAwareDeleteGroup(loginController.user, gruppe)}"/>
+                        <h:outputText value="#{msg['GRUPPENTABELLE.NURLEITER']}"
+                                      rendered="#{!gruppeController.userAwareDeleteGroup(loginController.user, gruppe)}"/>
                     </h:column>
                 </h:dataTable>
-                <h:commandButton action="#{gruppeController.neu(loginController.user)}" value="#{msg['BUTTON.NEU']}"/>
+                <h:commandButton action="#{gruppeController.neu(loginController.user)}" value="#{msg['BUTTON.NEU']}"
+                                 rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
             </ui:insert>
         </h:form>
     </div>
 </h:body>
-<f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
+<f:event listener="#{loginController.userAwareGroupTable}" type="preRenderView"/>
 <f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
 </html>

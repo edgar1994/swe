@@ -8,6 +8,7 @@ import de.hsb.app.repository.AbstractCrudRepository;
 import de.hsb.app.utils.RedirectUtils;
 
 import javax.annotation.Nonnull;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -68,6 +69,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                 "where u.username = :username and u.passwort = :passwort ");
         query.setParameter("username", this.username);
         query.setParameter("passwort", this.passwort);
+        // Fixme Unchecked cast
         List<User> userList = query.getResultList();
         if (userList.size() == 1) {
             this.user = userList.get(0);
@@ -82,6 +84,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                 "where u.username = :username and u.passwort = :passwort ");
         query.setParameter("username", this.username);
         query.setParameter("passwort", this.passwort);
+        // Fixme Unchecked cast
         List<User> userList = query.getResultList();
         if (userList.size() == 1) {
             this.user = userList.get(0);
@@ -89,23 +92,30 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     }
 
     /**
-     * Prueft ob der {@link User} die Berechtigung ({@link Rolle#MITARBEITER}) hat um eine neue {@link Gruppe}.
+     * Prueft ob der {@link User} die Berechtigung ({@link Rolle#MITARBEITER}) hat um eine neue {@link Gruppe} anzulegen.
+     * Andernfalls wird auf {@link RedirectUtils#LOGIN_INDEX_XHTML} redirected;
      *
      * @param cse {@link ComponentSystemEvent}
      */
     public void userAwareNewGroup(ComponentSystemEvent cse) {
         FacesContext context = FacesContext.getCurrentInstance();
-        if (this.user == null) {
-            context.getApplication().getNavigationHandler().
-                    handleNavigation(context, null,
-                            RedirectUtils.LOGIN_INDEX_XHTML);
-        }
+        this.checkLoggedIn(cse);
         switch (this.user.getRolle()) {
             case MITARBEITER:
                 break;
             case ADMIN:
             case KUNDE:
+                // Fixme Wird nicht angezeigt
+                context.addMessage(null, new FacesMessage("Unerlaubt",
+                        String.format("Sie duerfen keine Gruppe mit der Rolle %s anlegen!", this.user.getRolle())));
+                context.getApplication().getNavigationHandler().
+                        handleNavigation(context, null,
+                                RedirectUtils.GRUPPETABELLE_XHTML);
+                break;
             case USER:
+                // Fixme Wird nicht angezeigt
+                context.addMessage(null, new FacesMessage("Unerlaubt",
+                        String.format("Sie duerfen keine Gruppe mit der Rolle %s anlegen!", this.user.getRolle())));
                 context.getApplication().getNavigationHandler().
                         handleNavigation(context, null,
                                 RedirectUtils.LOGIN_INDEX_XHTML);
@@ -113,7 +123,33 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
             default:
                 throw new IllegalArgumentException(String.format("Rolle %s exestiert nicht", this.user.getRolle()));
         }
+    }
 
+    /**
+     * Prueft ob der {@link User} die Berechtigung ({@link Rolle#MITARBEITER}, {@link Rolle#ADMIN}, {@link Rolle#KUNDE})
+     * hat um die Gruppentabelle einzusehen. Andernfalls wird auf {@link RedirectUtils#LOGIN_INDEX_XHTML} redirected;
+     *
+     * @param cse {@link ComponentSystemEvent}
+     */
+    public void userAwareGroupTable(ComponentSystemEvent cse) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        this.checkLoggedIn(cse);
+        switch (this.user.getRolle()) {
+            case ADMIN:
+            case KUNDE:
+            case MITARBEITER:
+                break;
+            case USER:
+                // Fixme Wird nicht angezeigt
+                context.addMessage(null, new FacesMessage("Unerlaubt",
+                        String.format("Sie duerfen keine Gruppe mit der Rolle %s anlegen!", this.user.getRolle())));
+                context.getApplication().getNavigationHandler().
+                        handleNavigation(context, null,
+                                RedirectUtils.LOGIN_INDEX_XHTML);
+                break;
+            default:
+                throw new IllegalArgumentException(String.format("Rolle %s exestiert nicht", this.user.getRolle()));
+        }
     }
 
     /**
@@ -124,6 +160,9 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     public void checkLoggedIn(ComponentSystemEvent cse) {
         FacesContext context = FacesContext.getCurrentInstance();
         if (this.user == null) {
+            // Fixme Wird nicht angezeigt
+            context.addMessage(null, new FacesMessage("Nicht eingeloggt",
+                    "Sie sind nicht eingeloggt. Bitte loggen Sie sich zuerst ein"));
             context.getApplication().getNavigationHandler().
                     handleNavigation(context, null,
                             RedirectUtils.LOGIN_XHTML);

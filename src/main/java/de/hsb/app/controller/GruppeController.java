@@ -171,6 +171,47 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
         }
     }
 
+    /**
+     * Liefert zuruck ob der eingeloggte {@link User} eine neue {@link Gruppe} erstellen darf oder nicht.
+     *
+     * @param loggedUser eingeloggter User
+     * @return boolean
+     */
+    public boolean userAwareNewGroup(@Nonnull User loggedUser) {
+        switch (loggedUser.getRolle()) {
+            case KUNDE:
+            case ADMIN:
+            case USER:
+                return false;
+            case MITARBEITER:
+                return true;
+            default:
+                throw new IllegalArgumentException(String.format("User mit der Rolle %s gibt es nicht",
+                        loggedUser.getRolle()));
+        }
+    }
+
+    /**
+     * Liefert zuruck ob der eingeloggte {@link User} eine {@link Gruppe} loeschen darf oder nicht.
+     *
+     * @param loggedUser eingeloggter User
+     * @return boolean
+     */
+    public boolean userAwareDeleteGroup(@Nonnull User loggedUser, @Nonnull Gruppe currentGroup) {
+        switch (loggedUser.getRolle()) {
+            case KUNDE:
+            case USER:
+                return false;
+            case MITARBEITER:
+                return UserUtils.compareUserById(currentGroup.getLeiterId(), loggedUser);
+            case ADMIN:
+                return true;
+            default:
+                throw new IllegalArgumentException(String.format("User mit der Rolle %s gibt es nicht",
+                        loggedUser.getRolle()));
+        }
+    }
+
 
     /**
      * Erstellt anhand aller gefundenen {@link Gruppe}n das entsprechende {@link DataModel <Gruppe>}.
