@@ -92,6 +92,16 @@
             <from-outcome>neueGruppe.xhtml</from-outcome>
             <to-view-id>/neueGruppe.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{gruppeController.save()}</from-action>
+            <from-outcome>gruppeTabelle.xhtml</from-outcome>
+            <to-view-id>/gruppeTabelle.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{gruppeController.cancel()}</from-action>
+            <from-outcome>gruppeTabelle.xhtml</from-outcome>
+            <to-view-id>/gruppeTabelle.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
 
     <!-- End Redirect -->

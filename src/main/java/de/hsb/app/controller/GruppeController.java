@@ -225,8 +225,8 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      */
     public DataModel<Gruppe> entityListForGruppenerstellung(@Nonnull User user) {
         List<Gruppe> gruppeList = this.userAwareFindAllGruppen(user);
+        this.checkEntityList();
         if (!gruppeList.isEmpty()) {
-            this.checkEntityList();
             this.entityList.setWrappedData(gruppeList);
         }
         return this.entityList;
