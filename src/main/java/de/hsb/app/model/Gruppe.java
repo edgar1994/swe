@@ -25,9 +25,10 @@ public class Gruppe {
 
     private int leiterId;
 
-    @NotNull
+    // Fixme CascadeType
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "ID", nullable = false)
+    @NotNull
     private Set<User> mitglieder;
 
     @Temporal(TemporalType.DATE)

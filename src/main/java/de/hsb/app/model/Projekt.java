@@ -2,11 +2,10 @@ package de.hsb.app.model;
 
 import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,18 +25,15 @@ public class Projekt {
     @Size(min = 3, max = 30)
     private String titel;
 
-    @Valid
     @NotNull
-    @OneToOne(cascade = CascadeType.ALL)
-    private User leiter;
+    private int leiterId;
 
     @NotNull
     @OneToMany(cascade = CascadeType.ALL)
     private List<Ticket> ticket;
 
     @NotNull
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Gruppe> gruppen;
+    private int gruppenId;
 
     @Temporal(TemporalType.DATE)
     @NotNull
@@ -49,21 +45,20 @@ public class Projekt {
     private Date abschlussdatum;
 
     public Projekt() {
-        this.ticket = Collections.emptyList();
-        this.gruppen = Collections.emptyList();
+        this.ticket = new ArrayList<>();
     }
 
-    public Projekt(String titel, User leiter, List<Ticket> ticket, List<Gruppe> gruppen, Date erstellungsdatum, Date abschlussdatum) {
+    public Projekt(String titel, int leiter, List<Ticket> ticket, int gruppenId, Date erstellungsdatum, Date abschlussdatum) {
         this.titel = titel;
-        this.leiter = leiter;
+        this.leiterId = leiter;
         this.ticket = ticket;
-        this.gruppen = gruppen;
+        this.gruppenId = gruppenId;
         this.erstellungsdatum = erstellungsdatum;
         this.abschlussdatum = abschlussdatum;
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -71,39 +66,39 @@ public class Projekt {
     }
 
     public String getTitel() {
-        return titel;
+        return this.titel;
     }
 
     public void setTitel(String titel) {
         this.titel = titel;
     }
 
-    public User getLeiter() {
-        return leiter;
+    public int getLeiterId() {
+        return this.leiterId;
     }
 
-    public void setLeiter(User leiter) {
-        this.leiter = leiter;
+    public void setLeiter(int leiterId) {
+        this.leiterId = leiterId;
     }
 
     public List<Ticket> getTicket() {
-        return ticket;
+        return this.ticket;
     }
 
     public void setTicket(List<Ticket> ticket) {
         this.ticket = ticket;
     }
 
-    public List<Gruppe> getGruppen() {
-        return gruppen;
+    public int getGruppen() {
+        return this.gruppenId;
     }
 
-    public void setGruppen(List<Gruppe> gruppen) {
-        this.gruppen = gruppen;
+    public void setGruppen(int gruppenId) {
+        this.gruppenId = gruppenId;
     }
 
     public Date getErstellungsdatum() {
-        return erstellungsdatum;
+        return this.erstellungsdatum;
     }
 
     public void setErstellungsdatum(Date erstellungsdatum) {
@@ -111,7 +106,7 @@ public class Projekt {
     }
 
     public Date getAbschlussdatum() {
-        return abschlussdatum;
+        return this.abschlussdatum;
     }
 
     public void setAbschlussdatum(Date abschlussdatum) {

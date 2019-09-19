@@ -46,6 +46,7 @@ public class User {
     @NotNull
     private Rolle rolle;
 
+    // Fixme CascadeType
     @ManyToMany(mappedBy = "mitglieder", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Gruppe> gruppen;
 
@@ -55,7 +56,7 @@ public class User {
         this.gruppen = new HashSet<>();
     }
 
-    public User(final String vorname, final String nachname, final Adresse adresse, final String username, final String passwort, final Rolle rolle, final Set<Gruppe> gruppen) {
+    public User(String vorname, String nachname, Adresse adresse, String username, String passwort, Rolle rolle, Set<Gruppe> gruppen) {
         this.vorname = vorname;
         this.nachname = nachname;
         this.adresse = adresse;
@@ -69,7 +70,7 @@ public class User {
         return this.id;
     }
 
-    public void setId(final int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -77,7 +78,7 @@ public class User {
         return this.vorname;
     }
 
-    public void setVorname(final String vorname) {
+    public void setVorname(String vorname) {
         this.vorname = vorname;
     }
 
@@ -85,7 +86,7 @@ public class User {
         return this.nachname;
     }
 
-    public void setNachname(final String nachname) {
+    public void setNachname(String nachname) {
         this.nachname = nachname;
     }
 
@@ -93,7 +94,7 @@ public class User {
         return this.adresse;
     }
 
-    public void setAdresse(final Adresse adresse) {
+    public void setAdresse(Adresse adresse) {
         this.adresse = adresse;
     }
 
@@ -101,7 +102,7 @@ public class User {
         return this.username;
     }
 
-    public void setUsername(final String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -109,7 +110,7 @@ public class User {
         return this.passwort;
     }
 
-    public void setPasswort(final String passwort) {
+    public void setPasswort(String passwort) {
         this.passwort = passwort;
     }
 
@@ -117,7 +118,7 @@ public class User {
         return this.rolle;
     }
 
-    public void setRolle(final Rolle rolle) {
+    public void setRolle(Rolle rolle) {
         this.rolle = rolle;
     }
 
@@ -125,7 +126,7 @@ public class User {
         return this.gruppen;
     }
 
-    public void setGruppen(final Set<Gruppe> gruppen) {
+    public void setGruppen(Set<Gruppe> gruppen) {
         this.gruppen = gruppen;
     }
 
@@ -135,7 +136,7 @@ public class User {
      *
      * @param gruppe {@link Gruppe}
      */
-    public void addGruppe(@Nonnull final Gruppe gruppe) {
+    public void addGruppe(@Nonnull Gruppe gruppe) {
         this.gruppen.add(gruppe);
         gruppe.getMitglieder().add(this);
     }
@@ -146,7 +147,7 @@ public class User {
      *
      * @param gruppe {@link User}
      */
-    public void removeGruppe(@Nonnull final Gruppe gruppe) {
+    public void removeGruppe(@Nonnull Gruppe gruppe) {
         this.gruppen.remove(gruppe);
         gruppe.getMitglieder().remove(this);
     }
