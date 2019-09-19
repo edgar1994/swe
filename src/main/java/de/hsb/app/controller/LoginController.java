@@ -109,7 +109,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                         String.format("Sie duerfen keine Gruppe mit der Rolle %s anlegen!", this.user.getRolle())));
                 context.getApplication().getNavigationHandler().
                         handleNavigation(context, null,
-                                RedirectUtils.GRUPPETABELLE_XHTML);
+                                RedirectUtils.GRUPPE_TABELLE_XHTML);
                 break;
             case USER:
                 // Fixme Wird nicht angezeigt
@@ -169,13 +169,13 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     }
 
     /**
-     * Abspeichern eines neuen Kunden. Nach Erfolg wird auf {@link RedirectUtils#USERTABELLE_XHTML} redirected.
+     * Abspeichern eines neuen Kunden. Nach Erfolg wird auf {@link RedirectUtils#USER_TABELLE_XHTML} redirected.
      *
-     * @return {@link RedirectUtils#USERTABELLE_XHTML}
+     * @return {@link RedirectUtils#USER_TABELLE_XHTML}
      */
     public String speichern() {
         this.save(this.getSelectedEntity());
-        return RedirectUtils.USERTABELLE_XHTML;
+        return RedirectUtils.USER_TABELLE_XHTML;
     }
 
     /**
@@ -273,7 +273,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      */
     @Override
     protected List<User> uncheckedSolver(Object var) {
-        List<User> result = new ArrayList<User>();
+        List<User> result = new ArrayList<>();
         if (var instanceof List) {
             for (int i = 0; i < ((List<?>) var).size(); i++) {
                 Object item = ((List<?>) var).get(i);

@@ -29,7 +29,7 @@ public class Projekt {
     private int leiterId;
 
     @NotNull
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Ticket> ticket;
 
     @NotNull
@@ -89,7 +89,7 @@ public class Projekt {
         this.ticket = ticket;
     }
 
-    public int getGruppen() {
+    public int getGruppenId() {
         return this.gruppenId;
     }
 

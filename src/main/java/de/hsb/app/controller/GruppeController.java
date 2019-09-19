@@ -28,7 +28,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
 
     /**
      * Entfernt einen {@link User} aus der Mitglieder-Liste der ausgewaehlten {@link Gruppe}.
-     * Redirected auf {@link RedirectUtils#NEUEGRUPPE_XHTML}
+     * Redirected auf {@link RedirectUtils#NEUE_GRUPPE_XHTML}
      *
      * @param userToRmove Zu entfernenden {@link User}
      */
@@ -36,7 +36,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     public String removeUser(@Nonnull User userToRmove) {
         this.selectedEntity.getMitglieder().removeIf(user -> !UserUtils.compareUserById(this.selectedEntity.getLeiterId(),
                 userToRmove) && UserUtils.compareUserById(user, userToRmove));
-        return RedirectUtils.NEUEGRUPPE_XHTML;
+        return RedirectUtils.NEUE_GRUPPE_XHTML;
     }
 
     /**
@@ -67,11 +67,11 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     }
 
     /**
-     * Loescht eine {@link Gruppe} und redirected auf {@link RedirectUtils#GRUPPETABELLE_XHTML}.
+     * Loescht eine {@link Gruppe} und redirected auf {@link RedirectUtils#GRUPPE_TABELLE_XHTML}.
      * Ist der {@link User} dazu nicht berechtigt wird die ausgewaehlte {@link Gruppe} nicht geloescht und er bleibt auf
      * der gleichen Seite.
      *
-     * @return {@link RedirectUtils#GRUPPETABELLE_XHTML}
+     * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
     @Nonnull
     public String deleteGruppe(@Nonnull User loggedUser) {
@@ -92,17 +92,17 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                     RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
                 this.logger.error("Löschen fehlgeschlagen -> ", e);
             }
-            return RedirectUtils.GRUPPETABELLE_XHTML;
+            return RedirectUtils.GRUPPE_TABELLE_XHTML;
         }
-        return RedirectUtils.NEUEGRUPPE_XHTML;
+        return RedirectUtils.NEUE_GRUPPE_XHTML;
     }
 
     /**
      * Erstellt eine neue {@link Gruppe} setzt den uebergenen {@link User} loggedUser als Leiter und fuegt ihn als
-     * Mitglied hinzu. Redirected auf {@link RedirectUtils#NEUEGRUPPE_XHTML}.
+     * Mitglied hinzu. Redirected auf {@link RedirectUtils#NEUE_GRUPPE_XHTML}.
      *
      * @param eingeloggterUser Eingeloggter {@link User}
-     * @return {@link RedirectUtils#NEUEGRUPPE_XHTML}
+     * @return {@link RedirectUtils#NEUE_GRUPPE_XHTML}
      */
     @CheckForNull
     public String newGroup(@Nonnull User eingeloggterUser) {
@@ -112,7 +112,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
             this.selectedEntity.setLeiterId(eingeloggterUser.getId());
             this.selectedEntity.addUser(eingeloggterUser);
             this.utx.commit();
-            return RedirectUtils.NEUEGRUPPE_XHTML;
+            return RedirectUtils.NEUE_GRUPPE_XHTML;
         } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
             this.logger.error("Speichern fehlgeschlagen -> ", e);
@@ -121,26 +121,26 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     }
 
     /**
-     * Fuegt einen {@link User} der {@link Gruppe} hinzu. Redirected auf {@link RedirectUtils#NEUEGRUPPE_XHTML}.
+     * Fuegt einen {@link User} der {@link Gruppe} hinzu. Redirected auf {@link RedirectUtils#NEUE_GRUPPE_XHTML}.
      *
      * @param userToAdd hinzuzufügender {@link User}
-     * @return {@link RedirectUtils#NEUEGRUPPE_XHTML}
+     * @return {@link RedirectUtils#NEUE_GRUPPE_XHTML}
      */
     @Nonnull
     public String addUser(@Nonnull User userToAdd) {
         this.selectedEntity.addUser(userToAdd);
-        return RedirectUtils.NEUEGRUPPE_XHTML;
+        return RedirectUtils.NEUE_GRUPPE_XHTML;
     }
 
     /**
-     * Speichert eine {@link Gruppe}. Redirected auf {@link RedirectUtils#GRUPPETABELLE_XHTML}
+     * Speichert eine {@link Gruppe}. Redirected auf {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      *
-     * @return {@link RedirectUtils#GRUPPETABELLE_XHTML}
+     * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
     @Nonnull
     public String save() {
         this.save(this.selectedEntity);
-        return RedirectUtils.GRUPPETABELLE_XHTML;
+        return RedirectUtils.GRUPPE_TABELLE_XHTML;
     }
 
     /**
@@ -150,7 +150,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return List<Gruppe>
      */
     @Nonnull
-    private List<Gruppe> userAwareFindAllGruppen(@Nonnull User user) {
+    public List<Gruppe> userAwareFindAllGruppen(@Nonnull User user) {
         switch (user.getRolle()) {
             case KUNDE:
             case MITARBEITER:
@@ -246,13 +246,13 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     }
 
     /**
-     * Bricht den aktuellen Vorgang ab und redirected auf {@link RedirectUtils#GRUPPETABELLE_XHTML}.
+     * Bricht den aktuellen Vorgang ab und redirected auf {@link RedirectUtils#GRUPPE_TABELLE_XHTML}.
      *
-     * @return {@link RedirectUtils#GRUPPETABELLE_XHTML}
+     * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
     @Nonnull
     public String cancel() {
-        return RedirectUtils.GRUPPETABELLE_XHTML;
+        return RedirectUtils.GRUPPE_TABELLE_XHTML;
     }
 
     /**

@@ -28,7 +28,7 @@
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
                 <h:dataTable id="gruppeTabelle" var="gruppe"
-                             value="#{gruppeController.entityListForGruppenerstellung(loginController.user)}"
+                             value="#{gruppeController.userAwareFindAllGruppen(loginController.user)}"
                              rowClasses="odd,even" headerClass="header">
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENTITEL']}</f:facet>

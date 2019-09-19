@@ -37,12 +37,12 @@ public class UserController extends AbstractCrudRepository<User> {
     }
 
     /**
-     * Bricht den aktuellen Vorgang ab und leitet zurueck auf {@link RedirectUtils#USERTABELLE_XHTML}.
+     * Bricht den aktuellen Vorgang ab und leitet zurueck auf {@link RedirectUtils#USER_TABELLE_XHTML}.
      *
-     * @return {@link RedirectUtils#USERTABELLE_XHTML}
+     * @return {@link RedirectUtils#USER_TABELLE_XHTML}
      */
     public String cancel() {
-        return RedirectUtils.USERTABELLE_XHTML;
+        return RedirectUtils.USER_TABELLE_XHTML;
     }
 
     /**
@@ -87,44 +87,44 @@ public class UserController extends AbstractCrudRepository<User> {
     }
 
     /**
-     * Sucht den zu bearbeitenden {@link User} raus und redirected auf {@link RedirectUtils#NEUERUSER_XHTML}
+     * Sucht den zu bearbeitenden {@link User} raus und redirected auf {@link RedirectUtils#NEUER_USER_XHTML}
      *
-     * @return {@link RedirectUtils#NEUERUSER_XHTML}
+     * @return {@link RedirectUtils#NEUER_USER_XHTML}
      */
     public String edit() {
         this.selectedEntity = this.entityList.getRowData();
-        return RedirectUtils.NEUERUSER_XHTML;
+        return RedirectUtils.NEUER_USER_XHTML;
     }
 
     /**
      * Loescht ein Element in der Liste.
      *
-     * @return {@link RedirectUtils#USERTABELLE_XHTML}.
+     * @return {@link RedirectUtils#USER_TABELLE_XHTML}.
      */
     public String deleteRow() {
         this.delete();
-        return RedirectUtils.USERTABELLE_XHTML;
+        return RedirectUtils.USER_TABELLE_XHTML;
     }
 
     /**
-     * Legt einen neuen Kunden an und leitet auf {@link RedirectUtils#USERTABELLE_XHTML}.
+     * Legt einen neuen Kunden an und leitet auf {@link RedirectUtils#USER_TABELLE_XHTML}.
      *
-     * @return {@link RedirectUtils#USERTABELLE_XHTML}
+     * @return {@link RedirectUtils#USER_TABELLE_XHTML}
      */
     public String newUser() {
         this.setSelectedEntity(new User());
-        return RedirectUtils.NEUERUSER_XHTML;
+        return RedirectUtils.NEUER_USER_XHTML;
     }
 
     /**
-     * Abspeichern eines neuen Kunden. Nach Erfolg wird auf {@link RedirectUtils#USERTABELLE_XHTML} redirected.
+     * Abspeichern eines neuen Kunden. Nach Erfolg wird auf {@link RedirectUtils#USER_TABELLE_XHTML} redirected.
      *
-     * @return {@link RedirectUtils#USERTABELLE_XHTML}
+     * @return {@link RedirectUtils#USER_TABELLE_XHTML}
      */
     public String save() {
         this.getSelectedEntity().setPasswort("passwort+");
         this.save(this.getSelectedEntity());
-        return RedirectUtils.USERTABELLE_XHTML;
+        return RedirectUtils.USER_TABELLE_XHTML;
     }
 
     /**
