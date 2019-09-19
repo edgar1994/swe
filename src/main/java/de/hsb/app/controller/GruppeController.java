@@ -159,8 +159,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                         "where m.id = :userId");
                 query.setParameter("userId", user.getId());
                 Set<Integer> gruppenIds = new HashSet<>();
-                // Fixme Unchecked cast
-                for (Gruppe gruppe : (List<Gruppe>) query.getResultList()) {
+                for (Gruppe gruppe : this.uncheckedSolver(query.getResultList())) {
                     gruppenIds.add(gruppe.getId());
                 }
                 for (int id : gruppenIds) {
@@ -281,6 +280,23 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     @Override
     protected String getSelect() {
         return Gruppe.NAMED_QUERY_NAME;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected List<Gruppe> uncheckedSolver(Object var) {
+        List<Gruppe> result = new ArrayList<Gruppe>();
+        if (var instanceof List) {
+            for (int i = 0; i < ((List<?>) var).size(); i++) {
+                Object item = ((List<?>) var).get(i);
+                if (item instanceof Gruppe) {
+                    result.add((Gruppe) item);
+                }
+            }
+        }
+        return result;
     }
 
 }

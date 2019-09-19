@@ -35,7 +35,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      */
     @Override
     @CheckForNull
-    public T findById(final int id) {
+    public T findById(int id) {
         return this.em.find(this.getRepositoryClass(), id);
     }
 
@@ -45,7 +45,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
     @Override
     @Nonnull
     public List<T> findAll() {
-        return this.em.createQuery(this.getQueryCommand()).getResultList();
+        return this.uncheckedSolver(this.em.createQuery(this.getQueryCommand()).getResultList());
     }
 
     /**
@@ -59,7 +59,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
             this.em.persist(entity);
             this.utx.commit();
             return true;
-        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
+        } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
             this.logger.error("Speichern fehlgeschlagen -> ", e);
             return false;
@@ -79,7 +79,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
             this.entityList.setWrappedData(this.em.createNamedQuery(this.getSelect()).getResultList());
             this.utx.commit();
             return true;
-        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
+        } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
             this.logger.error("Löschen fehlgeschlagen -> ", e);
             return false;
@@ -134,7 +134,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      *
      * @param entityList {@link DataModel<T>}
      */
-    public void setEntityList(final DataModel<T> entityList) {
+    public void setEntityList(DataModel<T> entityList) {
         this.entityList = entityList;
     }
 
@@ -150,8 +150,16 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      *
      * @param selectedEntity {@link T}
      */
-    public void setSelectedEntity(final T selectedEntity) {
+    public void setSelectedEntity(T selectedEntity) {
         this.selectedEntity = selectedEntity;
     }
+
+    /**
+     * Soll die Warnung "Unchecked cast" loesen.
+     *
+     * @param var Object
+     * @return
+     */
+    protected abstract List<T> uncheckedSolver(Object var);
 
 }

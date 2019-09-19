@@ -16,6 +16,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.persistence.Query;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -70,8 +71,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                 "where u.username = :username and u.passwort = :passwort ");
         query.setParameter("username", this.username);
         query.setParameter("passwort", this.passwort);
-        // Fixme Unchecked cast
-        List<User> userList = query.getResultList();
+        List<User> userList = this.uncheckedSolver(query.getResultList());
         if (userList.size() == 1) {
             this.user = userList.get(0);
             return RedirectUtils.LOGIN_INDEX_XHTML;
@@ -85,8 +85,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                 "where u.username = :username and u.passwort = :passwort ");
         query.setParameter("username", this.username);
         query.setParameter("passwort", this.passwort);
-        // Fixme Unchecked cast
-        List<User> userList = query.getResultList();
+        List<User> userList = this.uncheckedSolver(query.getResultList());
         if (userList.size() == 1) {
             this.user = userList.get(0);
         }
@@ -106,7 +105,6 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                 break;
             case ADMIN:
             case KUNDE:
-                // Fixme Wird nicht angezeigt
                 context.addMessage(null, new FacesMessage("Unerlaubt",
                         String.format("Sie duerfen keine Gruppe mit der Rolle %s anlegen!", this.user.getRolle())));
                 context.getApplication().getNavigationHandler().
@@ -268,6 +266,23 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected List<User> uncheckedSolver(Object var) {
+        List<User> result = new ArrayList<User>();
+        if (var instanceof List) {
+            for (int i = 0; i < ((List<?>) var).size(); i++) {
+                Object item = ((List<?>) var).get(i);
+                if (item instanceof User) {
+                    result.add((User) item);
+                }
+            }
+        }
+        return result;
     }
 
 }

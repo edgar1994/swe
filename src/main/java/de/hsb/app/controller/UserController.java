@@ -14,6 +14,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -151,8 +152,7 @@ public class UserController extends AbstractCrudRepository<User> {
         query.setParameter("mitarbeiter", Rolle.MITARBEITER);
         query.setParameter("admin", Rolle.ADMIN);
         query.setParameter("kunde", Rolle.KUNDE);
-        // Fixme Unchecked cast
-        return query.getResultList();
+        return this.uncheckedSolver(query.getResultList());
     }
 
     /**
@@ -198,6 +198,23 @@ public class UserController extends AbstractCrudRepository<User> {
     @Nonnull
     protected String getSelect() {
         return User.NAMED_QUERY_NAME;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected List<User> uncheckedSolver(Object var) {
+        List<User> result = new ArrayList<User>();
+        if (var instanceof List) {
+            for (int i = 0; i < ((List<?>) var).size(); i++) {
+                Object item = ((List<?>) var).get(i);
+                if (item instanceof User) {
+                    result.add((User) item);
+                }
+            }
+        }
+        return result;
     }
 
 }
