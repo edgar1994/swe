@@ -44,17 +44,20 @@ public class Projekt {
     @NotNull
     private Date abschlussdatum;
 
+    private String beschreibung;
+
     public Projekt() {
         this.ticket = new ArrayList<>();
     }
 
-    public Projekt(String titel, int leiter, List<Ticket> ticket, int gruppenId, Date erstellungsdatum, Date abschlussdatum) {
+    public Projekt(String titel, int leiter, List<Ticket> ticket, int gruppenId, Date erstellungsdatum, Date abschlussdatum, String beschreibung) {
         this.titel = titel;
         this.leiterId = leiter;
         this.ticket = ticket;
         this.gruppenId = gruppenId;
         this.erstellungsdatum = erstellungsdatum;
         this.abschlussdatum = abschlussdatum;
+        this.beschreibung = beschreibung;
     }
 
     public int getId() {
@@ -77,7 +80,7 @@ public class Projekt {
         return this.leiterId;
     }
 
-    public void setLeiter(int leiterId) {
+    public void setLeiterId(int leiterId) {
         this.leiterId = leiterId;
     }
 
@@ -93,7 +96,7 @@ public class Projekt {
         return this.gruppenId;
     }
 
-    public void setGruppen(int gruppenId) {
+    public void setGruppenId(int gruppenId) {
         this.gruppenId = gruppenId;
     }
 
@@ -113,4 +116,11 @@ public class Projekt {
         this.abschlussdatum = abschlussdatum;
     }
 
+    public String getBeschreibung() {
+        return this.beschreibung;
+    }
+
+    public void setBeschreibung(String beschreibung) {
+        this.beschreibung = beschreibung;
+    }
 }

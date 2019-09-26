@@ -6,12 +6,15 @@ import de.hsb.app.model.Projekt;
 import de.hsb.app.model.User;
 import de.hsb.app.repository.AbstractCrudRepository;
 import de.hsb.app.utils.DateUtils;
+import de.hsb.app.utils.GruppeUtils;
 import de.hsb.app.utils.ProjectUtils;
 import de.hsb.app.utils.RedirectUtils;
 
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.persistence.Query;
+import javax.transaction.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,14 +25,17 @@ import java.util.List;
 @ManagedBean(name = "projektController")
 public class ProjektController extends AbstractCrudRepository<Projekt> {
 
+    private int choosenGroupId;
+
     /**
      * Erstellt ein neues {@link Projekt} und redirected auf {@link RedirectUtils#NEUES_PROJEKT_XHTML}.
      *
      * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
      */
     @Nonnull
-    public String newProject() {
+    public String newProject(@Nonnull User projektLeiter) {
         this.selectedEntity = new Projekt();
+        this.selectedEntity.setLeiterId(projektLeiter.getId());
         return RedirectUtils.NEUES_PROJEKT_XHTML;
     }
 
@@ -71,6 +77,17 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
         return projektList;
     }
 
+
+    /**
+     * Prueft ob die Gruppe die bearbeitende Gruppe des Projekts ist.
+     *
+     * @param gruppe zu pruefende Gruppe
+     * @return boolean
+     */
+    public boolean isChoosenGroup(@Nonnull Gruppe gruppe) {
+        return GruppeUtils.compareGruppeById(this.choosenGroupId, gruppe);
+    }
+
     /**
      * Formatirt das {@link Date} auf "dd.MM.yyyy".
      *
@@ -90,6 +107,17 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      */
     public boolean isChoosenGroup(@Nonnull Projekt projekt, @Nonnull Gruppe gruppe) {
         return ProjectUtils.isChoosenGroup(projekt, gruppe);
+    }
+
+    /**
+     * Setzt die ausgewaehlte Gruppe fuer das {@link Projekt}. Redirected auf {@link RedirectUtils#NEUES_PROJEKT_XHTML}.
+     *
+     * @param gruppe {@link Gruppe}
+     * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
+     */
+    public String addGroupToProjekt(@Nonnull Gruppe gruppe) {
+        this.choosenGroupId = gruppe.getId();
+        return RedirectUtils.NEUES_PROJEKT_XHTML;
     }
 
     /**
@@ -135,4 +163,35 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
         }
         return result;
     }
+
+    public int getChoosenGroupId() {
+        return this.choosenGroupId;
+    }
+
+    public void setChoosenGroupId(int choosenGroupId) {
+        this.choosenGroupId = choosenGroupId;
+    }
+
+    /**
+     * Speicher das {@link Projekt} und fuehr zureuck auf {@link RedirectUtils#NEUES_PROJEKT_XHTML}
+     *
+     * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
+     */
+    public String save() {
+        this.selectedEntity.setGruppenId(this.choosenGroupId);
+        this.selectedEntity.setErstellungsdatum(Date.from(Instant.now()));
+        try {
+            this.utx.begin();
+            this.selectedEntity = this.em.merge(this.selectedEntity);
+            this.em.persist(this.selectedEntity.getTicket());
+            this.em.persist(this.selectedEntity);
+            this.utx.commit();
+            return RedirectUtils.PROJEKT_TABELLE_XHTML;
+        } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
+                RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
+            this.logger.error("Speichern fehlgeschlagen -> ", e);
+            return null;
+        }
+    }
+
 }

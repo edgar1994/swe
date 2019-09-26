@@ -58,6 +58,9 @@
                     </h:column>
                 </h:dataTable>
             </ui:insert>
+            <h:commandButton action="#{projektController.newProject(loginController.user)}"
+                             value="#{msg['PROJEKTTABELLE.BUTTON.NEU']}"
+                             rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
         </h:form>
     </div>
 </h:body>

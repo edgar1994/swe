@@ -175,6 +175,31 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
         }
     }
 
+    public List<Gruppe> userAwareFindAllGruppenByLeiterId(@Nonnull User user) {
+        switch (user.getRolle()) {
+            case MITARBEITER:
+                List<Gruppe> gruppen = new ArrayList<>();
+                Query query = this.em.createQuery("select gr from Gruppe gr join fetch gr.mitglieder m " +
+                        "where gr.leiterId = :leiterId");
+                query.setParameter("leiterId", user.getId());
+                Set<Integer> gruppenIds = new HashSet<>();
+                for (Gruppe gruppe : this.uncheckedSolver(query.getResultList())) {
+                    gruppenIds.add(gruppe.getId());
+                }
+                for (int id : gruppenIds) {
+                    gruppen.add(this.findById(id));
+                }
+                return gruppen;
+            case ADMIN:
+                return this.findAll();
+            case KUNDE:
+            case USER:
+            default:
+                throw new IllegalArgumentException(String.format("Rolle %s kann kein Gruppen-Leiter sein.", user.getRolle()));
+
+        }
+    }
+
     /**
      * Liefert zuruck ob der eingeloggte {@link User} eine neue {@link Gruppe} erstellen darf oder nicht.
      *

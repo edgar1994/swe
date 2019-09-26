@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
+<h:head>
+    <title>#{msg['NEUEGRUPPE.TITEL']}</title>
+    <link rel="stylesheet" href="resources/index.css" type="text/css"/>
+</h:head>
+<body>
+<h:form>
+    <div align="right">
+        <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'
+                         immediate="true"/>
+        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'
+                         immediate="true"/>
+        <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
+    </div>
+    <div>
+        <a href="index.xhtml">Mainpage</a>
+        <a href="userTabelle.xhtml">#{msg['USER.BEZEICHNUNG']}</a>
+        <a href="gruppeTabelle.xhtml">#{msg['GRUPPENTABELLE.TITEL']}</a>
+    </div>
+    <div id="content">
+        <ui:insert name="content">
+            <h:form>
+                <p:growl id="growl" showDetail="true" sticky="true"/>
+                <h:panelGrid var="gruppe" value="#{gruppeController.selectedEntity}" columns="2"
+                             headerClass="header"
+                             footerClass="footer">
+                    <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.TITEL']}" for="titel"/>
+                    <h:panelGroup>
+                        <p:inputText id="titel" value="#{projektController.selectedEntity.titel}" required="true"
+                                     requiredMessage="#{msg['NEUESPROJEKT.TITEL.MESSAGE']}">
+                        </p:inputText>
+                    </h:panelGroup>
+                    <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.ABSCHLUSSDATUM']}" for="abschlussdatum"/>
+                    <h:panelGroup>
+                        <p:calendar id="abschlussdatum" value="#{projekt.abschlussdatum}" mode="popup" navigator="true"
+                                    showOn="button" pattern="dd.MM.yyy" required="true"
+                                    requiredMessage="Gültigkeitsdatum wir benötigt."/>
+                    </h:panelGroup>
+                    <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.BESCHREIBUNG']}" for="beschreibung"/>
+                    <h:panelGroup>
+                        <p:inputTextarea id="beschreibung" value="#{projekt.beschreibung}"/>
+                    </h:panelGroup>
+                </h:panelGrid>
+                <h:dataTable id="gruppeTabelle" var="gruppe"
+                             value="#{gruppeController.userAwareFindAllGruppenByLeiterId(loginController.user)}"
+                             rowClasses="odd,even" headerClass="header">
+                    <h:column>
+                        <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENTITEL']}</f:facet>
+                        <h:outputText value="#{gruppe.titel}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
+                        <h:outputText value="#{userController.formatedName(userController.findById(gruppe.leiterId))}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
+                        <h:outputText value="#{gruppe.mitglieder.size()}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">#{msg['GRUPPENTABELLE.KUNDE']}</f:facet>
+                        <h:outputText
+                                value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder))}"/>
+                    </h:column>
+                    <h:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
+                        <f:facet name="header">#{msg['NEUESPROJEKT.WORKING.GROUP']}</f:facet>
+                        <h:commandButton action="#{projektController.addGroupToProjekt(gruppe)}"
+                                         value="#{msg['BUTTON.ADD']}"
+                                         immediate="true"
+                                         rendered="#{!projektController.isChoosenGroup(gruppe)}"/>
+                        <h:outputText value="#{msg['NEUESPROJEKT.CHOOSENGROUP']}"
+                                      rendered="#{projektController.isChoosenGroup(gruppe)}"/>
+                    </h:column>
+                </h:dataTable>
+                <p:commandButton value="#{msg['BUTTON.SPEICHERN']}" action="#{projektController.save()}"/>
+            </h:form>
+        </ui:insert>
+    </div>
+</h:form>
+</body>
+</html>

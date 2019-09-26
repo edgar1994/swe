@@ -16,8 +16,19 @@ public class GruppeUtils {
      * @param gruppeToCheck {@link Gruppe}
      * @return boolean
      */
-    public static boolean compareGruppeById(@Nonnull final Gruppe gruppe, @Nonnull final Gruppe gruppeToCheck) {
+    public static boolean compareGruppeById(@Nonnull Gruppe gruppe, @Nonnull Gruppe gruppeToCheck) {
         return gruppe.getId() == gruppeToCheck.getId();
+    }
+
+    /**
+     * Vergleicht zwei {@link Gruppe}n anhand ihrer Id.
+     *
+     * @param gruppeId      Id einer {@link Gruppe}
+     * @param gruppeToCheck {@link Gruppe}
+     * @return boolean
+     */
+    public static boolean compareGruppeById(int gruppeId, @Nonnull Gruppe gruppeToCheck) {
+        return gruppeId == gruppeToCheck.getId();
     }
 
 }
