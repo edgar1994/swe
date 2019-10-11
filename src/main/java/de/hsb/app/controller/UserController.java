@@ -6,12 +6,10 @@ import de.hsb.app.repository.AbstractCrudRepository;
 import de.hsb.app.utils.AdressUtils;
 import de.hsb.app.utils.RedirectUtils;
 import de.hsb.app.utils.UserUtils;
-import org.primefaces.push.annotation.Singleton;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -22,9 +20,7 @@ import java.util.stream.Collectors;
 /**
  * UserController
  */
-@Singleton
 @ManagedBean(name = "userController")
-@SessionScoped
 public class UserController extends AbstractCrudRepository<User> {
 
     /**
@@ -122,8 +118,12 @@ public class UserController extends AbstractCrudRepository<User> {
      * @return {@link RedirectUtils#USER_TABELLE_XHTML}
      */
     public String save() {
-        this.getSelectedEntity().setPasswort("passwort+");
-        this.save(this.getSelectedEntity());
+        if (this.selectedEntity != null) {
+            this.getSelectedEntity().setPasswort("passwort+");
+            this.save(this.getSelectedEntity());
+        } else {
+            this.logger.error("Selected Entity is not allowed to be null -> {0}", new NullPointerException());
+        }
         return RedirectUtils.USER_TABELLE_XHTML;
     }
 

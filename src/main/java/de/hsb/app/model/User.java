@@ -46,14 +46,12 @@ public class User {
     @NotNull
     private Rolle rolle;
 
-    // Fixme CascadeType
-    @ManyToMany(mappedBy = "mitglieder", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Gruppe> gruppen;
+    @ManyToMany(mappedBy = "mitglieder", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Gruppe> gruppen = new HashSet<>();
 
     public User() {
         this.rolle = Rolle.USER;
         this.adresse = new Adresse();
-        this.gruppen = new HashSet<>();
     }
 
     public User(String vorname, String nachname, Adresse adresse, String username, String passwort, Rolle rolle, Set<Gruppe> gruppen) {

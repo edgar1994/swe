@@ -25,11 +25,9 @@ public class Gruppe {
 
     private int leiterId;
 
-    // Fixme CascadeType
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "ID", nullable = false)
-    @NotNull
-    private Set<User> mitglieder;
+    private Set<User> mitglieder = new HashSet<>();
 
     @Temporal(TemporalType.DATE)
     @NotNull
@@ -39,7 +37,6 @@ public class Gruppe {
     private String titel;
 
     public Gruppe() {
-        this.mitglieder = new HashSet<>();
         this.erstellungsdatum = Date.from(Instant.now());
     }
 
