@@ -12,6 +12,7 @@ import de.hsb.app.utils.RedirectUtils;
 
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.persistence.Query;
 import javax.transaction.*;
 import java.time.Instant;
@@ -23,6 +24,7 @@ import java.util.List;
  * {@link Projekt}-Controller
  */
 @ManagedBean(name = "projektController")
+@SessionScoped
 public class ProjektController extends AbstractCrudRepository<Projekt> {
 
     private int choosenGroupId;

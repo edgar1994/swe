@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Resource;
-import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.persistence.EntityManager;
@@ -15,7 +14,6 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.*;
 import java.util.List;
 
-@SessionScoped
 public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
 
     protected DataModel<T> entityList;

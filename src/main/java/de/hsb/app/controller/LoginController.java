@@ -9,9 +9,10 @@ import de.hsb.app.utils.RedirectUtils;
 import de.hsb.app.utils.UserUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.persistence.Query;
@@ -24,7 +25,7 @@ import java.util.List;
  * Login-Controller
  */
 @ManagedBean(name = "loginController")
-@SessionScoped
+@ApplicationScoped
 public class LoginController extends AbstractCrudRepository<User> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,16 +50,19 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     /**
      * Erstellt daten beim Initialisieren.
      */
-    // Fixme deaktiviert bis Postconstruct benötigt wird. (Feuert zwei mal)
-    // @PostConstruct
+    @PostConstruct
     public void init() {
         Adresse adresse = new Adresse("Strasse 21", "99999", "Stadt");
-        this.save(new User("Aron", "O'Connor", adresse, "test",
-                "passwort+", Rolle.KUNDE, new HashSet<>()));
-        this.save(new User("Edgar", "Grischenko", adresse, "edgar",
-                "passwort+", Rolle.ADMIN, new HashSet<>()));
-        this.save(new User("Mitarbeiter1", "Nachname1", adresse, "mitarbeiter1",
+        this.save(new User("Aron", "O'Connor", adresse, "mitarbeiter1",
                 "passwort+", Rolle.MITARBEITER, new HashSet<>()));
+        this.save(new User("test", "test", adresse, "testMitarbeiter",
+                "passwort+", Rolle.MITARBEITER, new HashSet<>()));
+        this.save(new User("Dan", "Evan", adresse, "admin",
+                "passwort+", Rolle.ADMIN, new HashSet<>()));
+        this.save(new User("Max", "Kundenmann", adresse, "kunde1",
+                "passwort+", Rolle.KUNDE, new HashSet<>()));
+        this.save(new User("Malon", "Lonlon", adresse, "user1",
+                "passwort+", Rolle.KUNDE, new HashSet<>()));
     }
 
     /**

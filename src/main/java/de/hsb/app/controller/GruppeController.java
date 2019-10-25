@@ -154,18 +154,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
         switch (user.getRolle()) {
             case KUNDE:
             case MITARBEITER:
-                List<Gruppe> gruppen = new ArrayList<>();
-                Query query = this.em.createQuery("select gr from Gruppe gr join fetch gr.mitglieder m " +
-                        "where m.id = :userId");
-                query.setParameter("userId", user.getId());
-                Set<Integer> gruppenIds = new HashSet<>();
-                for (Gruppe gruppe : this.uncheckedSolver(query.getResultList())) {
-                    gruppenIds.add(gruppe.getId());
-                }
-                for (int id : gruppenIds) {
-                    gruppen.add(this.findById(id));
-                }
-                return gruppen;
+                return new ArrayList<>(user.getGruppen());
             case ADMIN:
                 return this.findAll();
             case USER:
