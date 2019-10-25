@@ -69,7 +69,7 @@ public class UserController extends AbstractCrudRepository<User> {
      *
      * @return {@link RedirectUtils#USER_TABELLE_XHTML}
      */
-    public String cancel() {
+    public String switchToUser() {
         return RedirectUtils.USER_TABELLE_XHTML;
     }
 

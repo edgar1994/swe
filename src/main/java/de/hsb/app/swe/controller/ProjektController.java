@@ -196,4 +196,9 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
         }
     }
 
+    @Nonnull
+    public String switchToProjekt() {
+        return RedirectUtils.PROJEKT_TABELLE_XHTML;
+    }
+
 }
