@@ -33,7 +33,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param userToRmove Zu entfernenden {@link User}
      */
     @Nonnull
-    public String removeUser(@Nonnull User userToRmove) {
+    public String removeUser(@Nonnull final User userToRmove) {
         this.selectedEntity.getMitglieder().removeIf(user -> !UserUtils.compareUserById(this.selectedEntity.getLeiterId(),
                 userToRmove) && UserUtils.compareUserById(user, userToRmove));
         return RedirectUtils.NEUE_GRUPPE_XHTML;
@@ -48,13 +48,13 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @throws IllegalStateException Gruppe = null
      */
     @Nonnull
-    private Gruppe userAwareFindGruppeToDeleteByLoggedUserAndRowData(@Nonnull User loggedUser, @Nonnull Gruppe rowData)
+    private Gruppe userAwareFindGruppeToDeleteByLoggedUserAndRowData(@Nonnull final User loggedUser, @Nonnull final Gruppe rowData)
             throws IllegalStateException {
         // Fixme Workaround
         // Suche alle fuer den User sichtbaren Gruppen und pruefe sie mit der RowData
-        List<Gruppe> gruppen = this.userAwareFindAllGruppen(loggedUser);
+        final List<Gruppe> gruppen = this.userAwareFindAllGruppen(loggedUser);
         if (!gruppen.isEmpty()) {
-            for (Gruppe gruppe : gruppen) {
+            for (final Gruppe gruppe : gruppen) {
                 // Haben die Gruppe und die RowData die gleiche ID und der eingellogte User ist der Gruppenleiter oder
                 // ein Admin dann liefere die Gruppe zurueck.
                 if (GruppeUtils.compareGruppeById(gruppe, rowData) &&
@@ -74,13 +74,13 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
     @Nonnull
-    public String deleteGruppe(@Nonnull User loggedUser) {
+    public String deleteGruppe(@Nonnull final User loggedUser) {
         this.selectedEntity = this.userAwareFindGruppeToDeleteByLoggedUserAndRowData(loggedUser,
                 this.entityList.getRowData());
         if (this.userAwareDeleteGroup(loggedUser, this.selectedEntity)) {
             try {
                 this.utx.begin();
-                for (User user : this.selectedEntity.getMitglieder()) {
+                for (final User user : this.selectedEntity.getMitglieder()) {
                     this.selectedEntity.removeUser(user);
                 }
                 this.selectedEntity = this.em.merge(this.selectedEntity);
@@ -88,7 +88,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                 this.em.flush();
                 this.entityList.setWrappedData(this.userAwareFindAllGruppen(loggedUser));
                 this.utx.commit();
-            } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
+            } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                     RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
                 this.logger.error("Löschen fehlgeschlagen -> ", e);
             }
@@ -105,7 +105,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return {@link RedirectUtils#NEUE_GRUPPE_XHTML}
      */
     @CheckForNull
-    public String newGroup(@Nonnull User eingeloggterUser) {
+    public String newGroup(@Nonnull final User eingeloggterUser) {
         try {
             this.utx.begin();
             this.selectedEntity = new Gruppe();
@@ -113,7 +113,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
             this.selectedEntity.addUser(eingeloggterUser);
             this.utx.commit();
             return RedirectUtils.NEUE_GRUPPE_XHTML;
-        } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
+        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
             this.logger.error("Speichern fehlgeschlagen -> ", e);
             return null;
@@ -127,7 +127,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return {@link RedirectUtils#NEUE_GRUPPE_XHTML}
      */
     @Nonnull
-    public String addUser(@Nonnull User userToAdd) {
+    public String addUser(@Nonnull final User userToAdd) {
         this.selectedEntity.addUser(userToAdd);
         return RedirectUtils.NEUE_GRUPPE_XHTML;
     }
@@ -150,7 +150,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return List<Gruppe>
      */
     @Nonnull
-    public List<Gruppe> userAwareFindAllGruppen(@Nonnull User user) {
+    public List<Gruppe> userAwareFindAllGruppen(@Nonnull final User user) {
         switch (user.getRolle()) {
             case KUNDE:
             case MITARBEITER:
@@ -164,18 +164,18 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
         }
     }
 
-    public List<Gruppe> userAwareFindAllGruppenByLeiterId(@Nonnull User user) {
+    public List<Gruppe> userAwareFindAllGruppenByLeiterId(@Nonnull final User user) {
         switch (user.getRolle()) {
             case MITARBEITER:
-                List<Gruppe> gruppen = new ArrayList<>();
-                Query query = this.em.createQuery("select gr from Gruppe gr join fetch gr.mitglieder m " +
+                final List<Gruppe> gruppen = new ArrayList<>();
+                final Query query = this.em.createQuery("select gr from Gruppe gr join fetch gr.mitglieder m " +
                         "where gr.leiterId = :leiterId");
                 query.setParameter("leiterId", user.getId());
-                Set<Integer> gruppenIds = new HashSet<>();
-                for (Gruppe gruppe : this.uncheckedSolver(query.getResultList())) {
+                final Set<Integer> gruppenIds = new HashSet<>();
+                for (final Gruppe gruppe : this.uncheckedSolver(query.getResultList())) {
                     gruppenIds.add(gruppe.getId());
                 }
-                for (int id : gruppenIds) {
+                for (final int id : gruppenIds) {
                     gruppen.add(this.findById(id));
                 }
                 return gruppen;
@@ -195,7 +195,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param loggedUser eingeloggter User
      * @return boolean
      */
-    public boolean userAwareNewGroup(@Nonnull User loggedUser) {
+    public boolean userAwareNewGroup(@Nonnull final User loggedUser) {
         switch (loggedUser.getRolle()) {
             case KUNDE:
             case ADMIN:
@@ -215,7 +215,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param loggedUser eingeloggter User
      * @return boolean
      */
-    public boolean userAwareDeleteGroup(@Nonnull User loggedUser, @Nonnull Gruppe currentGroup) {
+    public boolean userAwareDeleteGroup(@Nonnull final User loggedUser, @Nonnull final Gruppe currentGroup) {
         switch (loggedUser.getRolle()) {
             case KUNDE:
             case USER:
@@ -236,8 +236,8 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      *
      * @return DataModel<User>
      */
-    public DataModel<Gruppe> entityListForGruppenerstellung(@Nonnull User user) {
-        List<Gruppe> gruppeList = this.userAwareFindAllGruppen(user);
+    public DataModel<Gruppe> entityListForGruppenerstellung(@Nonnull final User user) {
+        final List<Gruppe> gruppeList = this.userAwareFindAllGruppen(user);
         this.checkEntityList();
         if (!gruppeList.isEmpty()) {
             this.entityList.setWrappedData(gruppeList);
@@ -251,9 +251,9 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param user {@link User}
      * @return boolean
      */
-    public boolean isAdded(@Nonnull User user) {
+    public boolean isAdded(@Nonnull final User user) {
         boolean hinzugefuegt = false;
-        for (User hinzugefuegteUser : this.selectedEntity.getMitglieder()) {
+        for (final User hinzugefuegteUser : this.selectedEntity.getMitglieder()) {
             hinzugefuegt |= UserUtils.compareUserById(hinzugefuegteUser, user);
         }
         return hinzugefuegt;
@@ -265,7 +265,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
     @Nonnull
-    public String cancel() {
+    public String switchToGruppe() {
         return RedirectUtils.GRUPPE_TABELLE_XHTML;
     }
 
@@ -300,11 +300,11 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * {@inheritDoc}
      */
     @Override
-    protected List<Gruppe> uncheckedSolver(Object var) {
-        List<Gruppe> result = new ArrayList<Gruppe>();
+    protected List<Gruppe> uncheckedSolver(final Object var) {
+        final List<Gruppe> result = new ArrayList<>();
         if (var instanceof List) {
             for (int i = 0; i < ((List<?>) var).size(); i++) {
-                Object item = ((List<?>) var).get(i);
+                final Object item = ((List<?>) var).get(i);
                 if (item instanceof Gruppe) {
                     result.add((Gruppe) item);
                 }

@@ -36,4 +36,6 @@ public class RedirectUtils {
 
     public static final String PROJEKT_TABELLE_XHTML = "projektTabelle.xhtml";
 
+    public static final String PROJEKT_INDEX_XHTML = "index.xhtml";
+
 }

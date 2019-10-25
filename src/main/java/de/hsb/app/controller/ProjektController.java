@@ -35,7 +35,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
      */
     @Nonnull
-    public String newProject(@Nonnull User projektLeiter) {
+    public String newProject(@Nonnull final User projektLeiter) {
         this.selectedEntity = new Projekt();
         this.selectedEntity.setLeiterId(projektLeiter.getId());
         return RedirectUtils.NEUES_PROJEKT_XHTML;
@@ -47,7 +47,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @param projekt {@link Projekt}
      * @return Anzahl der offenen Tickets
      */
-    public long openTickets(@Nonnull Projekt projekt) {
+    public long openTickets(@Nonnull final Projekt projekt) {
         return projekt.getTicket().stream().filter(ticket -> Status.OFFEN.equals(ticket.getStatus())).count();
     }
 
@@ -69,10 +69,10 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @return List<Projekt>
      */
     @Nonnull
-    public List<Projekt> userAwareFindAllByGruppe(@Nonnull User loggedUser, @Nonnull List<Gruppe> gruppenList) {
-        List<Projekt> projektList = new ArrayList<>();
-        for (Gruppe gruppe : gruppenList) {
-            Query query = this.em.createQuery("select pr from Projekt pr fetch all properties where pr.gruppenId = :gruppenId");
+    public List<Projekt> userAwareFindAllByGruppe(@Nonnull final User loggedUser, @Nonnull final List<Gruppe> gruppenList) {
+        final List<Projekt> projektList = new ArrayList<>();
+        for (final Gruppe gruppe : gruppenList) {
+            final Query query = this.em.createQuery("select pr from Projekt pr fetch all properties where pr.gruppenId = :gruppenId");
             query.setParameter("gruppenId", gruppe.getId());
             projektList.addAll(this.uncheckedSolver(query.getResultList()));
         }
@@ -86,7 +86,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @param gruppe zu pruefende Gruppe
      * @return boolean
      */
-    public boolean isChoosenGroup(@Nonnull Gruppe gruppe) {
+    public boolean isChoosenGroup(@Nonnull final Gruppe gruppe) {
         return GruppeUtils.compareGruppeById(this.choosenGroupId, gruppe);
     }
 
@@ -96,7 +96,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @param date {@link Date}
      * @return "dd.MM.yyyy"
      */
-    public String formattedDateDDMMYYYY(Date date) {
+    public String formattedDateDDMMYYYY(final Date date) {
         return DateUtils.formatedDateDDMMYYYY(date);
     }
 
@@ -107,7 +107,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @param gruppe  {@link Gruppe}
      * @return boolean
      */
-    public boolean isChoosenGroup(@Nonnull Projekt projekt, @Nonnull Gruppe gruppe) {
+    public boolean isChoosenGroup(@Nonnull final Projekt projekt, @Nonnull final Gruppe gruppe) {
         return ProjectUtils.isChoosenGroup(projekt, gruppe);
     }
 
@@ -117,7 +117,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @param gruppe {@link Gruppe}
      * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
      */
-    public String addGroupToProjekt(@Nonnull Gruppe gruppe) {
+    public String addGroupToProjekt(@Nonnull final Gruppe gruppe) {
         this.choosenGroupId = gruppe.getId();
         return RedirectUtils.NEUES_PROJEKT_XHTML;
     }
@@ -153,11 +153,11 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * {@inheritDoc}
      */
     @Override
-    protected List<Projekt> uncheckedSolver(Object var) {
-        List<Projekt> result = new ArrayList<Projekt>();
+    protected List<Projekt> uncheckedSolver(final Object var) {
+        final List<Projekt> result = new ArrayList<>();
         if (var instanceof List) {
             for (int i = 0; i < ((List<?>) var).size(); i++) {
-                Object item = ((List<?>) var).get(i);
+                final Object item = ((List<?>) var).get(i);
                 if (item instanceof Projekt) {
                     result.add((Projekt) item);
                 }
@@ -170,7 +170,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
         return this.choosenGroupId;
     }
 
-    public void setChoosenGroupId(int choosenGroupId) {
+    public void setChoosenGroupId(final int choosenGroupId) {
         this.choosenGroupId = choosenGroupId;
     }
 
@@ -189,11 +189,16 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
             this.em.persist(this.selectedEntity);
             this.utx.commit();
             return RedirectUtils.PROJEKT_TABELLE_XHTML;
-        } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
+        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
             this.logger.error("Speichern fehlgeschlagen -> ", e);
             return null;
         }
+    }
+
+    @Nonnull
+    public String switchToProjekt() {
+        return RedirectUtils.PROJEKT_TABELLE_XHTML;
     }
 
 }
