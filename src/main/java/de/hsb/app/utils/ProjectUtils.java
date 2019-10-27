@@ -33,7 +33,7 @@ public class ProjectUtils {
     }
 
     /**
-     * Prueft ob die uebergebene {@link Gruppe} die Gruppe des {@link Projekt}es ist.
+     * Prueft  ob die uebergebene {@link Gruppe} die Gruppe des {@link Projekt}es ist.
      *
      * @param projekt {@link Projekt}
      * @param gruppe  {@link Gruppe}
