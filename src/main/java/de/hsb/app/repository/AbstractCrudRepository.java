@@ -4,7 +4,6 @@ import de.hsb.app.interfaces.CrudRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Resource;
 import javax.faces.model.DataModel;
@@ -13,9 +12,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.*;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
 
+    @Resource
     protected DataModel<T> entityList;
 
     protected T selectedEntity;
@@ -32,9 +33,13 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    @CheckForNull
-    public T findById(int id) {
-        return this.em.find(this.getRepositoryClass(), id);
+    @Nonnull
+    public Optional<T> findById(final int id) {
+        final T entity = this.em.find(this.getRepositoryClass(), id);
+        if (entity != null) {
+            return Optional.of(entity);
+        }
+        return Optional.empty();
     }
 
     /**
@@ -57,7 +62,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
             this.em.persist(entity);
             this.utx.commit();
             return true;
-        } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
+        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
             this.logger.error("Speichern fehlgeschlagen -> ", e);
             return false;
@@ -77,7 +82,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
             this.entityList.setWrappedData(this.em.createNamedQuery(this.getSelect()).getResultList());
             this.utx.commit();
             return true;
-        } catch (NotSupportedException | SystemException | SecurityException | IllegalStateException |
+        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
             this.logger.error("Löschen fehlgeschlagen -> ", e);
             return false;
@@ -132,7 +137,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      *
      * @param entityList {@link DataModel<T>}
      */
-    public void setEntityList(DataModel<T> entityList) {
+    public void setEntityList(final DataModel<T> entityList) {
         this.entityList = entityList;
     }
 
@@ -148,7 +153,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      *
      * @param selectedEntity {@link T}
      */
-    public void setSelectedEntity(T selectedEntity) {
+    public void setSelectedEntity(final T selectedEntity) {
         this.selectedEntity = selectedEntity;
     }
 

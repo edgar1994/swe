@@ -17,7 +17,7 @@ public interface CrudRepository<T> {
      * @return {@link Optional<T>}
      */
     @CheckForNull
-    T findById(final int id);
+    Optional<T> findById(final int id);
 
     /**
      * Finde alle {@link T}.

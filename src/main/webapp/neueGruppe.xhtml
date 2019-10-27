@@ -32,7 +32,8 @@
                              headerClass="header"
                              footerClass="footer">
                     <h:outputLabel value="#{msg['NEUEGRUPPE.TABLE.TITEL']}" for="titel"/>
-                    <p:inputText id="titel" value="#{gruppeController.selectedEntity.titel}" required="true"
+                    <p:inputText id="titel" value="#{gruppeController.selectedEntity.titel}"
+                                 onchange="#{gruppeController.selectedEntity.titel}" required="true"
                                  requiredMessage="#{msg['NEUEGRUPPE.TITEL.MESSAGE']}">
                     </p:inputText>
                 </h:panelGrid>
@@ -53,23 +54,25 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['NEUEGRRUPPE.IMPROJEKT']}</f:facet>
-                        <h:commandButton action="#{gruppeController.addUser(user)}"
+                        <h:commandButton action="#{userController.addUser(user.id)}"
                                          value="#{msg['NEUEGRUPPE.BUTTON.ADD']}"
                                          immediate="true"
-                                         rendered="#{!gruppeController.isAdded(user)}"/>
-                        <h:commandButton action="#{gruppeController.removeUser(user)}"
+                                         rendered="#{!userController.isAdded(user)}"/>
+                        <h:commandButton action="#{userController.removeUser(user.id)}"
                                          value="#{msg['NEUEGRUPPE.BUTTON.REMOVE']}"
                                          immediate="true"
-                                         rendered="#{gruppeController.isAdded(user)}"/>
+                                         rendered="#{userController.isAdded(user)}"/>
                     </h:column>
                 </h:dataTable>
                 <h:commandButton
-                        action="#{gruppeController.save}"
+                        action="#{gruppeController.saveGroup(userController.groupmembersSet)}"
                         value="#{msg['BUTTON.SPEICHERN']}"
                         actionListener="#{growlView.showAction(msg['NEUERUSER.MESSAGE.SUMMARY'], msg['NEUERUSER.MESSAGE.TEXT'])}"
                         update=":growl"/>
-                <h:commandButton action="#{gruppeController.cancel}" value="#{msg['BUTTON.ABBRECHEN']}"
-                                 immediate="true"/>
+                <h:commandButton
+                        action="#{gruppeController.cancel}"
+                        value="#{msg['BUTTON.ABBRECHEN']}"
+                        immediate="true"/>
             </h:form>
         </ui:insert>
     </div>

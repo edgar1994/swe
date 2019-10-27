@@ -36,7 +36,8 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
-                        <h:outputText value="#{userController.formatedName(userController.findById(gruppe.leiterId))}"/>
+                        <h:outputText
+                                value="#{gruppe.leiterName}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
@@ -51,17 +52,20 @@
                         <f:facet name="header">#{msg['GRUPPENTABELLE.LOESCHEN']}</f:facet>
                         <h:commandButton action="#{gruppeController.deleteGruppe(loginController.user)}"
                                          value="#{msg['BUTTON.REMOVE']}"
-                                         rendered="#{gruppeController.userAwareDeleteGroup(loginController.user, gruppe)}"/>
+                                         rendered="#{gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
                         <h:outputText value="#{msg['GRUPPENTABELLE.NURLEITER']}"
-                                      rendered="#{!gruppeController.userAwareDeleteGroup(loginController.user, gruppe)}"/>
+                                      rendered="#{!gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
                     </h:column>
                 </h:dataTable>
-                <h:commandButton action="#{gruppeController.newGroup(loginController.user)}"
-                                 value="#{msg['GRUPPENTABELLE.BUTTON.NEU']}"
-                                 rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
+                <h:commandButton
+                        action="#{gruppeController.newGroup(loginController.user)}"
+                        value="#{msg['GRUPPENTABELLE.BUTTON.NEU']}"
+                        onclick="#{userController.resetGroupmembersSet(loginController.user)}"
+                        rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
             </ui:insert>
         </h:form>
     </div>
 </h:body>
 <f:event listener="#{loginController.userAwareGroupTable}" type="preRenderView"/>
+<f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
 </html>

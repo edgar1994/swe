@@ -49,7 +49,7 @@
                     </h:panelGroup>
                 </h:panelGrid>
                 <h:dataTable id="gruppeTabelle" var="gruppe"
-                             value="#{gruppeController.userAwareFindAllGruppenByLeiterId(loginController.user)}"
+                             value="#{gruppeController.userAwareFindAllGruppen(loginController.user)}"
                              rowClasses="odd,even" headerClass="header">
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENTITEL']}</f:facet>
@@ -57,7 +57,8 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
-                        <h:outputText value="#{userController.formatedName(userController.findById(gruppe.leiterId))}"/>
+                        <h:outputText
+                                value="#{userController.formatedName(userController.findById(gruppe.leiterId).get())}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>

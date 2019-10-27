@@ -23,9 +23,9 @@ public class Gruppe {
     @GeneratedValue
     private int id;
 
-    private int leiterId;
+    private String leiterName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "ID", nullable = false)
     private Set<User> mitglieder = new HashSet<>();
 
@@ -40,8 +40,8 @@ public class Gruppe {
         this.erstellungsdatum = Date.from(Instant.now());
     }
 
-    public Gruppe(int leiterId, Set<User> mitglieder, String titel) {
-        this.leiterId = leiterId;
+    public Gruppe(final String leiterName, final Set<User> mitglieder, final String titel) {
+        this.leiterName = leiterName;
         this.mitglieder = mitglieder;
         this.erstellungsdatum = Date.from(Instant.now());
         this.titel = titel;
@@ -51,23 +51,23 @@ public class Gruppe {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(final int id) {
         this.id = id;
     }
 
-    public int getLeiterId() {
-        return this.leiterId;
+    public String getLeiterName() {
+        return this.leiterName;
     }
 
-    public void setLeiterId(int leiterId) {
-        this.leiterId = leiterId;
+    public void setLeiterName(@Nonnull final String leiterId) {
+        this.leiterName = leiterId;
     }
 
     public Set<User> getMitglieder() {
         return this.mitglieder;
     }
 
-    public void setMitglieder(Set<User> mitglieder) {
+    public void setMitglieder(final Set<User> mitglieder) {
         this.mitglieder = mitglieder;
     }
 
@@ -75,7 +75,7 @@ public class Gruppe {
         return this.erstellungsdatum;
     }
 
-    public void setErstellungsdatum(Date erstellungsdatum) {
+    public void setErstellungsdatum(final Date erstellungsdatum) {
         this.erstellungsdatum = erstellungsdatum;
     }
 
@@ -83,7 +83,7 @@ public class Gruppe {
         return this.titel;
     }
 
-    public void setTitel(String name) {
+    public void setTitel(final String name) {
         this.titel = name;
     }
 
@@ -93,7 +93,7 @@ public class Gruppe {
      *
      * @param user {@link User}
      */
-    public void addUser(@Nonnull User user) {
+    public void addUser(@Nonnull final User user) {
         this.mitglieder.add(user);
         user.getGruppen().add(this);
     }
@@ -104,7 +104,7 @@ public class Gruppe {
      *
      * @param user {@link User}
      */
-    public void removeUser(@Nonnull User user) {
+    public void removeUser(@Nonnull final User user) {
         this.mitglieder.remove(user);
         user.getGruppen().remove(this);
     }

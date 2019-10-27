@@ -1,6 +1,7 @@
 package de.hsb.app.controller;
 
 import de.hsb.app.enumeration.Rolle;
+import de.hsb.app.model.Gruppe;
 import de.hsb.app.model.User;
 import de.hsb.app.repository.AbstractCrudRepository;
 import de.hsb.app.utils.AdressUtils;
@@ -9,19 +10,50 @@ import de.hsb.app.utils.UserUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.DataModel;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * UserController
  */
 @ManagedBean(name = "userController")
+@ApplicationScoped
 public class UserController extends AbstractCrudRepository<User> {
+
+    private Set<User> groupmembersSet;
+
+    public void addUser(final int userId) {
+        Optional.of(this.em.find(User.class, userId)).ifPresent(this.groupmembersSet::add);
+    }
+
+    /**
+     * Prueft ob ein {@link User} bereits Mitglied der {@link Gruppe} ist.
+     *
+     * @param user {@link User}
+     * @return boolean
+     */
+    public boolean isAdded(@Nonnull final User user) {
+        boolean hinzugefuegt = false;
+        for (final User hinzugefuegterUser : this.groupmembersSet) {
+            hinzugefuegt |= UserUtils.compareUserById(hinzugefuegterUser, user);
+        }
+        return hinzugefuegt;
+    }
+
+    public void removeUser(final int userId) {
+        Optional.of(this.em.find(User.class, userId)).ifPresent(this.groupmembersSet::remove);
+    }
+
+    public void resetGroupmembersSet(@CheckForNull final User loggedUser) {
+        this.groupmembersSet = new HashSet<>();
+        if (loggedUser != null) {
+            this.groupmembersSet.add(loggedUser);
+        }
+    }
 
     /**
      * Liefert ein Array aller {@link Rolle}n zurueck.
@@ -47,7 +79,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param user {@link User}
      * @return Straße Hausnummer, Stadt, Postleitzahl
      */
-    public String formatedAdresse(@Nonnull User user) {
+    public String formatedAdresse(@Nonnull final User user) {
         return AdressUtils.formatAdresse(user.getAdresse());
     }
 
@@ -57,7 +89,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param user {@link User}
      * @return "Nachname, Vorname"
      */
-    public String formatedName(@CheckForNull User user) {
+    public String formatedName(@CheckForNull final User user) {
         if (user != null) {
             return UserUtils.getNachnameVornameString(user);
         } else {
@@ -73,8 +105,8 @@ public class UserController extends AbstractCrudRepository<User> {
      * @return User mit {@link Rolle#KUNDE} || {@link UserUtils#DUMMY_USER_KUNDE}
      */
     @Nonnull
-    public User getKundeUser(@Nonnull Set<User> userList) {
-        for (User user : userList) {
+    public User getKundeUser(@Nonnull final Set<User> userList) {
+        for (final User user : userList) {
             if (Rolle.KUNDE.equals(user.getRolle())) {
                 return user;
             }
@@ -147,7 +179,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @return List<User> fuer die Gruppenerstellung
      */
     private List<User> findAllUserForGruppenerstellung() {
-        Query query = this.em.createQuery("select u from  User u where u.rolle = :mitarbeiter or " +
+        final Query query = this.em.createQuery("select u from  User u where u.rolle = :mitarbeiter or " +
                 "u.rolle = :admin or u.rolle = :kunde");
         query.setParameter("mitarbeiter", Rolle.MITARBEITER);
         query.setParameter("admin", Rolle.ADMIN);
@@ -163,8 +195,8 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param loggedUser eingeloggter {@link User}
      * @return DataModel<User>
      */
-    public DataModel<User> entityListForGruppenerstellung(@Nonnull User loggedUser) {
-        List<User> userList = this.findAllUserForGruppenerstellung();
+    public DataModel<User> entityListForGruppenerstellung(@Nonnull final User loggedUser) {
+        final List<User> userList = this.findAllUserForGruppenerstellung();
         userList.removeIf(user -> UserUtils.compareUserById(loggedUser, user));
         if (!userList.isEmpty()) {
             this.checkEntityList();
@@ -204,17 +236,25 @@ public class UserController extends AbstractCrudRepository<User> {
      * {@inheritDoc}
      */
     @Override
-    protected List<User> uncheckedSolver(Object var) {
-        List<User> result = new ArrayList<User>();
+    protected List<User> uncheckedSolver(final Object var) {
+        final List<User> result = new ArrayList<>();
         if (var instanceof List) {
             for (int i = 0; i < ((List<?>) var).size(); i++) {
-                Object item = ((List<?>) var).get(i);
+                final Object item = ((List<?>) var).get(i);
                 if (item instanceof User) {
                     result.add((User) item);
                 }
             }
         }
         return result;
+    }
+
+    public Set<User> getGroupmembersSet() {
+        return this.groupmembersSet;
+    }
+
+    public void setGroupmembersSet(final Set<User> groupmembersSet) {
+        this.groupmembersSet = groupmembersSet;
     }
 
 }
