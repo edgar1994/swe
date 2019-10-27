@@ -17,7 +17,7 @@ public class ProjectUtils {
      * @param projektToCheck {@link Projekt} zu pruefen
      * @return boolean
      */
-    public static boolean compareUserById(@Nonnull Projekt projekt, @Nonnull Projekt projektToCheck) {
+    public static boolean compareUserById(@Nonnull final Projekt projekt, @Nonnull final Projekt projektToCheck) {
         return projekt.getId() == projektToCheck.getId();
     }
 
@@ -28,7 +28,7 @@ public class ProjectUtils {
      * @param projektToCheck {@link Projekt} to check
      * @return boolean
      */
-    public static boolean compareUserById(int projektId, @Nonnull Projekt projektToCheck) {
+    public static boolean compareUserById(final int projektId, @Nonnull final Projekt projektToCheck) {
         return projektToCheck.getId() == projektId;
     }
 
@@ -39,8 +39,9 @@ public class ProjectUtils {
      * @param gruppe  {@link Gruppe}
      * @return boolean
      */
-    public static boolean isChoosenGroup(@Nonnull Projekt projekt, @Nonnull Gruppe gruppe) {
-        return projekt.getGruppenId() == gruppe.getLeiterId();
+    public static boolean isChoosenGroup(@Nonnull final Projekt projekt, @Nonnull final Gruppe gruppe) {
+//        return projekt.getGruppenId() == gruppe.getLeiterName();
+        return false;
     }
 
 }
