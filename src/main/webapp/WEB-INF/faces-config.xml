@@ -115,9 +115,9 @@
         </locale-config>
         <message-bundle>messages</message-bundle>
         <resource-bundle>
-            <base-name>de.hsb.app.i18n.messages</base-name>
+            <base-name>de.hsb.app.swe.i18n.messages</base-name>
             <var>msg</var>
         </resource-bundle>
-        <message-bundle>de.hsb.app.i18n.messages</message-bundle>
+        <message-bundle>de.hsb.app.swe.i18n.messages</message-bundle>
     </application>
 </faces-config>
