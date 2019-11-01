@@ -161,8 +161,8 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      * Soll die Warnung "Unchecked cast" loesen.
      *
      * @param var Object
-     * @return
+     * @return List<T>
      */
-    protected abstract List<T> uncheckedSolver(Object var);
+    protected abstract List<T> uncheckedSolver(@Nonnull Object var);
 
 }

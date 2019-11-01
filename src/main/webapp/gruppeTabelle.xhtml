@@ -22,6 +22,7 @@
         <a href="index.xhtml">Mainpage</a>
         <a href="userTabelle.xhtml">#{msg['USER.BEZEICHNUNG']}</a>
         <a href="gruppeTabelle.xhtml">#{msg['GRUPPENTABELLE.TITEL']}</a>
+        <a href="projectTabelle.xhtml">#{msg['PROJEKTTABELLE.TITEL']}</a>
     </div>
     <div id="content">
         <h:form>
@@ -37,7 +38,7 @@
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
                         <h:outputText
-                                value="#{gruppe.leiterName}"/>
+                                value="#{userController.formatedName(gruppe.leiterId)}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
@@ -47,6 +48,10 @@
                         <f:facet name="header">#{msg['GRUPPENTABELLE.KUNDE']}</f:facet>
                         <h:outputText
                                 value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder))}"/>
+                    </h:column>
+                    <h:column rendered="#{loginController.adminRole()}">
+                        <f:facet name="header">#{msg['GRUPPENTABELLE.ERSTELLUNGSDATUM']}</f:facet>
+                        <h:outputText value="#{gruppeController.getFormatedDate(gruppe.erstellungsdatum)}"/>
                     </h:column>
                     <h:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
                         <f:facet name="header">#{msg['GRUPPENTABELLE.LOESCHEN']}</f:facet>
@@ -66,6 +71,6 @@
         </h:form>
     </div>
 </h:body>
-<f:event listener="#{loginController.userAwareGroupTable}" type="preRenderView"/>
+<f:event type="preRenderView" listener="#{loginController.userAwareGroupTable}"/>
 <f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
 </html>

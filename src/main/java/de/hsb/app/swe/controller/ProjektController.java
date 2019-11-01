@@ -153,7 +153,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * {@inheritDoc}
      */
     @Override
-    protected List<Projekt> uncheckedSolver(final Object var) {
+    protected List<Projekt> uncheckedSolver(@Nonnull final Object var) {
         final List<Projekt> result = new ArrayList<>();
         if (var instanceof List) {
             for (int i = 0; i < ((List<?>) var).size(); i++) {

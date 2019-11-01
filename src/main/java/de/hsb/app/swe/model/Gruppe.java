@@ -1,5 +1,6 @@
 package de.hsb.app.swe.model;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
@@ -23,7 +24,7 @@ public class Gruppe {
     @GeneratedValue
     private int id;
 
-    private String leiterName;
+    private int leiterId;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "ID", nullable = false)
@@ -40,8 +41,8 @@ public class Gruppe {
         this.erstellungsdatum = Date.from(Instant.now());
     }
 
-    public Gruppe(final String leiterName, final Set<User> mitglieder, final String titel) {
-        this.leiterName = leiterName;
+    public Gruppe(final int leiterId, final Set<User> mitglieder, final String titel) {
+        this.leiterId = leiterId;
         this.mitglieder = mitglieder;
         this.erstellungsdatum = Date.from(Instant.now());
         this.titel = titel;
@@ -55,19 +56,19 @@ public class Gruppe {
         this.id = id;
     }
 
-    public String getLeiterName() {
-        return this.leiterName;
+    public int getLeiterId() {
+        return this.leiterId;
     }
 
-    public void setLeiterName(@Nonnull final String leiterId) {
-        this.leiterName = leiterId;
+    public void setLeiterId(final int leiterId) {
+        this.leiterId = leiterId;
     }
 
     public Set<User> getMitglieder() {
         return this.mitglieder;
     }
 
-    public void setMitglieder(final Set<User> mitglieder) {
+    public void setMitglieder(@Nonnull final Set<User> mitglieder) {
         this.mitglieder = mitglieder;
     }
 
@@ -75,7 +76,7 @@ public class Gruppe {
         return this.erstellungsdatum;
     }
 
-    public void setErstellungsdatum(final Date erstellungsdatum) {
+    public void setErstellungsdatum(@CheckForNull final Date erstellungsdatum) {
         this.erstellungsdatum = erstellungsdatum;
     }
 
@@ -83,7 +84,7 @@ public class Gruppe {
         return this.titel;
     }
 
-    public void setTitel(final String name) {
+    public void setTitel(@Nonnull final String name) {
         this.titel = name;
     }
 
@@ -96,17 +97,6 @@ public class Gruppe {
     public void addUser(@Nonnull final User user) {
         this.mitglieder.add(user);
         user.getGruppen().add(this);
-    }
-
-    /**
-     * Remove-Methode zum sicherstellen, dass die Beziehung zwischen {@link User} zur {@link Gruppe} und {@link Gruppe}
-     * zum {@link User} entfernt wird.
-     *
-     * @param user {@link User}
-     */
-    public void removeUser(@Nonnull final User user) {
-        this.mitglieder.remove(user);
-        user.getGruppen().remove(this);
     }
 
 }

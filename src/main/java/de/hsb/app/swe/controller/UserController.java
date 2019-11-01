@@ -15,7 +15,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.model.DataModel;
 import javax.persistence.Query;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * UserController
@@ -26,6 +25,11 @@ public class UserController extends AbstractCrudRepository<User> {
 
     private Set<User> groupmembersSet;
 
+    /**
+     * Fuegt einen User dem Groupmember-Set hinzu.
+     *
+     * @param userId Id eines Users
+     */
     public void addUser(final int userId) {
         Optional.of(this.em.find(User.class, userId)).ifPresent(this.groupmembersSet::add);
     }
@@ -40,14 +44,34 @@ public class UserController extends AbstractCrudRepository<User> {
         boolean hinzugefuegt = false;
         for (final User hinzugefuegterUser : this.groupmembersSet) {
             hinzugefuegt |= UserUtils.compareUserById(hinzugefuegterUser, user);
+            this.logger.info("User mit ID '{}' erfolgreich hinzugefuegt.", user.getId());
+        }
+        if (!hinzugefuegt) {
+            this.logger.info("Hinzufuegen von User mit ID '{}' fehlgeschlagen!", user.getId());
         }
         return hinzugefuegt;
     }
 
+    /**
+     * Entfernt einen Member aus dem Set, der der uebergebenen UserId eines vorhanden Users im Set entspricht.
+     *
+     * @param userId Id eines Users
+     */
     public void removeUser(final int userId) {
-        Optional.of(this.em.find(User.class, userId)).ifPresent(this.groupmembersSet::remove);
+        final Set<User> tmpGroupmembersSet = new HashSet<>();
+        for (final User member : this.groupmembersSet) {
+            if (!UserUtils.compareUserById(userId, member)) {
+                tmpGroupmembersSet.add(member);
+            }
+        }
+        this.groupmembersSet = tmpGroupmembersSet;
     }
 
+    /**
+     * Leert das Group-Member-Set und setzt den eingeloggten User als ersten Member.
+     *
+     * @param loggedUser Eingeloggter User
+     */
     public void resetGroupmembersSet(@CheckForNull final User loggedUser) {
         this.groupmembersSet = new HashSet<>();
         if (loggedUser != null) {
@@ -95,6 +119,19 @@ public class UserController extends AbstractCrudRepository<User> {
         } else {
             return UserUtils.getNachnameVornameString(UserUtils.DUMMY_USER_KUNDE);
         }
+    }
+
+    /**
+     * Sucht den User anhand der uebergebenen Id.
+     * Liefert den Vor- und Nachnamen im Format "Nachname, Vorname" zurueck.
+     *
+     * @param userId {@link User}Id
+     * @return "Nachname, Vorname"
+     */
+    public String formatedName(final int userId) {
+        final Optional<User> user = this.findById(userId);
+        return user.map(UserUtils::getNachnameVornameString)
+                .orElseGet(() -> UserUtils.getNachnameVornameString(UserUtils.DUMMY_USER_KUNDE));
     }
 
     /**
@@ -163,24 +200,10 @@ public class UserController extends AbstractCrudRepository<User> {
      * Findet alle {@link User} fuer die Gruppenerstellung.
      *
      * @return List<User> fuer die Gruppenerstellung
-     * @deprecated Lambda erst ab 1.8 verwendbar
-     */
-    @Deprecated
-    @Nonnull
-    private List<User> findAllUserForGruppenerstellungTest() {
-        return this.findAll().stream().filter(user -> user.getRolle().equals(Rolle.KUNDE) ||
-                user.getRolle().equals(Rolle.MITARBEITER) || user.getRolle().equals(Rolle.ADMIN))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Findet alle {@link User} fuer die Gruppenerstellung.
-     *
-     * @return List<User> fuer die Gruppenerstellung
      */
     private List<User> findAllUserForGruppenerstellung() {
         final Query query = this.em.createQuery("select u from  User u where u.rolle = :mitarbeiter or " +
-                "u.rolle = :admin or u.rolle = :kunde");
+                "u.rolle <> :admin or u.rolle = :kunde");
         query.setParameter("mitarbeiter", Rolle.MITARBEITER);
         query.setParameter("admin", Rolle.ADMIN);
         query.setParameter("kunde", Rolle.KUNDE);
@@ -189,15 +212,16 @@ public class UserController extends AbstractCrudRepository<User> {
 
     /**
      * Erstellt anhand aller gefundenen {@link User} fuer die Gruppenerstellung das entsprechende
-     * {@link DataModel<User>}. Der eingeloggte {@link User} wird nicht mit Aufgeführt, da dieser bereits in der
-     * {@link Gruppe} als Leiter gesetzt ist. Er kann nicht entfernt werden.
+     * {@link DataModel<User>}. Der eingeloggte {@link User} wird nicht mit Aufgeführt,
+     * da dieser bereits in der {@link Gruppe} als Leiter gesetzt ist und ein {@link Rolle#ADMIN} wird ebenfalls
+     * ausgeschlossen, da dieser kein Member einer Gruppe sein darf. Ein Gruppenleiter kann nicht entfernt werden.
      *
      * @param loggedUser eingeloggter {@link User}
      * @return DataModel<User>
      */
     public DataModel<User> entityListForGruppenerstellung(@Nonnull final User loggedUser) {
         final List<User> userList = this.findAllUserForGruppenerstellung();
-        userList.removeIf(user -> UserUtils.compareUserById(loggedUser, user));
+        userList.removeIf(user -> UserUtils.compareUserById(loggedUser, user) || Rolle.ADMIN.equals(user.getRolle()));
         if (!userList.isEmpty()) {
             this.checkEntityList();
             this.entityList.setWrappedData(userList);
@@ -236,7 +260,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * {@inheritDoc}
      */
     @Override
-    protected List<User> uncheckedSolver(final Object var) {
+    protected List<User> uncheckedSolver(@Nonnull final Object var) {
         final List<User> result = new ArrayList<>();
         if (var instanceof List) {
             for (int i = 0; i < ((List<?>) var).size(); i++) {
@@ -249,10 +273,18 @@ public class UserController extends AbstractCrudRepository<User> {
         return result;
     }
 
+    /**
+     * Getter fuer groupmembersSet.
+     *
+     * @return groupmembersSet
+     */
     public Set<User> getGroupmembersSet() {
         return this.groupmembersSet;
     }
 
+    /**
+     * Setter fuer groupmembersSet.
+     */
     public void setGroupmembersSet(final Set<User> groupmembersSet) {
         this.groupmembersSet = groupmembersSet;
     }

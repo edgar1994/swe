@@ -186,16 +186,10 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      * Prueft ob der angemeldete User admin ist.
      */
     public boolean adminRole() {
-        switch (this.user.getRolle()) {
-            case USER:
-            case KUNDE:
-            case MITARBEITER:
-                return false;
-            case ADMIN:
-                return true;
-            default:
-                throw new IllegalArgumentException("Rolle Exestiert nicht.");
+        if (this.user != null) {
+            return Rolle.ADMIN.equals(this.user.getRolle());
         }
+        return false;
     }
 
     /**
@@ -276,7 +270,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      * {@inheritDoc}
      */
     @Override
-    protected List<User> uncheckedSolver(final Object var) {
+    protected List<User> uncheckedSolver(@Nonnull final Object var) {
         final List<User> result = new ArrayList<>();
         if (var instanceof List) {
             for (int i = 0; i < ((List<?>) var).size(); i++) {

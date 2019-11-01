@@ -41,6 +41,10 @@
                              value="#{userController.entityListForGruppenerstellung(loginController.user)}"
                              rowClasses="odd,even" headerClass="header">
                     <h:column>
+                        <f:facet name="header">#{msg['NEUERUSER.ROLLE']}</f:facet>
+                        <h:outputText value="#{msg[user.rolle.rolle]}"/>
+                    </h:column>
+                    <h:column>
                         <f:facet name="header">#{msg['USER.NACHNAME']}</f:facet>
                         <h:outputText value="#{user.nachname}"/>
                     </h:column>
