@@ -203,25 +203,28 @@ public class UserController extends AbstractCrudRepository<User> {
      */
     private List<User> findAllUserForGruppenerstellung() {
         final Query query = this.em.createQuery("select u from  User u where u.rolle = :mitarbeiter or " +
-                "u.rolle <> :admin or u.rolle = :kunde");
+                "u.rolle = :kunde and u.rolle <> :admin and u.rolle <> :user");
         query.setParameter("mitarbeiter", Rolle.MITARBEITER);
         query.setParameter("admin", Rolle.ADMIN);
         query.setParameter("kunde", Rolle.KUNDE);
+        query.setParameter("user", Rolle.USER);
         return this.uncheckedSolver(query.getResultList());
     }
 
     /**
      * Erstellt anhand aller gefundenen {@link User} fuer die Gruppenerstellung das entsprechende
      * {@link DataModel<User>}. Der eingeloggte {@link User} wird nicht mit Aufgeführt,
-     * da dieser bereits in der {@link Gruppe} als Leiter gesetzt ist und ein {@link Rolle#ADMIN} wird ebenfalls
-     * ausgeschlossen, da dieser kein Member einer Gruppe sein darf. Ein Gruppenleiter kann nicht entfernt werden.
+     * da dieser bereits in der {@link Gruppe} als Leiter gesetzt ist und ein {@link Rolle#ADMIN} oder ein
+     * {@link Rolle#USER} werden ebenfalls ausgeschlossen, da diese keine Member einer Gruppe sein duerfen.
+     * Ein Gruppenleiter kann nicht entfernt werden.
      *
      * @param loggedUser eingeloggter {@link User}
      * @return DataModel<User>
      */
     public DataModel<User> entityListForGruppenerstellung(@Nonnull final User loggedUser) {
         final List<User> userList = this.findAllUserForGruppenerstellung();
-        userList.removeIf(user -> UserUtils.compareUserById(loggedUser, user) || Rolle.ADMIN.equals(user.getRolle()));
+        userList.removeIf(user -> UserUtils.compareUserById(loggedUser, user) || Rolle.ADMIN.equals(user.getRolle())
+                || Rolle.USER.equals(user.getRolle()));
         if (!userList.isEmpty()) {
             this.checkEntityList();
             this.entityList.setWrappedData(userList);

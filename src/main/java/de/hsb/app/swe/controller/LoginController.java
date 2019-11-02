@@ -1,7 +1,6 @@
 package de.hsb.app.swe.controller;
 
 import de.hsb.app.swe.enumeration.Rolle;
-import de.hsb.app.swe.model.Adresse;
 import de.hsb.app.swe.model.Gruppe;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
@@ -9,7 +8,6 @@ import de.hsb.app.swe.utils.RedirectUtils;
 import de.hsb.app.swe.utils.UserUtils;
 
 import javax.annotation.Nonnull;
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -18,7 +16,6 @@ import javax.faces.event.ComponentSystemEvent;
 import javax.persistence.Query;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -45,24 +42,6 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
         FacesContext.getCurrentInstance()
                 .getExternalContext().invalidateSession();
         return RedirectUtils.LOGIN_XHTML;
-    }
-
-    /**
-     * Erstellt daten beim Initialisieren.
-     */
-    @PostConstruct
-    public void init() {
-        final Adresse adresse = new Adresse("Strasse 21", "99999", "Stadt");
-        this.save(new User("Aron", "O'Connor", adresse, "mitarbeiter1",
-                "passwort+", Rolle.MITARBEITER, new HashSet<>()));
-        this.save(new User("test", "test", adresse, "testMitarbeiter",
-                "passwort+", Rolle.MITARBEITER, new HashSet<>()));
-        this.save(new User("Dan", "Evan", adresse, "admin",
-                "passwort+", Rolle.ADMIN, new HashSet<>()));
-        this.save(new User("Max", "Kundenmann", adresse, "kunde1",
-                "passwort+", Rolle.KUNDE, new HashSet<>()));
-        this.save(new User("Malon", "Lonlon", adresse, "user1",
-                "passwort+", Rolle.KUNDE, new HashSet<>()));
     }
 
     /**
