@@ -277,6 +277,17 @@ public class UserController extends AbstractCrudRepository<User> {
     }
 
     /**
+     * Aktualisiert das groupmembersSet.
+     *
+     * @param groupmembersSet {@link Set<User>}
+     */
+    public void updateGroupMemberSet(@CheckForNull final Set<User> groupmembersSet) {
+        if (groupmembersSet != null) {
+            this.groupmembersSet = groupmembersSet;
+        }
+    }
+
+    /**
      * Getter fuer groupmembersSet.
      *
      * @return groupmembersSet

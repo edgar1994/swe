@@ -1,6 +1,5 @@
 package de.hsb.app.swe.model;
 
-import javax.faces.bean.ManagedBean;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,7 +12,6 @@ import javax.validation.constraints.Size;
  */
 @NamedQuery(name = Adresse.NAMED_QUERY_NAME, query = Adresse.NAMED_QUERY_QUERY)
 @Entity
-@ManagedBean(name = "adresse")
 public class Adresse {
 
     public static final String NAMED_QUERY_NAME = "SelectAdresse";

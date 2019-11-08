@@ -3,7 +3,6 @@ package de.hsb.app.swe.model;
 import de.hsb.app.swe.enumeration.Rolle;
 
 import javax.annotation.Nonnull;
-import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -15,7 +14,6 @@ import java.util.Set;
  */
 @NamedQuery(name = User.NAMED_QUERY_NAME, query = User.NAMED_QUERY_QUERY)
 @Entity
-@ManagedBean(name = "user")
 public class User {
 
     public static final String NAMED_QUERY_NAME = "SelectUser";

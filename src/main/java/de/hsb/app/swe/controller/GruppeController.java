@@ -11,10 +11,14 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.model.DataModel;
 import javax.transaction.*;
 import java.sql.Date;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Controller fuer {@link Gruppe}.
@@ -103,6 +107,23 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     }
 
     /**
+     * Prueft ob der User die Gruppe editieren darf und setzt die gewaehlte {@link Gruppe} und redirected auf
+     * {@link RedirectUtils#NEUE_GRUPPE_XHTML} weiter. Sollte er nicht die Gruppe editieren duerfen bleibt er auf
+     * {@link RedirectUtils#GRUPPE_TABELLE_XHTML}.
+     *
+     * @return {@link RedirectUtils#NEUE_GRUPPE_XHTML} || {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
+     */
+    public String userAwareEditGroup(@Nonnull final User user) {
+        this.checkEntityList();
+        final Gruppe gruppeToCheck = this.entityList.getRowData();
+        if (gruppeToCheck != null && UserUtils.compareUserById(gruppeToCheck.getLeiterId(), user)) {
+            this.selectedEntity = gruppeToCheck;
+            return RedirectUtils.NEUE_GRUPPE_XHTML;
+        }
+        return RedirectUtils.GRUPPE_TABELLE_XHTML;
+    }
+
+    /**
      * Setzt die Mitglieder der gewaehlten {@link Gruppe} und speichert sie. Redirected auf {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      *
      * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
@@ -133,21 +154,24 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return List<Gruppe>
      */
     @Nonnull
-    public List<Gruppe> userAwareFindAllGruppen(@CheckForNull final User user) {
+    public DataModel<Gruppe> userAwareFindAllGruppen(@CheckForNull final User user) {
+        this.checkEntityList();
         if (user != null) {
             switch (user.getRolle()) {
                 case KUNDE:
                 case MITARBEITER:
-                    return new ArrayList<>(user.getGruppen());
+                    this.entityList.setWrappedData(new ArrayList<>(user.getGruppen()));
+                    return this.entityList;
                 case ADMIN:
-                    return this.findAll();
+                    this.entityList.setWrappedData(this.findAll());
+                    return this.entityList;
                 case USER:
                 default:
                     throw new IllegalArgumentException(String.format("Role %s has now permission to be in a Group.", user.getRolle()));
             }
         } else {
             this.logger.error("User is not allowed to be null.");
-            return Collections.emptyList();
+            return this.entityList;
         }
     }
 

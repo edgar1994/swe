@@ -1,6 +1,5 @@
 package de.hsb.app.swe.model;
 
-import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
@@ -11,7 +10,6 @@ import java.util.List;
 
 @NamedQuery(name = Projekt.NAMED_QUERY_NAME, query = Projekt.NAMED_QUERY_QUERY)
 @Entity
-@ManagedBean(name = "projekt")
 public class Projekt {
 
     public static final String NAMED_QUERY_NAME = "SelectProjekt";

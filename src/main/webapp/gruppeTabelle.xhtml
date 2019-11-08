@@ -61,6 +61,15 @@
                         <h:outputText value="#{msg['GRUPPENTABELLE.NURLEITER']}"
                                       rendered="#{!gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
                     </h:column>
+                    <h:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
+                        <f:facet name="header">#{msg['GRUPPENTABELLE.EDIT']}</f:facet>
+                        <h:commandButton action="#{gruppeController.userAwareEditGroup(loginController.user)}"
+                                         value="#{msg['BUTTON.EDIT']}"
+                                         actionListener="#{userController.updateGroupMemberSet(gruppe.mitglieder)}"
+                                         rendered="#{gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
+                        <h:outputText value="#{msg['GRUPPENTABELLE.NURLEITER']}"
+                                      rendered="#{!gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
+                    </h:column>
                 </h:dataTable>
                 <h:commandButton
                         action="#{gruppeController.newGroup(loginController.user)}"

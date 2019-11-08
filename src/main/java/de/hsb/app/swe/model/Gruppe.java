@@ -2,7 +2,6 @@ package de.hsb.app.swe.model;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -13,7 +12,6 @@ import java.util.Set;
 
 @NamedQuery(name = Gruppe.NAMED_QUERY_NAME, query = Gruppe.NAMED_QUERY_QUERY)
 @Entity
-@ManagedBean(name = "gruppe")
 public class Gruppe {
 
     public static final String NAMED_QUERY_NAME = "SelectGruppe";

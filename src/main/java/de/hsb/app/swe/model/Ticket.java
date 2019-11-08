@@ -2,7 +2,6 @@ package de.hsb.app.swe.model;
 
 import de.hsb.app.swe.enumeration.Status;
 
-import javax.faces.bean.ManagedBean;
 import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
@@ -12,7 +11,6 @@ import java.util.Date;
 
 @NamedQuery(name = Ticket.NAMED_QUERY_NAME, query = Ticket.NAMED_QUERY_QUERY)
 @Entity
-@ManagedBean(name = "ticket")
 public class Ticket {
 
     public static final String NAMED_QUERY_NAME = "SelectTicket";
