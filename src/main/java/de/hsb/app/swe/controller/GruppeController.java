@@ -9,8 +9,8 @@ import de.hsb.app.swe.utils.UserUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.transaction.*;
 import java.sql.Date;
@@ -24,7 +24,7 @@ import java.util.Set;
  * Controller fuer {@link Gruppe}.
  */
 @ManagedBean(name = "gruppeController")
-@ApplicationScoped
+@SessionScoped
 public class GruppeController extends AbstractCrudRepository<Gruppe> {
 
     /**

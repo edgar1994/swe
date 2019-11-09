@@ -182,7 +182,7 @@ public class UserController extends AbstractCrudRepository<User> {
     }
 
     /**
-     * Abspeichern eines neuen Kunden. Nach Erfolg wird auf {@link RedirectUtils#USER_TABELLE_XHTML} redirected.
+     * Abspeichern eines neuen {@link User}s. Nach Erfolg wird auf {@link RedirectUtils#USER_TABELLE_XHTML} redirected.
      *
      * @return {@link RedirectUtils#USER_TABELLE_XHTML}
      */
