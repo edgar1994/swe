@@ -12,6 +12,7 @@ import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
+import javax.persistence.Query;
 import javax.transaction.*;
 import java.sql.Date;
 import java.time.Instant;
@@ -166,6 +167,37 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                     this.entityList.setWrappedData(this.findAll());
                     return this.entityList;
                 case USER:
+                default:
+                    throw new IllegalArgumentException(String.format("Role %s has now permission to be in a Group.", user.getRolle()));
+            }
+        } else {
+            this.logger.error("User is not allowed to be null.");
+            return this.entityList;
+        }
+    }
+
+    /**
+     * Findet alle {@link Gruppe}n in denen der uebergebene {@link User} Mitglied oder Gruppenleiter ist.
+     *
+     * @param user {@link User}
+     * @return List<Gruppe>
+     */
+    @Nonnull
+    public DataModel<Gruppe> userAwareFindAllGruppenByLeiterId(@CheckForNull final User user) {
+        this.checkEntityList();
+        if (user != null) {
+            switch (user.getRolle()) {
+                case MITARBEITER:
+                    final Query query = this.em.createQuery("select gr from Gruppe gr where gr.leiterId = :userId");
+                    query.setParameter("userId", user.getId());
+                    final List<Gruppe> gruppeList = this.uncheckedSolver(query.getResultList());
+                    this.entityList.setWrappedData(gruppeList);
+                    return this.entityList;
+                case ADMIN:
+                    this.entityList.setWrappedData(this.findAll());
+                    return this.entityList;
+                case USER:
+                case KUNDE:
                 default:
                     throw new IllegalArgumentException(String.format("Role %s has now permission to be in a Group.", user.getRolle()));
             }

@@ -78,7 +78,7 @@
         </navigation-case>
     </navigation-rule>
 
-    <!-- Von Gruppentabelle -->
+    <!-- Von neue Gruppe -->
     <navigation-rule>
         <display-name>neueGruppe</display-name>
         <from-view-id>/neueGruppe.xhtml</from-view-id>
@@ -106,6 +106,38 @@
             <from-action>#{gruppeController.cancel()}</from-action>
             <from-outcome>gruppeTabelle.xhtml</from-outcome>
             <to-view-id>/gruppeTabelle.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- Von Projekt-Tabelle -->
+    <navigation-rule>
+        <display-name>projectTabelle</display-name>
+        <from-view-id>/projectTabelle.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{userController.addUser(loginController.user)}</from-action>
+            <from-outcome>neuesProjekt.xhtml</from-outcome>
+            <to-view-id>/neuesProjekt.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- Von neues Projekt -->
+    <navigation-rule>
+        <display-name>neuesProjekt</display-name>
+        <from-view-id>/neuesProjekt.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{projektController.saveProject(ticketController.ticketList)}</from-action>
+            <from-outcome>projectTabelle.xhtml</from-outcome>
+            <to-view-id>/projectTabelle.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{projektController.saveProject(ticketController.ticketList)}</from-action>
+            <from-outcome>neuesProjekt.xhtml</from-outcome>
+            <to-view-id>/neuesProjekt.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{projektController.switchToProjekt()}</from-action>
+            <from-outcome>projectTabelle.xhtml</from-outcome>
+            <to-view-id>/projectTabelle.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 

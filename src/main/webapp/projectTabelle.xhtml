@@ -29,8 +29,7 @@
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
                 <h:dataTable id="prjektTabelle" var="projekt"
-                             value="#{projektController.userAwareFindAllByGruppe(loginController.user,
-                             gruppeController.userAwareFindAllGruppen(loginController.user))}"
+                             value="#{projektController.userAwareFindAllByGruppe(loginController.user)}"
                              rowClasses="odd,even" headerClass="header">
                     <h:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.TITEL']}</f:facet>
@@ -65,5 +64,4 @@
         </h:form>
     </div>
 </h:body>
-<f:event listener="#{loginController.userAwareGroupTable}" type="preRenderView"/>
 </html>

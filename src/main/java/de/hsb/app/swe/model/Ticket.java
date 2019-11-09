@@ -18,7 +18,7 @@ public class Ticket {
     public static final String NAMED_QUERY_QUERY = "Select t from Ticket t";
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Future
@@ -41,6 +41,9 @@ public class Ticket {
 
     @NotNull
     private String beschreibung;
+
+    @ManyToOne
+    private Projekt projekt;
 
     public Ticket() {
         this.status = Status.OFFEN;
@@ -113,4 +116,27 @@ public class Ticket {
         this.beschreibung = beschreibung;
     }
 
+    public int getBearbeiterId() {
+        return this.bearbeiterId;
+    }
+
+    public void setBearbeiterId(final int bearbeiterId) {
+        this.bearbeiterId = bearbeiterId;
+    }
+
+    public String getBeschreibung() {
+        return this.beschreibung;
+    }
+
+    public void setBeschreibung(final String beschreibung) {
+        this.beschreibung = beschreibung;
+    }
+
+    public Projekt getProjekt() {
+        return this.projekt;
+    }
+
+    public void setProjekt(final Projekt projekt) {
+        this.projekt = projekt;
+    }
 }

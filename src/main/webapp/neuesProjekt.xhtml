@@ -39,17 +39,18 @@
                     </h:panelGroup>
                     <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.ABSCHLUSSDATUM']}" for="abschlussdatum"/>
                     <h:panelGroup>
-                        <p:calendar id="abschlussdatum" value="#{projekt.abschlussdatum}" mode="popup" navigator="true"
+                        <p:calendar id="abschlussdatum" value="#{projektController.selectedEntity.abschlussdatum}"
+                                    mode="popup" navigator="true"
                                     showOn="button" pattern="dd.MM.yyy" required="true"
                                     requiredMessage="Gültigkeitsdatum wir benötigt."/>
                     </h:panelGroup>
                     <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.BESCHREIBUNG']}" for="beschreibung"/>
                     <h:panelGroup>
-                        <p:inputTextarea id="beschreibung" value="#{projekt.beschreibung}"/>
+                        <p:inputTextarea id="beschreibung" value="#{projektController.selectedEntity.beschreibung}"/>
                     </h:panelGroup>
                 </h:panelGrid>
                 <h:dataTable id="gruppeTabelle" var="gruppe"
-                             value="#{gruppeController.userAwareFindAllGruppen(loginController.user)}"
+                             value="#{gruppeController.userAwareFindAllGruppenByLeiterId(loginController.user)}"
                              rowClasses="odd,even" headerClass="header">
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENTITEL']}</f:facet>
@@ -79,7 +80,11 @@
                                       rendered="#{projektController.isChoosenGroup(gruppe)}"/>
                     </h:column>
                 </h:dataTable>
-                <p:commandButton value="#{msg['BUTTON.SPEICHERN']}" action="#{projektController.save()}"/>
+                <h:commandButton value="#{msg['BUTTON.SPEICHERN']}"
+                                 action="#{projektController.saveProject(ticketController.getTicketList())}"/>
+                <h:commandButton value="#{msg['BUTTON.ABBRECHEN']}"
+                                 action="#{projektController.switchToProjekt()}"
+                                 immediate="true"/>
             </h:form>
         </ui:insert>
     </div>

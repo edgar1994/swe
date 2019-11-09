@@ -17,7 +17,7 @@ public class Projekt {
     public static final String NAMED_QUERY_QUERY = "Select pr from Projekt pr";
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Size(min = 3, max = 30)
@@ -26,8 +26,8 @@ public class Projekt {
     @NotNull
     private int leiterId;
 
-    @NotNull
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL,
+            mappedBy = "projekt", orphanRemoval = true)
     private List<Ticket> ticket;
 
     @NotNull

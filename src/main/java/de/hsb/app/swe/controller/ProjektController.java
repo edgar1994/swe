@@ -3,6 +3,7 @@ package de.hsb.app.swe.controller;
 import de.hsb.app.swe.enumeration.Status;
 import de.hsb.app.swe.model.Gruppe;
 import de.hsb.app.swe.model.Projekt;
+import de.hsb.app.swe.model.Ticket;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
 import de.hsb.app.swe.utils.DateUtils;
@@ -10,6 +11,7 @@ import de.hsb.app.swe.utils.GruppeUtils;
 import de.hsb.app.swe.utils.ProjectUtils;
 import de.hsb.app.swe.utils.RedirectUtils;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -38,6 +40,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     public String newProject(@Nonnull final User projektLeiter) {
         this.selectedEntity = new Projekt();
         this.selectedEntity.setLeiterId(projektLeiter.getId());
+        this.selectedEntity.setErstellungsdatum(Date.from(Instant.now()));
         return RedirectUtils.NEUES_PROJEKT_XHTML;
     }
 
@@ -47,8 +50,16 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @param projekt {@link Projekt}
      * @return Anzahl der offenen Tickets
      */
-    public long openTickets(@Nonnull final Projekt projekt) {
-        return projekt.getTicket().stream().filter(ticket -> Status.OFFEN.equals(ticket.getStatus())).count();
+    public long openTickets(@CheckForNull final Projekt projekt) {
+        int open = 0;
+        if (projekt != null) {
+            for (final Ticket ticket : projekt.getTicket()) {
+                if (Status.OFFEN.equals(ticket.getStatus())) {
+                    ++open;
+                }
+            }
+        }
+        return open;
     }
 
     /**
@@ -57,22 +68,21 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @return {@link RedirectUtils#PROJEKT_TABELLE_XHTML}
      */
     @Nonnull
-    public String abbrechen() {
+    public String switchToProjekt() {
         return RedirectUtils.PROJEKT_TABELLE_XHTML;
     }
 
     /**
      * Findet alle Projekte eines {@link User}s in der er auch Mitglied ist.
      *
-     * @param loggedUser  eingeloggter {@link User}
-     * @param gruppenList {@link List<Gruppe>}
+     * @param loggedUser eingeloggter {@link User}
      * @return List<Projekt>
      */
     @Nonnull
-    public List<Projekt> userAwareFindAllByGruppe(@Nonnull final User loggedUser, @Nonnull final List<Gruppe> gruppenList) {
+    public List<Projekt> userAwareFindAllByGruppe(@Nonnull final User loggedUser) {
         final List<Projekt> projektList = new ArrayList<>();
-        for (final Gruppe gruppe : gruppenList) {
-            final Query query = this.em.createQuery("select pr from Projekt pr fetch all properties where pr.gruppenId = :gruppenId");
+        for (final Gruppe gruppe : loggedUser.getGruppen()) {
+            final Query query = this.em.createQuery("select pr from Projekt pr where pr.gruppenId = :gruppenId");
             query.setParameter("gruppenId", gruppe.getId());
             projektList.addAll(this.uncheckedSolver(query.getResultList()));
         }
@@ -120,6 +130,33 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     public String addGroupToProjekt(@Nonnull final Gruppe gruppe) {
         this.choosenGroupId = gruppe.getId();
         return RedirectUtils.NEUES_PROJEKT_XHTML;
+    }
+
+    /**
+     * Speicher das {@link Projekt} und fuehr zureuck auf {@link RedirectUtils#NEUES_PROJEKT_XHTML}
+     *
+     * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
+     */
+    public String saveProject(@CheckForNull final List<Ticket> tickets) {
+        if (tickets != null) {
+            for (final Ticket ticket : tickets) {
+                ticket.setProjekt(this.selectedEntity);
+            }
+            this.selectedEntity.setTicket(tickets);
+            this.selectedEntity.setGruppenId(this.choosenGroupId);
+            try {
+                this.utx.begin();
+                this.em.persist(this.selectedEntity);
+                this.utx.commit();
+                return RedirectUtils.PROJEKT_TABELLE_XHTML;
+            } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
+                    RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
+                this.logger.error("Saving operation failed -> ", e);
+            }
+        } else {
+            this.logger.error("Saving operation failed. Entity is null.");
+        }
+        return RedirectUtils.PROJEKT_TABELLE_XHTML;
     }
 
     /**
@@ -173,27 +210,4 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     public void setChoosenGroupId(final int choosenGroupId) {
         this.choosenGroupId = choosenGroupId;
     }
-
-    /**
-     * Speicher das {@link Projekt} und fuehr zureuck auf {@link RedirectUtils#NEUES_PROJEKT_XHTML}
-     *
-     * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
-     */
-    public String save() {
-        this.selectedEntity.setGruppenId(this.choosenGroupId);
-        this.selectedEntity.setErstellungsdatum(Date.from(Instant.now()));
-        try {
-            this.utx.begin();
-            this.selectedEntity = this.em.merge(this.selectedEntity);
-            this.em.persist(this.selectedEntity.getTicket());
-            this.em.persist(this.selectedEntity);
-            this.utx.commit();
-            return RedirectUtils.PROJEKT_TABELLE_XHTML;
-        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
-                RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-            this.logger.error("Speichern fehlgeschlagen -> ", e);
-            return null;
-        }
-    }
-
 }
