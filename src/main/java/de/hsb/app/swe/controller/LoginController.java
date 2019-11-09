@@ -39,6 +39,9 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      * @return {@link RedirectUtils#LOGIN_XHTML}
      */
     public String logout() {
+        this.user = null;
+        this.passwort = "";
+        this.username = "";
         FacesContext.getCurrentInstance()
                 .getExternalContext().invalidateSession();
         return RedirectUtils.LOGIN_XHTML;
@@ -116,21 +119,23 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     public void userAwareGroupTable(final ComponentSystemEvent cse) {
         final FacesContext context = FacesContext.getCurrentInstance();
         this.checkLoggedIn(cse);
-        switch (this.user.getRolle()) {
-            case ADMIN:
-            case KUNDE:
-            case MITARBEITER:
-                break;
-            case USER:
-                // Fixme Wird nicht angezeigt
-                context.addMessage(null, new FacesMessage("Unerlaubt",
-                        String.format("Sie duerfen keine Gruppe mit der Rolle %s anlegen!", this.user.getRolle())));
-                context.getApplication().getNavigationHandler().
-                        handleNavigation(context, null,
-                                RedirectUtils.LOGIN_INDEX_XHTML);
-                break;
-            default:
-                throw new IllegalArgumentException(String.format("Rolle %s exestiert nicht", this.user.getRolle()));
+        if (this.user != null) {
+            switch (this.user.getRolle()) {
+                case ADMIN:
+                case KUNDE:
+                case MITARBEITER:
+                    break;
+                case USER:
+                    // Fixme Wird nicht angezeigt
+                    context.addMessage(null, new FacesMessage("Unerlaubt",
+                            String.format("Sie duerfen keine Gruppe mit der Rolle %s anlegen!", this.user.getRolle())));
+                    context.getApplication().getNavigationHandler().
+                            handleNavigation(context, null,
+                                    RedirectUtils.LOGIN_INDEX_XHTML);
+                    break;
+                default:
+                    throw new IllegalArgumentException(String.format("Rolle %s exestiert nicht", this.user.getRolle()));
+            }
         }
     }
 
