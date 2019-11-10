@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view locale="#{languageHandler.language}"/>
+<h:head>
+    <title><ui:insert name="title">#{msg['PROJEKTANSICHT.HEADER']}</ui:insert></title>
+    <link rel="stylesheet" href="resources/index.css" type="text/css"/>
+</h:head>
+<h:body>
+    <h:form>
+        <div align="right">
+            <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
+            <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
+            <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
+        </div>
+    </h:form>
+    <div>
+        <a href="index.xhtml">Mainpage</a>
+        <a href="userTabelle.xhtml">#{msg['USER.BEZEICHNUNG']}</a>
+        <a href="gruppeTabelle.xhtml">#{msg['GRUPPENTABELLE.TITEL']}</a>
+        <a href="projectTabelle.xhtml">#{msg['PROJEKTTABELLE.TITEL']}</a>
+    </div>
+    <div id="wrapper">
+        <div id="content">
+            <h:form>
+                <p:growl id="growl" showDetail="true" sticky="true"/>
+                <ui:insert name="content">
+                    <h:dataTable id="ticketTabelle" var="ticket"
+                                 value="#{projektController.selectedEntity.ticket}"
+                                 rowClasses="odd,even" headerClass="header">
+                        <h:column>
+                            <f:facet name="header">#{msg['PROJEKTANSICHT.TITEL']}</f:facet>
+                            <p:outputLabel value="#{ticket.titel}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{msg['PROJEKTANSICHT.STATUS']}</f:facet>
+                            <p:outputLabel value="#{ticket.status}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{msg['PROJEKTANSICHT.BEARBEITER']}</f:facet>
+                            <p:outputLabel
+                                    value="#{userController.formatedName(ticket.bearbeiter, rolleController.getEmployee())}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{msg['PROJEKTANSICHT.ABSCHLUSSDATUM']}</f:facet>
+                            <p:outputLabel value="#{ticket.abschlussdatum}"/>
+                        </h:column>
+                    </h:dataTable>
+                </ui:insert>
+                <div id="footer">
+                    <ui:insert name="footer">
+                        <p:outputLabel
+                                rendered="#{projektController.isTicketsEmpty()}">#{msg['PROJEKTANSICHT.ISEMPTY']}
+                        </p:outputLabel>
+                    </ui:insert>
+                </div>
+                <p:commandButton action="#{projektController.isTicketsEmpty()}"
+                                 value="#{msg['PROJEKTANSICHT.BUTTON.NEU']}"
+                                 rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
+            </h:form>
+        </div>
+        <div id="right">
+            <h2>#{msg['PROJEKTANSICHT.DETAILS.INFORMATIONEN']}</h2>
+
+            <h3>#{msg['PROJEKTANSICHT.DETAILS.LEITER']}</h3>
+            <p:dataList styleClass="datalist-noborder"
+                        value="#{projektController.selectedEntity}"
+                        var="user">
+                #{userController.formatedName(user.leiterId, rolleController.getEmployee())}
+            </p:dataList>
+            <h3>#{msg['PROJEKTANSICHT.DETAIL.EMPLOYEES']}</h3>
+            <p:dataList styleClass="datalist-noborder"
+                        value="#{userController.findAllEmployeesInProjectExceptLeader(projektController.selectedEntity)}"
+                        var="user">
+                #{userController.formatedName(user, rolleController.getEmployee())}
+            </p:dataList>
+            <h3>#{msg['PROJEKTANSICHT.DETAIL.CUSTOMER']}</h3>
+            <p:dataList styleClass="datalist-noborder"
+                        value="#{userController.findAllCustomers(projektController.selectedEntity)}"
+                        var="user">
+                #{userController.formatedName(user, rolleController.getCustomer())}
+            </p:dataList>
+            <h3>#{msg['PROJEKTANSICHT.DETAILS.TICKETS']}</h3>
+            <p:dataList styleClass="datalist-noborder"
+                        value="#{projektController.selectedEntity}"
+                        var="projekt">
+                #{msg['PROJEKTANSICHT.DETAILS.GESAMT']}
+                #{projekt.ticket.size()}
+            </p:dataList>
+            <p:dataList styleClass="datalist-noborder"
+                        value="#{projektController.selectedEntity}"
+                        var="projekt">
+                #{msg['PROJEKTANSICHT.DETAILS.OFFEN']}
+                #{projektController.openTickets(projektController.selectedEntity)}
+            </p:dataList>
+            <h3>#{msg['PROJEKTANSICHT.DETAILS.CREATEDDATE']}</h3>
+            <p:dataList styleClass="datalist-noborder"
+                        value="#{projektController.selectedEntity}"
+                        var="projekt">
+                #{dateController.getFormatedDateDDMMYYYY(projekt.erstellungsdatum)}
+            </p:dataList>
+            <h3>#{msg['PROJEKTANSICHT.DETAILS.DUEDATE']}</h3>
+            <p:dataList styleClass="datalist-noborder"
+                        value="#{projektController.selectedEntity}"
+                        var="projekt">
+                #{dateController.getFormatedDateDDMMYYYY(projekt.abschlussdatum)}
+            </p:dataList>
+        </div>
+    </div>
+</h:body>
+<f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
+</html>
