@@ -50,11 +50,12 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.DUEDATE']}</f:facet>
-                        <h:outputText value="#{projektController.formattedDateDDMMYYYY(projekt.abschlussdatum)}"/>
+                        <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(projekt.abschlussdatum)}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.CREATEDDATE']}</f:facet>
-                        <h:outputText value="#{projektController.formattedDateDDMMYYYY(projekt.erstellungsdatum)}"/>
+                        <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(projekt.erstellungsdatum)}"/>
+                    </h:column>
                     </h:column>
                 </h:dataTable>
             </ui:insert>

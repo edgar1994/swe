@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * Utils-Klasse fuer {@link Date}
+ */
 public class DateUtils {
 
     private static final String DATE_TIME_DDMMYYYY = "dd.MM.yyyy";

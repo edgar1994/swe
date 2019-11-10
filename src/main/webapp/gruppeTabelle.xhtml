@@ -51,7 +51,7 @@
                     </h:column>
                     <h:column rendered="#{loginController.adminRole()}">
                         <f:facet name="header">#{msg['GRUPPENTABELLE.ERSTELLUNGSDATUM']}</f:facet>
-                        <h:outputText value="#{gruppeController.getFormatedDate(gruppe.erstellungsdatum)}"/>
+                        <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(gruppe.erstellungsdatum)}"/>
                     </h:column>
                     <h:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
                         <f:facet name="header">#{msg['GRUPPENTABELLE.LOESCHEN']}</f:facet>

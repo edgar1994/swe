@@ -4,7 +4,6 @@ import de.hsb.app.swe.model.Gruppe;
 import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
-import de.hsb.app.swe.utils.DateUtils;
 import de.hsb.app.swe.utils.ListUtils;
 import de.hsb.app.swe.utils.RedirectUtils;
 import de.hsb.app.swe.utils.UserUtils;
@@ -89,22 +88,6 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
             }
         } else {
             this.logger.error("User is not allowed to be null.");
-        }
-    }
-
-    /**
-     * Liefert das Datim im Format "dd.MM.yyyy" zurueck. Wenn das Datum <code>null</code> ist dann wird ein leerer
-     * String zurueckgeliefert.
-     *
-     * @param date Date
-     * @return dd.MM.yyyy
-     */
-    @Nonnull
-    public String getFormatedDate(@CheckForNull final Date date) {
-        if (date != null) {
-            return DateUtils.formatedDateDDMMYYYY(date);
-        } else {
-            return "";
         }
     }
 

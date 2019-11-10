@@ -101,16 +101,6 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     }
 
     /**
-     * Formatirt das {@link Date} auf "dd.MM.yyyy".
-     *
-     * @param date {@link Date}
-     * @return "dd.MM.yyyy"
-     */
-    public String formattedDateDDMMYYYY(final Date date) {
-        return DateUtils.formatedDateDDMMYYYY(date);
-    }
-
-    /**
      * Prueft ob die Gruppe die Gruppe des Projektes ist.
      *
      * @param projekt {@link Projekt}
