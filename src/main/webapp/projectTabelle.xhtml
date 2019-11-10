@@ -28,7 +28,7 @@
         <h:form>
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
-                <h:dataTable id="prjektTabelle" var="projekt"
+                <h:dataTable id="projektTabelle" var="projekt"
                              value="#{projektController.userAwareFindAllByGruppe(loginController.user)}"
                              rowClasses="odd,even" headerClass="header">
                     <h:column>
@@ -38,7 +38,8 @@
                     <h:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.LEITER']}</f:facet>
                         <h:outputText
-                                value="#{userController.formatedName(userController.findById(projekt.leiterId).get())}"/>
+                                value="#{userController.formatedName(userController.findById(projekt.leiterId).get(),
+                                    rolleController.getEmployee())}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.TICKETS.OFFEN']}</f:facet>
