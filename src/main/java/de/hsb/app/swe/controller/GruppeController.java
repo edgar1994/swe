@@ -1,9 +1,11 @@
 package de.hsb.app.swe.controller;
 
 import de.hsb.app.swe.model.Gruppe;
+import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
 import de.hsb.app.swe.utils.DateUtils;
+import de.hsb.app.swe.utils.ListUtils;
 import de.hsb.app.swe.utils.RedirectUtils;
 import de.hsb.app.swe.utils.UserUtils;
 
@@ -16,10 +18,7 @@ import javax.persistence.Query;
 import javax.transaction.*;
 import java.sql.Date;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Controller fuer {@link Gruppe}.
@@ -29,36 +28,44 @@ import java.util.Set;
 public class GruppeController extends AbstractCrudRepository<Gruppe> {
 
     /**
-     * Loescht eine {@link Gruppe} und redirected auf {@link RedirectUtils#GRUPPE_TABELLE_XHTML}.
+     * Loescht eine {@link Gruppe} und entfernt vorher dessen {@link User}. Das {@link Projekt} an dass die {@link Gruppe}
+     * gearbeitet hat wird nicht gelöscht bekommt aber keine {@link Gruppe} mehr zugewissen.Anschiessend wird auf
+     * {@link RedirectUtils#GRUPPE_TABELLE_XHTML} redirectet.
      * Ist der {@link User} dazu nicht berechtigt wird die ausgewaehlte {@link Gruppe} nicht geloescht und er bleibt auf
      * der gleichen Seite.
      *
      * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
     @Nonnull
-    public String deleteGruppe(@CheckForNull final User loggedUser) {
+    public String deleteGruppe(@CheckForNull final User loggedUser, final int groupId) {
         if (loggedUser != null) {
-            this.checkEntityList();
-            this.entityList.setWrappedData(this.em.createNamedQuery(this.getSelect()).getResultList());
-            final Gruppe group = this.entityList.getRowData();
-            if (group != null) {
-                final int groupId = group.getId();
+            final Optional<Gruppe> group = this.findById(groupId);
+            if (group.isPresent()) {
+                this.selectedEntity = group.get();
                 try {
-                    this.utx.begin();
-                    this.selectedEntity = this.em.find(Gruppe.class, groupId);
-                    for (final User user : this.selectedEntity.getMitglieder()) {
-                        user.getGruppen().remove(this.selectedEntity);
+                    if (UserUtils.compareUserById(this.selectedEntity.getLeiterId(), loggedUser)) {
+                        this.utx.begin();
+                        for (final User user : this.selectedEntity.getMitglieder()) {
+                            user.getGruppen().remove(this.selectedEntity);
+                        }
+                        final Query query = this.em.createQuery("select pr from Projekt pr where pr.gruppenId = :groupId");
+                        query.setParameter("groupId", groupId);
+                        for (final Projekt projekt : ListUtils.uncheckedSolverProjekt(query.getResultList())) {
+                            projekt.setGruppenId(0);
+                            this.em.persist(projekt);
+                        }
+                        this.selectedEntity.setMitglieder(new HashSet<>());
+                        this.selectedEntity = this.em.merge(this.selectedEntity);
+                        this.em.remove(this.selectedEntity);
+                        this.entityList.setWrappedData(this.userAwareFindAllGruppen(loggedUser).getWrappedData());
+                        this.logger.info("Group '{}'  [ID: {}] was deleted.", this.selectedEntity.getTitel(), groupId);
+                        this.utx.commit();
+                    } else {
+                        this.logger.error("Could not delete Group with Id '{}'. Permission denied.", groupId);
                     }
-                    this.selectedEntity.setMitglieder(new HashSet<>());
-                    this.selectedEntity = this.em.merge(this.selectedEntity);
-                    this.em.remove(this.selectedEntity);
-                    this.em.flush();
-                    this.entityList.setWrappedData(this.userAwareFindAllGruppen(loggedUser));
-                    this.logger.info("Group with Id '{}' deleted.", groupId);
-                    this.utx.commit();
                 } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                         RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-                    this.logger.error("Could not delete Group with Id '{}' -> Reason {}", groupId, e.getMessage());
+                    this.logger.error("Could not delete Group with Id '{}' -> Reason: {}", group, e.getMessage());
                 }
             } else {
                 this.logger.error("Could not delete Group. No Group found.");

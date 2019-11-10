@@ -55,7 +55,7 @@
                     </h:column>
                     <h:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
                         <f:facet name="header">#{msg['GRUPPENTABELLE.LOESCHEN']}</f:facet>
-                        <h:commandButton action="#{gruppeController.deleteGruppe(loginController.user)}"
+                        <h:commandButton action="#{gruppeController.deleteGruppe(loginController.user, gruppe.id)}"
                                          value="#{msg['BUTTON.REMOVE']}"
                                          rendered="#{gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
                         <h:outputText value="#{msg['GRUPPENTABELLE.NURLEITER']}"
