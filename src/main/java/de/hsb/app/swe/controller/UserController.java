@@ -2,6 +2,7 @@ package de.hsb.app.swe.controller;
 
 import de.hsb.app.swe.enumeration.Rolle;
 import de.hsb.app.swe.model.Gruppe;
+import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
 import de.hsb.app.swe.utils.AdressUtils;
@@ -77,15 +78,6 @@ public class UserController extends AbstractCrudRepository<User> {
         if (loggedUser != null) {
             this.groupmembersSet.add(loggedUser);
         }
-    }
-
-    /**
-     * Liefert ein Array aller {@link Rolle}n zurueck.
-     *
-     * @return Rolle[]
-     */
-    public Rolle[] getRolleValues() {
-        return Rolle.values();
     }
 
     /**
