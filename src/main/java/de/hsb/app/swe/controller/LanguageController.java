@@ -25,7 +25,7 @@ public class LanguageController {
     /**
      * Setter für language
      *
-     * @param language
+     * @param language {@link Language}
      */
     public void setLanguage(final String language) {
         this.language = language;

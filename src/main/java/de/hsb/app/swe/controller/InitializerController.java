@@ -3,6 +3,7 @@ package de.hsb.app.swe.controller;
 import de.hsb.app.swe.enumeration.Rolle;
 import de.hsb.app.swe.enumeration.Status;
 import de.hsb.app.swe.model.*;
+import de.hsb.app.swe.utils.ListUtils;
 import de.hsb.app.swe.utils.StringUtils;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarStyle;
@@ -74,7 +75,8 @@ public class InitializerController {
     private void initProjects() {
         // Finde alle moeglichen Gruppen
         this.logger.info("Find all groups.");
-        final List<Gruppe> groups = this.em.createQuery(Gruppe.NAMED_QUERY_QUERY).getResultList();
+        final List<Gruppe> groups = ListUtils.uncheckedSolverGroup(this.em.createQuery(Gruppe.NAMED_QUERY_QUERY)
+                .getResultList());
         this.logger.info("{} groups found.", groups.size());
 
         // Abschluss Datum. Fromat ist "Gruppe_TicketNr => 1_1".
@@ -190,12 +192,12 @@ public class InitializerController {
         this.logger.info("Load all Emplyoees.");
         final Query queryEmployee = this.em.createQuery("select u from User u where u.rolle = :mitarbeiter", User.class);
         queryEmployee.setParameter("mitarbeiter", Rolle.MITARBEITER);
-        final List<User> employeeResultList = queryEmployee.getResultList();
+        final List<User> employeeResultList = ListUtils.uncheckedSolverUser(queryEmployee.getResultList());
         this.logger.info(String.format("%s employees are loaded.", employeeResultList.size()));
         this.logger.info("Load all customer.");
         final Query queryCustomer = this.em.createQuery("select u from User u where u.rolle = :kunde", User.class);
         queryCustomer.setParameter("kunde", Rolle.KUNDE);
-        final List<User> customerResultList = queryCustomer.getResultList();
+        final List<User> customerResultList = ListUtils.uncheckedSolverUser(queryCustomer.getResultList());
         this.logger.info(String.format("%s customer are loaded.", employeeResultList.size()));
 
         this.logger.info("Prepare Groupmembers ...");

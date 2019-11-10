@@ -98,9 +98,6 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                                 RedirectUtils.GRUPPE_TABELLE_XHTML);
                 break;
             case USER:
-                // Fixme Wird nicht angezeigt
-                context.addMessage(null, new FacesMessage("Unerlaubt",
-                        String.format("Sie duerfen keine Gruppe mit der Rolle %s anlegen!", this.user.getRolle())));
                 context.getApplication().getNavigationHandler().
                         handleNavigation(context, null,
                                 RedirectUtils.LOGIN_INDEX_XHTML);
@@ -126,9 +123,6 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                 case MITARBEITER:
                     break;
                 case USER:
-                    // Fixme Wird nicht angezeigt
-                    context.addMessage(null, new FacesMessage("Unerlaubt",
-                            String.format("Sie duerfen keine Gruppe mit der Rolle %s anlegen!", this.user.getRolle())));
                     context.getApplication().getNavigationHandler().
                             handleNavigation(context, null,
                                     RedirectUtils.LOGIN_INDEX_XHTML);
@@ -147,9 +141,6 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     public void checkLoggedIn(final ComponentSystemEvent cse) {
         final FacesContext context = FacesContext.getCurrentInstance();
         if (this.user == null) {
-            // Fixme Wird nicht angezeigt
-            context.addMessage(null, new FacesMessage("Nicht eingeloggt",
-                    "Sie sind nicht eingeloggt. Bitte loggen Sie sich zuerst ein"));
             context.getApplication().getNavigationHandler().
                     handleNavigation(context, null,
                             RedirectUtils.LOGIN_XHTML);
