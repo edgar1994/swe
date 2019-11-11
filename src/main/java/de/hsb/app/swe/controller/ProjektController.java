@@ -109,13 +109,23 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      */
     @Nonnull
     public List<Projekt> userAwareFindAllByGruppe(@Nonnull final User loggedUser) {
-        final List<Projekt> projektList = new ArrayList<>();
-        for (final Gruppe gruppe : loggedUser.getGruppen()) {
-            final Query query = this.em.createQuery("select pr from Projekt pr where pr.gruppenId = :gruppenId");
-            query.setParameter("gruppenId", gruppe.getId());
-            projektList.addAll(this.uncheckedSolver(query.getResultList()));
+        switch (loggedUser.getRolle()) {
+            case KUNDE:
+            case MITARBEITER:
+                final List<Projekt> projektList = new ArrayList<>();
+                for (final Gruppe gruppe : loggedUser.getGruppen()) {
+                    final Query query = this.em.createQuery("select pr from Projekt pr where pr.gruppenId = :gruppenId");
+                    query.setParameter("gruppenId", gruppe.getId());
+                    projektList.addAll(this.uncheckedSolver(query.getResultList()));
+                }
+                return projektList;
+            case ADMIN:
+                return this.findAll();
+            case USER:
+            default:
+                throw new IllegalArgumentException("Role {} can not have any projects!");
         }
-        return projektList;
+
     }
 
 
