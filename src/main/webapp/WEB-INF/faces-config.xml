@@ -33,6 +33,11 @@
             <from-outcome>neuerUser</from-outcome>
             <to-view-id>/neuerUser.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{indexController.switchToIndex}</from-action>
+            <from-outcome>index.xhtml</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
 
     <!-- Von neuerUser -->
@@ -48,6 +53,11 @@
             <from-action>#{userController.save}</from-action>
             <from-outcome>userTabelle</from-outcome>
             <to-view-id>/userTabelle.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{indexController.switchToIndex}</from-action>
+            <from-outcome>index.xhtml</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 
@@ -65,6 +75,11 @@
             <from-outcome>registrieren.xhtml</from-outcome>
             <to-view-id>/registrieren.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{indexController.switchToIndex}</from-action>
+            <from-outcome>index.xhtml</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
 
     <!-- Von Gruppentabelle -->
@@ -76,6 +91,22 @@
             <from-outcome>neueGruppe.xhtml</from-outcome>
             <to-view-id>/neueGruppe.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{indexController.switchToIndex}</from-action>
+            <from-outcome>index.xhtml</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- Von Index -->
+    <navigation-rule>
+        <display-name>index</display-name>
+        <from-view-id>/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{indexController.switchToIndex}</from-action>
+            <from-outcome>index.xhtml</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
 
     <!-- Von neue Gruppe -->
@@ -83,7 +114,12 @@
         <display-name>neueGruppe</display-name>
         <from-view-id>/neueGruppe.xhtml</from-view-id>
         <navigation-case>
-            <from-action>#{userController.addUser(loginController.user)}</from-action>
+            <from-action>#{indexController.switchToIndex}</from-action>
+            <from-outcome>index.xhtml</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{gruppeController.addUser(loginController.user)}</from-action>
             <from-outcome>neueGruppe.xhtml</from-outcome>
             <to-view-id>/neueGruppe.xhtml</to-view-id>
         </navigation-case>
@@ -103,7 +139,7 @@
             <to-view-id>/neueGruppe.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
-            <from-action>#{gruppeController.cancel()}</from-action>
+            <from-action>#{gruppeController.switchToGruppe()}</from-action>
             <from-outcome>gruppeTabelle.xhtml</from-outcome>
             <to-view-id>/gruppeTabelle.xhtml</to-view-id>
         </navigation-case>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<head>
+    <title>Title</title>
+</head>
+<body>
+<h:form>
+    <p:growl id="growl" life="2000"/>
+
+    <p:commandButton value="Ajax Submit" id="ajax" update="growl" action="#{buttonView.buttonAction}"
+                     style="margin-right:20px;" styleClass="ui-priority-primary"/>
+
+    <p:commandButton value="Non-Ajax Submit" id="nonAjax" action="#{buttonView.buttonAction}" style="margin-right:20px;"
+                     ajax="false"/>
+
+    <p:commandButton value="With Icon" id="withIcon" action="#{buttonView.buttonAction}" update="growl"
+                     style="margin-right:20px;" icon="pi pi-save"/>
+
+    <p:commandButton action="#{buttonView.buttonAction}" id="iconOnly" update="growl" style="margin-right:20px;"
+                     icon="pi pi-save" title="Icon Only"/>
+
+    <p:commandButton value="Disabled" id="disabled" style="margin-right:20px;" disabled="true"/>
+</h:form>
+</body>
+</html>
