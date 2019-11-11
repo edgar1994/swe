@@ -1,6 +1,6 @@
-package de.hsb.app.controller;
+package de.hsb.app.swe.controller;
 
-import de.hsb.app.utils.RedirectUtils;
+import de.hsb.app.swe.utils.RedirectUtils;
 
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
