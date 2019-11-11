@@ -1,10 +1,12 @@
 package de.hsb.app.swe.utils;
 
-
 import de.hsb.app.swe.model.Ticket;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Utils-Klasse fuer {@link Ticket}.
+ */
 public class TicketUtils {
     /**
      * Vergleicht zwei {@link Ticket} anhand {@link Ticket}-Id;

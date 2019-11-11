@@ -2,11 +2,14 @@ package de.hsb.app.swe.controller;
 
 import de.hsb.app.swe.model.Ticket;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
+import de.hsb.app.swe.utils.RedirectUtils;
 
 import javax.annotation.Nonnull;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +20,17 @@ import java.util.List;
 public class TicketController extends AbstractCrudRepository<Ticket> {
 
     private List<Ticket> ticketList = new ArrayList<>();
+
+    /**
+     * Legt ein neues {@link Ticket} an und redirected auf {@link RedirectUtils#NEUES_TICKET_XHTML}.
+     *
+     * @return {@link RedirectUtils#NEUES_TICKET_XHTML}
+     */
+    public String newTicket() {
+        this.selectedEntity = new Ticket();
+        this.selectedEntity.setErstellungsdatum(Date.from(Instant.now()));
+        return RedirectUtils.NEUES_TICKET_XHTML;
+    }
 
     /**
      * {@inheritDoc}

@@ -1,52 +1,64 @@
 body {
 
-	margin: 10px;
-	padding: 10px;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
+    margin: 10px;
+    padding: 10px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
 }
-#content{
-	width:90%;
-	
+
+#content {
+    width: 90%;
+    flex: 0 0 65%;
+}
+
+#wrapper {
+    display: flex;
+}
+
+.datalist-noborder .ui-widget-content {
+    border: none;
+}
+
+#right {
+    flex: 1;
+}
+
+.customerButton {
+    width: 100%;
 
 }
 
-.customerButton{
-	width:100%;
-	
-}
-
-#customerTable{
-	width:inherit;
-	border: 1px solid;
-	align-items: center;
+#customerTable {
+    width: inherit;
+    border: 1px solid;
+    align-items: center;
 }
 
 th {
-	background-color: #ccd2d3;
-	padding: 5px 5px 5px 5px;
-	border: 1px solid;
+    background-color: #ccd2d3;
+    padding: 5px 5px 5px 5px;
+    border: 1px solid;
 }
 
 td {
-	padding: 0px 5px 0px 5px;
+    padding: 0px 5px 0px 5px;
 }
 
 td.footer {
-	background-color: #ccd2d3;
-	border: 1px solid;
-	padding: 5px;
+    background-color: #ccd2d3;
+    border: 1px solid;
+    padding: 5px;
 }
 
 tr.odd {
-	background-color: #edf4f5;
+    background-color: #edf4f5;
 }
 
 tr.even {
-	background-color: #dae0e1;
+    background-color: #dae0e1;
 }
 
 .alert {
-	color: red;
-	font-size: 9px;
+    color: red;
+    font-size: 9px;
 }

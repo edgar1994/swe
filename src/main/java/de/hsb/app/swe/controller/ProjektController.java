@@ -6,7 +6,6 @@ import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.Ticket;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
-import de.hsb.app.swe.utils.DateUtils;
 import de.hsb.app.swe.utils.GruppeUtils;
 import de.hsb.app.swe.utils.ProjectUtils;
 import de.hsb.app.swe.utils.RedirectUtils;
@@ -21,6 +20,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * {@link Projekt}-Controller
@@ -30,6 +30,35 @@ import java.util.List;
 public class ProjektController extends AbstractCrudRepository<Projekt> {
 
     private int choosenGroupId;
+
+    /**
+     * Findet anhand der uebergebenen projectId das gewaehlte {@link Projekt} und redirected auf
+     * {@link RedirectUtils#PROJEKT_ANSICHT_XHTML}. Wird kein {@link Projekt} gefunden wird auf
+     * {@link RedirectUtils#PROJEKT_TABELLE_XHTML}.
+     *
+     * @param projectId {@link Projekt}-ID
+     * @return {@link RedirectUtils#PROJEKT_ANSICHT_XHTML} || {@link RedirectUtils#PROJEKT_TABELLE_XHTML}
+     */
+    public String chooseProject(final int projectId) {
+        final Optional<Projekt> optionalProjekt = this.findById(projectId);
+        if (optionalProjekt.isPresent()) {
+            this.selectedEntity = optionalProjekt.get();
+            return RedirectUtils.PROJEKT_ANSICHT_XHTML;
+        }
+        return RedirectUtils.PROJEKT_TABELLE_XHTML;
+    }
+
+    /**
+     * Prueft ob die {@link Ticket}s eines Projektes leer sind.
+     *
+     * @return boolean
+     */
+    public boolean isTicketsEmpty() {
+        if (this.selectedEntity != null) {
+            return this.selectedEntity.getTicket().isEmpty();
+        }
+        return true;
+    }
 
     /**
      * Erstellt ein neues {@link Projekt} und redirected auf {@link RedirectUtils#NEUES_PROJEKT_XHTML}.
@@ -98,16 +127,6 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      */
     public boolean isChoosenGroup(@Nonnull final Gruppe gruppe) {
         return GruppeUtils.compareGruppeById(this.choosenGroupId, gruppe);
-    }
-
-    /**
-     * Formatirt das {@link Date} auf "dd.MM.yyyy".
-     *
-     * @param date {@link Date}
-     * @return "dd.MM.yyyy"
-     */
-    public String formattedDateDDMMYYYY(final Date date) {
-        return DateUtils.formatedDateDDMMYYYY(date);
     }
 
     /**

@@ -154,6 +154,11 @@
             <from-outcome>neuesProjekt.xhtml</from-outcome>
             <to-view-id>/neuesProjekt.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{projektController.chooseProject(0)}</from-action>
+            <from-outcome>projectAnsicht.xhtml</from-outcome>
+            <to-view-id>/projectAnsicht.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
 
     <!-- Von neues Projekt -->

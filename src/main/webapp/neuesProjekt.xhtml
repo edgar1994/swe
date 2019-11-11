@@ -66,7 +66,8 @@
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
                         <h:outputText
-                                value="#{userController.formatedName(userController.findById(gruppe.leiterId).get())}"/>
+                                value="#{userController.formatedName(userController.findById(gruppe.leiterId).get(),
+                                    rolleController.getEmployee())}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
@@ -75,7 +76,8 @@
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.KUNDE']}</f:facet>
                         <h:outputText
-                                value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder))}"/>
+                                value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder),
+                                    rolleController.getCustomer())}"/>
                     </h:column>
                     <h:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
                         <f:facet name="header">#{msg['NEUESPROJEKT.WORKING.GROUP']}</f:facet>
@@ -97,4 +99,5 @@
     </div>
 </h:form>
 </body>
+<f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 </html>

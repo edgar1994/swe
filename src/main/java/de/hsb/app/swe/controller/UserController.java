@@ -2,6 +2,7 @@ package de.hsb.app.swe.controller;
 
 import de.hsb.app.swe.enumeration.Rolle;
 import de.hsb.app.swe.model.Gruppe;
+import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
 import de.hsb.app.swe.utils.AdressUtils;
@@ -80,15 +81,6 @@ public class UserController extends AbstractCrudRepository<User> {
     }
 
     /**
-     * Liefert ein Array aller {@link Rolle}n zurueck.
-     *
-     * @return Rolle[]
-     */
-    public Rolle[] getRolleValues() {
-        return Rolle.values();
-    }
-
-    /**
      * Bricht den aktuellen Vorgang ab und leitet zurueck auf {@link RedirectUtils#USER_TABELLE_XHTML}.
      *
      * @return {@link RedirectUtils#USER_TABELLE_XHTML}
@@ -110,15 +102,67 @@ public class UserController extends AbstractCrudRepository<User> {
     /**
      * Liefert den Vor- und Nachnamen im Format "Nachname, Vorname" zurueck.
      *
-     * @param user {@link User}
+     * @param user  {@link User}
+     * @param rolle {@link Rolle} fuer die Dummy-Option
      * @return "Nachname, Vorname"
      */
-    public String formatedName(@CheckForNull final User user) {
+    public String formatedName(@CheckForNull final User user, final Rolle rolle) {
         if (user != null) {
             return UserUtils.getNachnameVornameString(user);
         } else {
-            return UserUtils.getNachnameVornameString(UserUtils.DUMMY_USER_KUNDE);
+            return UserUtils.formatedNameDummy(rolle);
         }
+    }
+
+    /**
+     * Sucht alle {@link User} aus der {@link Gruppe} eines {@link Projekt}es, die nicht der Projektleiter aber
+     * {@link Rolle#MITARBEITER} sind und liefert diese zurueck.
+     *
+     * @param projectToCheck zu pruefendes Projekt
+     * @return List<User>
+     */
+    public List<User> findAllEmployeesInProjectExceptLeader(@CheckForNull final Projekt projectToCheck) {
+        final List<User> userList = new ArrayList<>();
+        if (projectToCheck != null && projectToCheck.getGruppenId() != 0) {
+            final Gruppe groupToCheck = this.em.find(Gruppe.class, projectToCheck.getGruppenId());
+            if (groupToCheck != null) {
+                for (final User user : groupToCheck.getMitglieder()) {
+                    if (!UserUtils.compareUserById(projectToCheck.getLeiterId(), user) &&
+                            Rolle.MITARBEITER.equals(user.getRolle())) {
+                        userList.add(user);
+                    }
+                }
+            }
+        }
+        if (userList.isEmpty()) {
+            userList.add(UserUtils.DUMMY_USER_MITARBEITER);
+        }
+        return userList;
+    }
+
+    /**
+     * Sucht alle {@link User} aus der {@link Gruppe} eines {@link Projekt}es, die die Rolle {@link Rolle#KUNDE} haben
+     * und liefert diese zurueck.
+     *
+     * @param projectToCheck zu pruefendes Projekt
+     * @return List<User>
+     */
+    public List<User> findAllCustomers(@CheckForNull final Projekt projectToCheck) {
+        final List<User> userList = new ArrayList<>();
+        if (projectToCheck != null && projectToCheck.getGruppenId() != 0) {
+            final Gruppe groupToCheck = this.em.find(Gruppe.class, projectToCheck.getGruppenId());
+            if (groupToCheck != null) {
+                for (final User user : groupToCheck.getMitglieder()) {
+                    if (Rolle.KUNDE.equals(user.getRolle())) {
+                        userList.add(user);
+                    }
+                }
+            }
+        }
+        if (userList.isEmpty()) {
+            userList.add(UserUtils.DUMMY_USER_KUNDE);
+        }
+        return userList;
     }
 
     /**
@@ -128,10 +172,9 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param userId {@link User}Id
      * @return "Nachname, Vorname"
      */
-    public String formatedName(final int userId) {
-        final Optional<User> user = this.findById(userId);
-        return user.map(UserUtils::getNachnameVornameString)
-                .orElseGet(() -> UserUtils.getNachnameVornameString(UserUtils.DUMMY_USER_KUNDE));
+    public String formatedName(final int userId, final Rolle rolle) {
+        final Optional<User> optionalUser = this.findById(userId);
+        return optionalUser.map(UserUtils::getNachnameVornameString).orElseGet(() -> UserUtils.formatedNameDummy(rolle));
     }
 
     /**

@@ -4,7 +4,6 @@ import de.hsb.app.swe.model.Gruppe;
 import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
-import de.hsb.app.swe.utils.DateUtils;
 import de.hsb.app.swe.utils.ListUtils;
 import de.hsb.app.swe.utils.RedirectUtils;
 import de.hsb.app.swe.utils.UserUtils;
@@ -16,7 +15,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.persistence.Query;
 import javax.transaction.*;
-import java.sql.Date;
 import java.time.Instant;
 import java.util.*;
 
@@ -28,44 +26,24 @@ import java.util.*;
 public class GruppeController extends AbstractCrudRepository<Gruppe> {
 
     /**
-     * Loescht eine {@link Gruppe} und entfernt vorher dessen {@link User}. Das {@link Projekt} an dass die {@link Gruppe}
-     * gearbeitet hat wird nicht gelöscht bekommt aber keine {@link Gruppe} mehr zugewissen.Anschiessend wird auf
-     * {@link RedirectUtils#GRUPPE_TABELLE_XHTML} redirectet.
+     * Loescht eine {@link Gruppe} redirected auf {@link RedirectUtils#GRUPPE_TABELLE_XHTML}.
      * Ist der {@link User} dazu nicht berechtigt wird die ausgewaehlte {@link Gruppe} nicht geloescht und er bleibt auf
-     * der gleichen Seite.
+     * {@link RedirectUtils#GRUPPE_TABELLE_XHTML}.
      *
+     * @param loggedUser Eingeloggter {@link User}
+     * @param groupId    Gruppen-ID
      * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
-    @Nonnull
     public String deleteGruppe(@CheckForNull final User loggedUser, final int groupId) {
         if (loggedUser != null) {
             final Optional<Gruppe> group = this.findById(groupId);
             if (group.isPresent()) {
                 this.selectedEntity = group.get();
-                try {
-                    if (UserUtils.compareUserById(this.selectedEntity.getLeiterId(), loggedUser)) {
-                        this.utx.begin();
-                        for (final User user : this.selectedEntity.getMitglieder()) {
-                            user.getGruppen().remove(this.selectedEntity);
-                        }
-                        final Query query = this.em.createQuery("select pr from Projekt pr where pr.gruppenId = :groupId");
-                        query.setParameter("groupId", groupId);
-                        for (final Projekt projekt : ListUtils.uncheckedSolverProjekt(query.getResultList())) {
-                            projekt.setGruppenId(0);
-                            this.em.persist(projekt);
-                        }
-                        this.selectedEntity.setMitglieder(new HashSet<>());
-                        this.selectedEntity = this.em.merge(this.selectedEntity);
-                        this.em.remove(this.selectedEntity);
-                        this.entityList.setWrappedData(this.userAwareFindAllGruppen(loggedUser).getWrappedData());
-                        this.logger.info("Group '{}'  [ID: {}] was deleted.", this.selectedEntity.getTitel(), groupId);
-                        this.utx.commit();
-                    } else {
-                        this.logger.error("Could not delete Group with Id '{}'. Permission denied.", groupId);
-                    }
-                } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
-                        RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-                    this.logger.error("Could not delete Group with Id '{}' -> Reason: {}", group, e.getMessage());
+                if (UserUtils.compareUserById(this.selectedEntity.getLeiterId(), loggedUser) ||
+                        UserUtils.isAdmin(loggedUser)) {
+                    this.deleteGruppe(loggedUser, this.selectedEntity);
+                } else {
+                    this.logger.error("Could not delete Group with Id '{}'. Permission denied.", groupId);
                 }
             } else {
                 this.logger.error("Could not delete Group. No Group found.");
@@ -77,18 +55,39 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     }
 
     /**
-     * Liefert das Datim im Format "dd.MM.yyyy" zurueck. Wenn das Datum <code>null</code> ist dann wird ein leerer
-     * String zurueckgeliefert.
-     *
-     * @param date Date
-     * @return dd.MM.yyyy
+     * Loescht eine {@link Gruppe} und entfernt vorher dessen {@link User}. Das {@link Projekt} an dem die {@link Gruppe}
+     * gearbeitet hat wird nicht gelöscht bekommt aber keine {@link Gruppe} mehr zugewissen.
      */
-    @Nonnull
-    public String getFormatedDate(@CheckForNull final Date date) {
-        if (date != null) {
-            return DateUtils.formatedDateDDMMYYYY(date);
+    private void deleteGruppe(@CheckForNull final User loggedUser, @CheckForNull final Gruppe group) {
+        if (loggedUser != null) {
+            if (group != null) {
+                try {
+                    this.utx.begin();
+                    for (final User user : this.selectedEntity.getMitglieder()) {
+                        user.getGruppen().remove(this.selectedEntity);
+                    }
+                    final Query query = this.em.createQuery("select pr from Projekt pr where pr.gruppenId = :groupId");
+                    query.setParameter("groupId", group.getId());
+                    for (final Projekt projekt : ListUtils.uncheckedSolverProjekt(query.getResultList())) {
+                        projekt.setGruppenId(0);
+                        this.em.persist(projekt);
+                    }
+                    this.selectedEntity.setMitglieder(new HashSet<>());
+                    this.selectedEntity = this.em.merge(this.selectedEntity);
+                    this.em.remove(this.selectedEntity);
+                    this.entityList.setWrappedData(this.userAwareFindAllGruppen(loggedUser).getWrappedData());
+                    this.logger.info("Group '{}'  [ID: {}] was deleted.", this.selectedEntity.getTitel(), group.getId());
+                    this.utx.commit();
+                } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
+                        RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
+                    this.logger.error("Could not delete Group with Id '{}' -> Reason: {}", group, e.getMessage());
+                }
+
+            } else {
+                this.logger.error("Could not delete Group. No Group found.");
+            }
         } else {
-            return "";
+            this.logger.error("User is not allowed to be null.");
         }
     }
 

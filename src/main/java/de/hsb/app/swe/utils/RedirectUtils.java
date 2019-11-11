@@ -5,6 +5,8 @@ package de.hsb.app.swe.utils;
  * <p>
  * Dies wird in der Berufspraxis so nicht gemacht. Jedoch aufgrund der uebermaessigen Wiederholung wurde das hier
  * eingerichtet.
+ * <p>
+ * Utils-Klasse fuer das Redirecten.
  */
 public class RedirectUtils {
 
@@ -35,6 +37,8 @@ public class RedirectUtils {
     public static final String PROJEKT_UEBERSICHT_XHTML = "projektUebersicht.xhtml";
 
     public static final String PROJEKT_TABELLE_XHTML = "projectTabelle.xhtml";
+
+    public static final String PROJEKT_ANSICHT_XHTML = "projectAnsicht.xhtml";
 
     public static final String PROJEKT_INDEX_XHTML = "index.xhtml";
 

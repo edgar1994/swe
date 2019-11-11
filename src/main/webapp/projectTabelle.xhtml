@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui">
 <f:view locale="#{languageHandler.language}"/>
 <h:head>
-    <title><ui:insert name="title">#{msg['GRUPPENTABELLE.TITEL']}</ui:insert></title>
+    <title><ui:insert name="title">#{msg['PROJEKTTABELLE.TITEL']}</ui:insert></title>
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
@@ -34,7 +34,7 @@
         <h:form>
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
-                <h:dataTable id="prjektTabelle" var="projekt"
+                <h:dataTable id="projektTabelle" var="projekt"
                              value="#{projektController.userAwareFindAllByGruppe(loginController.user)}"
                              rowClasses="odd,even" headerClass="header">
                     <h:column>
@@ -44,7 +44,8 @@
                     <h:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.LEITER']}</f:facet>
                         <h:outputText
-                                value="#{userController.formatedName(userController.findById(projekt.leiterId).get())}"/>
+                                value="#{userController.formatedName(userController.findById(projekt.leiterId).get(),
+                                    rolleController.getEmployee())}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.TICKETS.OFFEN']}</f:facet>
@@ -56,11 +57,17 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.DUEDATE']}</f:facet>
-                        <h:outputText value="#{projektController.formattedDateDDMMYYYY(projekt.abschlussdatum)}"/>
+                        <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(projekt.abschlussdatum)}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.CREATEDDATE']}</f:facet>
-                        <h:outputText value="#{projektController.formattedDateDDMMYYYY(projekt.erstellungsdatum)}"/>
+                        <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(projekt.erstellungsdatum)}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">#{msg['PROJEKTTABELLE.CHOOSE']}</f:facet>
+                        <p:commandButton
+                                value="#{msg['PROJEKTTABELLE.CHOOSE']}"
+                                action="#{projektController.chooseProject(projekt.id)}"/>
                     </h:column>
                 </h:dataTable>
             </ui:insert>
@@ -70,4 +77,5 @@
         </h:form>
     </div>
 </h:body>
+<f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 </html>

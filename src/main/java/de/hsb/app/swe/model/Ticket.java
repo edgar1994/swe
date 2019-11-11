@@ -92,28 +92,12 @@ public class Ticket {
         this.titel = titel;
     }
 
-    public int getBearbeiter() {
-        return this.bearbeiterId;
-    }
-
-    public void setBearbeiter(final int bearbeiterId) {
-        this.bearbeiterId = bearbeiterId;
-    }
-
     public Status getStatus() {
         return this.status;
     }
 
     public void setStatus(final Status status) {
         this.status = status;
-    }
-
-    public String getAufgabe() {
-        return this.beschreibung;
-    }
-
-    public void setAufgabe(final String beschreibung) {
-        this.beschreibung = beschreibung;
     }
 
     public int getBearbeiterId() {

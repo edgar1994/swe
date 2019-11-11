@@ -2,6 +2,9 @@ package de.hsb.app.swe.utils;
 
 import java.util.Date;
 
+/**
+ * Utils-Klasse fuer {@link String}
+ */
 public class StringUtils {
 
     private static final String INITIALIZER_CONSOLE_PB_TMPL =

@@ -5,7 +5,7 @@ import de.hsb.app.swe.model.Adresse;
 import javax.annotation.Nonnull;
 
 /**
- * Utils Klasse um {@link Adresse}n zu bearbeiten.
+ * Utils-Klasse um {@link Adresse}n zu bearbeiten.
  */
 public class AdressUtils {
 

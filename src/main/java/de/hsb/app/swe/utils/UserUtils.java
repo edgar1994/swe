@@ -6,6 +6,9 @@ import de.hsb.app.swe.model.User;
 import javax.annotation.Nonnull;
 import java.util.HashSet;
 
+/**
+ * Utils-Klasse fuer {@link User}
+ */
 public class UserUtils {
 
     public static final User DUMMY_USER_KUNDE = new User("Kunde", "Kein", AdressUtils.EMPTY_ADRESSE, "   ", "   ",
@@ -93,6 +96,26 @@ public class UserUtils {
      */
     public static boolean isCustomer(@Nonnull final User userToCheck) {
         return Rolle.KUNDE.equals(userToCheck.getRolle());
+    }
+
+    /**
+     * Liefert einen Dummy-User entsprechend der {@link Rolle} im format "Nachname, Vorname" zurueck.
+     *
+     * @param rolle {@link Rolle} fuer die Dummy-Option
+     * @return "Nachname, Vorname"
+     */
+    public static String formatedNameDummy(final Rolle rolle) {
+        switch (rolle) {
+            case KUNDE:
+                return UserUtils.getNachnameVornameString(UserUtils.DUMMY_USER_KUNDE);
+            case MITARBEITER:
+                return UserUtils.getNachnameVornameString(UserUtils.DUMMY_USER_MITARBEITER);
+            case USER:
+            case ADMIN:
+            default:
+                throw new IllegalArgumentException(String.format("Keine Dummy-Option implementiert fuer Rolle '%s'!",
+                        rolle));
+        }
     }
 
     /**
