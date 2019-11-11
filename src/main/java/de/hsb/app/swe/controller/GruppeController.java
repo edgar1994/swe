@@ -275,7 +275,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
     @Nonnull
-    public String cancel() {
+    public String switchToGruppe() {
         return RedirectUtils.GRUPPE_TABELLE_XHTML;
     }
 

@@ -22,16 +22,18 @@
         <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
     </div>
     <div>
-        <h:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
-        <h:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
-                         action="${userController.switchToUser()}"
-                         immediate="true"/>
-        <h:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
-                         action="${gruppeController.switchToGruppe()}"
-                         immediate="true"/>
-        <h:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
-                         action="${projektController.switchToProjekt()}"
-                         immediate="true"/>
+        <h:form>
+            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
+            <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
+                             action="${userController.switchToUser()}"
+                             immediate="true"/>
+            <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
+                             action="${gruppeController.switchToGruppe()}"
+                             immediate="true"/>
+            <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
+                             action="${projektController.switchToProjekt()}"
+                             immediate="true"/>
+        </h:form>
     </div>
     <div id="content">
         <ui:insert name="content">

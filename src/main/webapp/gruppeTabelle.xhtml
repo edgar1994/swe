@@ -13,25 +13,24 @@
 <h:body>
     <h:form>
         <div align="right">
-            <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
-            <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
-            <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
+            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
+            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
+            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
         </div>
-    </h:form>
-    <div>
-        <h:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
-        <h:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
-                         action="${userController.switchToUser()}"
-                         immediate="true"/>
-        <h:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
-                         action="${gruppeController.switchToGruppe()}"
-                         immediate="true"/>
-        <h:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
-                         action="${projektController.switchToProjekt()}"
-                         immediate="true"/>
-    </div>
-    <div id="content">
-        <h:form>
+
+        <div>
+            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
+            <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
+                             action="${userController.switchToUser()}"
+                             immediate="true"/>
+            <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
+                             action="${gruppeController.switchToGruppe()}"
+                             immediate="true"/>
+            <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
+                             action="${projektController.switchToProjekt()}"
+                             immediate="true"/>
+        </div>
+        <div id="content">
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
                 <h:dataTable id="gruppeTabelle" var="gruppe"
@@ -84,8 +83,8 @@
                         onclick="#{userController.resetGroupmembersSet(loginController.user)}"
                         rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
             </ui:insert>
-        </h:form>
-    </div>
+        </div>
+    </h:form>
 </h:body>
 <f:event type="preRenderView" listener="#{loginController.userAwareGroupTable}"/>
 <f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>

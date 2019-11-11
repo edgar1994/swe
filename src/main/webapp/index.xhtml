@@ -4,6 +4,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
 >
 <f:view locale="#{languageHandler.language}"/>
 <h:head>
@@ -20,14 +21,14 @@
             <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
         </div>
         <div>
-            <h:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
-            <h:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
+            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
+            <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
                              action="${userController.switchToUser()}"
                              immediate="true"/>
-            <h:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
+            <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
                              action="${gruppeController.switchToGruppe()}"
                              immediate="true"/>
-            <h:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
+            <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
                              action="${projektController.switchToProjekt()}"
                              immediate="true"/>
 
