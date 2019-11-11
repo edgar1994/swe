@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui">
 <f:view locale="#{languageHandler.language}"/>
 <h:head>
-    <title><ui:insert name="title">#{msg['PROJEKTANSICHT.HEADER']}</ui:insert></title>
+    <title><ui:insert name="title">#{msg['NEUESTICKET.TITEL']}</ui:insert></title>
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
@@ -27,40 +27,18 @@
     <div id="wrapper">
         <div id="content">
             <h:form>
-                <p:growl id="growl" showDetail="true" sticky="true"/>
-                <ui:insert name="content">
-                    <h:dataTable id="ticketTabelle" var="ticket"
-                                 value="#{projektController.selectedEntity.ticket}"
-                                 rowClasses="odd,even" headerClass="header">
-                        <h:column>
-                            <f:facet name="header">#{msg['PROJEKTANSICHT.TITEL']}</f:facet>
-                            <p:outputLabel value="#{ticket.titel}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">#{msg['PROJEKTANSICHT.STATUS']}</f:facet>
-                            <p:outputLabel value="#{ticket.status}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">#{msg['PROJEKTANSICHT.BEARBEITER']}</f:facet>
-                            <p:outputLabel
-                                    value="#{userController.formatedName(ticket.bearbeiterId, rolleController.getEmployee())}"/>
-                        </h:column>
-                        <h:column>
-                            <f:facet name="header">#{msg['PROJEKTANSICHT.ABSCHLUSSDATUM']}</f:facet>
-                            <p:outputLabel value="#{ticket.abschlussdatum}"/>
-                        </h:column>
-                    </h:dataTable>
-                </ui:insert>
-                <div id="footer">
-                    <ui:insert name="footer">
-                        <p:outputLabel
-                                rendered="#{projektController.isTicketsEmpty()}">#{msg['PROJEKTANSICHT.ISEMPTY']}
-                        </p:outputLabel>
-                    </ui:insert>
-                </div>
-                <p:commandButton action="#{ticketController.newTicket()}"
-                                 value="#{msg['PROJEKTANSICHT.BUTTON.NEU']}"
-                                 rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="#{msg['NEUESTICKET.TICKETTITEL']}"/>
+                    <p:inputText value="#{ticketController.selectedEntity.titel}"/>
+                    <p:outputLabel value="#{msg['NEUESTICKET.ABSCHLUSSDATUM']}"/>
+                    <p:calendar value="#{ticketController.selectedEntity.titel}"/>
+                    <p:outputLabel value="#{msg['NEUESTICKET.DESCRIPTION']}"/>
+                    <p:inputTextarea value="#{ticketController.selectedEntity.beschreibung}"/>
+                    <p:outputLabel value="#{msg['NEUESTICKET.PROCESSOR']}"/>
+                    <p:inputTextarea value=" "/>
+                    <p:outputLabel value="#{msg['NEUESTICKET.STATUS']}"/>
+                    <p:inputTextarea value=" "/>
+                </p:panelGrid>
             </h:form>
         </div>
         <div id="right">
