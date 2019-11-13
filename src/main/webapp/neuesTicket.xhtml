@@ -35,18 +35,40 @@
     <div id="wrapper">
         <div id="content">
             <h:form>
+                <p:growl id="growl" showDetail="true" sticky="true"/>
                 <p:panelGrid columns="2">
-                    <p:outputLabel value="#{msg['NEUESTICKET.TICKETTITEL']}"/>
-                    <p:inputText value="#{ticketController.selectedEntity.titel}"/>
-                    <p:outputLabel value="#{msg['NEUESTICKET.ABSCHLUSSDATUM']}"/>
-                    <p:calendar value="#{ticketController.selectedEntity.titel}"/>
-                    <p:outputLabel value="#{msg['NEUESTICKET.DESCRIPTION']}"/>
-                    <p:inputTextarea value="#{ticketController.selectedEntity.beschreibung}"/>
+                    <p:outputLabel value="#{msg['NEUESTICKET.TICKETTITEL']}" for="titel"/>
+                    <p:inputText id="titel" value="#{ticketController.selectedEntity.titel}" required="true"
+                                 requiredMessage="#{msg['NEUESTICKET.MESSAGES.TITEL.REQUIRED']}"/>
+                    <p:outputLabel value="#{msg['NEUESTICKET.ABSCHLUSSDATUM']}" for="duedate"/>
+                    <p:calendar id="duedate" value="#{ticketController.selectedEntity.abschlussdatum}" required="true"
+                                requiredMessage="#{msg['NEUESTICKET.MESSAGES.DUEDATE.REQUIRED']}"/>
+                    <p:outputLabel value="#{msg['NEUESTICKET.DESCRIPTION']}" for="description"/>
+                    <p:inputTextarea id="description" value="#{ticketController.selectedEntity.beschreibung}"/>
                     <p:outputLabel value="#{msg['NEUESTICKET.PROCESSOR']}"/>
-                    <p:inputTextarea value=" "/>
+                    <h:panelGroup>
+                        <p:selectOneMenu id="processor" onchange="submit()"
+                                         value="#{ticketController.selectedEntity.bearbeiterId}">
+                            <f:selectItem itemLabel="#{msg['NEUESTICKET.SELECTUSER']}" itemValue=""
+                                          immediate="true"/>
+                            <f:selectItems var="form" value="#{projektController.findAllProcessors()}"
+                                           itemValue="#{form.id}"
+                                           itemLabel="#{userController.formatedNameForDropdown(form,
+                                                enumController.rolleEmployee)}"/>
+                        </p:selectOneMenu>
+                    </h:panelGroup>
                     <p:outputLabel value="#{msg['NEUESTICKET.STATUS']}"/>
-                    <p:inputTextarea value=" "/>
+                    <h:panelGroup>
+                        <p:selectOneMenu id="status" value="#{ticketController.selectedEntity.status}">
+                            <f:selectItems var="form" value="#{enumController.getStatusValues()}"
+                                           itemLabel="#{msg[form.status]}"/>
+                        </p:selectOneMenu>
+                    </h:panelGroup>
                 </p:panelGrid>
+                <p:commandButton action="#{ticketController.saveNewTicketToProject(projektController.selectedEntity)}"
+                                 value="#{msg['BUTTON.SPEICHERN']}"
+                                 actionListener="#{growlView.showAction(msg['NEUESTICKET.MESSAGE.SUMMARY'], msg['NEUESTICKET.MESSAGE.TEXT'])}"
+                />
             </h:form>
         </div>
         <div id="right">
@@ -56,19 +78,19 @@
             <p:dataList styleClass="datalist-noborder"
                         value="#{projektController.selectedEntity}"
                         var="user">
-                #{userController.formatedName(user.leiterId, rolleController.getEmployee())}
+                #{userController.formatedName(user.leiterId, enumController.getRolleEmployee())}
             </p:dataList>
             <h3>#{msg['PROJEKTANSICHT.DETAIL.EMPLOYEES']}</h3>
             <p:dataList styleClass="datalist-noborder"
                         value="#{userController.findAllEmployeesInProjectExceptLeader(projektController.selectedEntity)}"
                         var="user">
-                #{userController.formatedName(user, rolleController.getEmployee())}
+                #{userController.formatedName(user, enumController.getRolleEmployee())}
             </p:dataList>
             <h3>#{msg['PROJEKTANSICHT.DETAIL.CUSTOMER']}</h3>
             <p:dataList styleClass="datalist-noborder"
                         value="#{userController.findAllCustomers(projektController.selectedEntity)}"
                         var="user">
-                #{userController.formatedName(user, rolleController.getCustomer())}
+                #{userController.formatedName(user, enumController.getRolleCustomer())}
             </p:dataList>
             <h3>#{msg['PROJEKTANSICHT.DETAILS.TICKETS']}</h3>
             <p:dataList styleClass="datalist-noborder"

@@ -17,6 +17,8 @@ public class UserUtils {
     public static final User DUMMY_USER_MITARBEITER = new User("Mitarbeiter", "Kein", AdressUtils.EMPTY_ADRESSE, "   ",
             "   ", Rolle.MITARBEITER, new HashSet<>());
 
+    public static final String SELECT_ONE_USER = "Wähle einen User aus";
+
 
     /**
      * Liefert den Namen im Format "Nachname, Vorname" des uebergebenen Users.

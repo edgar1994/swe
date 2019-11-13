@@ -1,5 +1,6 @@
 package de.hsb.app.swe.controller;
 
+import de.hsb.app.swe.enumeration.Rolle;
 import de.hsb.app.swe.enumeration.Status;
 import de.hsb.app.swe.model.Gruppe;
 import de.hsb.app.swe.model.Projekt;
@@ -9,6 +10,7 @@ import de.hsb.app.swe.repository.AbstractCrudRepository;
 import de.hsb.app.swe.utils.GruppeUtils;
 import de.hsb.app.swe.utils.ProjectUtils;
 import de.hsb.app.swe.utils.RedirectUtils;
+import de.hsb.app.swe.utils.UserUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -74,6 +76,26 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     }
 
     /**
+     * Sucht alle moeglichen Bearbeiter ({@link Rolle#MITARBEITER}) fuer ein {@link Ticket}
+     *
+     * @return List<User>
+     */
+    public List<User> findAllProcessors() {
+        final List<User> processors = new ArrayList<>();
+        if (this.selectedEntity != null) {
+            final Gruppe gruppe = this.em.find(Gruppe.class, this.selectedEntity.getGruppenId());
+            if (gruppe != null) {
+                for (final User user : gruppe.getMitglieder()) {
+                    if (UserUtils.isEmployee(user)) {
+                        processors.add(user);
+                    }
+                }
+            }
+        }
+        return processors;
+    }
+
+    /**
      * Zaehlt wie viele Tickets {@link de.hsb.app.swe.enumeration.Status#OFFEN} sind.
      *
      * @param projekt {@link Projekt}
@@ -128,6 +150,17 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
 
     }
 
+    /**
+     * Prueft ob ein der eingeloggte {@link User} leiter des {@link Projekt}s ist.
+     *
+     * @param loggedUser Eingeloggter {@link User}
+     * @param projekt    {@link Projekt}
+     * @return boolean
+     */
+    public boolean isLeader(final User loggedUser, final Projekt projekt) {
+        return UserUtils.compareUserById(projekt.getLeiterId(), loggedUser);
+    }
+
 
     /**
      * Prueft ob die Gruppe die bearbeitende Gruppe des Projekts ist.
@@ -171,10 +204,10 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
             for (final Ticket ticket : tickets) {
                 ticket.setProjekt(this.selectedEntity);
             }
-            this.selectedEntity.setTicket(tickets);
-            this.selectedEntity.setGruppenId(this.choosenGroupId);
             try {
                 this.utx.begin();
+                this.selectedEntity.setTicket(tickets);
+                this.selectedEntity.setGruppenId(this.choosenGroupId);
                 this.em.persist(this.selectedEntity);
                 this.utx.commit();
                 return RedirectUtils.PROJEKT_TABELLE_XHTML;

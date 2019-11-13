@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+<html
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:p="http://primefaces.org/ui">
 <f:view locale="#{languageHandler.language}"/>
 <h:head>
     <title><ui:insert name="title">#{msg['PROJEKTANSICHT.HEADER']}</ui:insert></title>
@@ -46,16 +46,22 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">#{msg['PROJEKTANSICHT.STATUS']}</f:facet>
-                            <p:outputLabel value="#{ticket.status}"/>
+                            <p:outputLabel value="#{msg[ticket.status.status]}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">#{msg['PROJEKTANSICHT.BEARBEITER']}</f:facet>
                             <p:outputLabel
-                                    value="#{userController.formatedName(ticket.bearbeiterId, rolleController.getEmployee())}"/>
+                                    value="#{userController.formatedName(userController.findById(ticket.bearbeiterId),
+                                     enumController.getRolleEmployee())}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">#{msg['PROJEKTANSICHT.ABSCHLUSSDATUM']}</f:facet>
-                            <p:outputLabel value="#{ticket.abschlussdatum}"/>
+                            <p:outputLabel value="#{dateController.getFormatedDateDDMMYYYY(ticket.abschlussdatum)}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{msg['PROJEKTANSICHT.CHANGETICKET']}</f:facet>
+                            <p:commandButton action="#{ticketController.editTicket(ticket.id)}"
+                                             value="#{msg['PROJEKTANSICHT.CHANGETICKET']}"/>
                         </h:column>
                     </h:dataTable>
                 </ui:insert>
@@ -68,29 +74,29 @@
                 </div>
                 <p:commandButton action="#{ticketController.newTicket()}"
                                  value="#{msg['PROJEKTANSICHT.BUTTON.NEU']}"
-                                 rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
+                                 rendered="#{projektController.isLeader(loginController.user,
+                                    projektController.selectedEntity)}"/>
             </h:form>
         </div>
         <div id="right">
             <h2>#{msg['PROJEKTANSICHT.DETAILS.INFORMATIONEN']}</h2>
-
             <h3>#{msg['PROJEKTANSICHT.DETAILS.LEITER']}</h3>
             <p:dataList styleClass="datalist-noborder"
                         value="#{projektController.selectedEntity}"
                         var="user">
-                #{userController.formatedName(user.leiterId, rolleController.getEmployee())}
+                #{userController.formatedName(user.leiterId, enumController.getRolleEmployee())}
             </p:dataList>
             <h3>#{msg['PROJEKTANSICHT.DETAIL.EMPLOYEES']}</h3>
             <p:dataList styleClass="datalist-noborder"
                         value="#{userController.findAllEmployeesInProjectExceptLeader(projektController.selectedEntity)}"
                         var="user">
-                #{userController.formatedName(user, rolleController.getEmployee())}
+                #{userController.formatedName(user, enumController.getRolleEmployee())}
             </p:dataList>
             <h3>#{msg['PROJEKTANSICHT.DETAIL.CUSTOMER']}</h3>
             <p:dataList styleClass="datalist-noborder"
                         value="#{userController.findAllCustomers(projektController.selectedEntity)}"
                         var="user">
-                #{userController.formatedName(user, rolleController.getCustomer())}
+                #{userController.formatedName(user, enumController.getRolleCustomer())}
             </p:dataList>
             <h3>#{msg['PROJEKTANSICHT.DETAILS.TICKETS']}</h3>
             <p:dataList styleClass="datalist-noborder"

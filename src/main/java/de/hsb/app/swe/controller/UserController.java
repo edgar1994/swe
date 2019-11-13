@@ -7,12 +7,13 @@ import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
 import de.hsb.app.swe.utils.AdressUtils;
 import de.hsb.app.swe.utils.RedirectUtils;
+import de.hsb.app.swe.utils.StringUtils;
 import de.hsb.app.swe.utils.UserUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.model.DataModel;
 import javax.persistence.Query;
 import java.util.*;
@@ -21,7 +22,7 @@ import java.util.*;
  * UserController
  */
 @ManagedBean(name = "userController")
-@ApplicationScoped
+@SessionScoped
 public class UserController extends AbstractCrudRepository<User> {
 
     private Set<User> groupmembersSet;
@@ -100,7 +101,8 @@ public class UserController extends AbstractCrudRepository<User> {
     }
 
     /**
-     * Liefert den Vor- und Nachnamen im Format "Nachname, Vorname" zurueck.
+     * Liefert den Vor- und Nachnamen im Format "Nachname, Vorname" zurueck. Ist der Vorname oder Nachname leer wird ein
+     * {@link UserUtils#SELECT_ONE_USER} zurueckgeliefert.
      *
      * @param user  {@link User}
      * @param rolle {@link Rolle} fuer die Dummy-Option
@@ -111,6 +113,28 @@ public class UserController extends AbstractCrudRepository<User> {
             return UserUtils.getNachnameVornameString(user);
         } else {
             return UserUtils.formatedNameDummy(rolle);
+        }
+    }
+
+    /**
+     * Liefert den Vor- und Nachnamen im Format "Nachname, Vorname" zurueck. Ist der Vorname oder Nachname leer wird ein
+     * {@link UserUtils#SELECT_ONE_USER} zurueckgeliefert.
+     *
+     * @param optionalUser {@link User}
+     * @param rolle        {@link Rolle} fuer die Dummy-Option
+     * @return "Nachname, Vorname"
+     */
+    public String formatedName(final Optional<User> optionalUser, final Rolle rolle) {
+        return optionalUser.map(UserUtils::getNachnameVornameString)
+                .orElseGet(() -> UserUtils.formatedNameDummy(rolle));
+    }
+
+    public String formatedNameForDropdown(final User user, final Rolle rolle) {
+        if (user != null && (user.getId() == 0 || StringUtils.isEmptyOrNullOrBlank(user.getVorname()) ||
+                StringUtils.isEmptyOrNullOrBlank(user.getNachname()))) {
+            return UserUtils.SELECT_ONE_USER;
+        } else {
+            return this.formatedName(user, rolle);
         }
     }
 
