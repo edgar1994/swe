@@ -60,11 +60,12 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
      */
     public String saveNewTicketToProject(final Projekt projekt) {
         if (projekt != null && this.selectedEntity != null) {
+            projekt.getTicket().removeIf(ticket -> ticket.getId() == this.selectedEntity.getId());
             projekt.getTicket().add(this.selectedEntity);
             this.selectedEntity.setProjekt(projekt);
             try {
                 this.utx.begin();
-                this.em.merge(this.selectedEntity);
+                this.selectedEntity = this.em.merge(this.selectedEntity);
                 this.em.merge(projekt);
                 this.em.persist(this.selectedEntity);
                 this.utx.commit();
