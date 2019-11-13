@@ -69,7 +69,7 @@
                         <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
                         <h:outputText
                                 value="#{userController.formatedName(userController.findById(gruppe.leiterId).get(),
-                                    rolleController.getEmployee())}"/>
+                                    enumController.getRolleEmployee())}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
@@ -79,7 +79,7 @@
                         <f:facet name="header">#{msg['GRUPPENTABELLE.KUNDE']}</f:facet>
                         <h:outputText
                                 value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder),
-                                    rolleController.getCustomer())}"/>
+                                    enumController.getRolleCustomer())}"/>
                     </h:column>
                     <h:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
                         <f:facet name="header">#{msg['NEUESPROJEKT.WORKING.GROUP']}</f:facet>

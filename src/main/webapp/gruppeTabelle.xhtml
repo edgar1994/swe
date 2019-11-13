@@ -43,7 +43,7 @@
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
                         <h:outputText
-                                value="#{userController.formatedName(gruppe.leiterId, rolleController.getEmployee())}"/>
+                                value="#{userController.formatedName(gruppe.leiterId, enumController.getRolleEmployee())}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
@@ -53,7 +53,7 @@
                         <f:facet name="header">#{msg['GRUPPENTABELLE.KUNDE']}</f:facet>
                         <h:outputText
                                 value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder),
-                                    rolleController.getCustomer())}"/>
+                                    enumController.getRolleCustomer())}"/>
                     </h:column>
                     <h:column rendered="#{loginController.adminRole()}">
                         <f:facet name="header">#{msg['GRUPPENTABELLE.ERSTELLUNGSDATUM']}</f:facet>

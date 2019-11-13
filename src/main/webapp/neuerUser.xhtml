@@ -45,7 +45,7 @@
                     <h:outputLabel value="#{msg['NEUERUSER.ROLLE']}" for="rolle"/>
                     <h:panelGroup>
                         <h:selectOneMenu id="rolle" value="#{userController.selectedEntity.rolle}">
-                            <f:selectItems var="form" value="#{rolleController.getRolleValues()}" itemValue="#{form}"
+                            <f:selectItems var="form" value="#{enumController.getRolleValues()}" itemValue="#{form}"
                                            itemLabel="#{msg[form.rolle]}"/>
                         </h:selectOneMenu>
                     </h:panelGroup>

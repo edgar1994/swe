@@ -17,7 +17,7 @@ public enum Status {
         this.STATUS = rolle;
     }
 
-    public String getRolle() {
+    public String getStatus() {
         return this.STATUS;
     }
 }
