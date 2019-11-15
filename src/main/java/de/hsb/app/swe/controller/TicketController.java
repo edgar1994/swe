@@ -95,7 +95,7 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
                             this.messageService.getMessage("NEUESTICKET.MESSAGES.CHANGE.SUMMARY"),
                             this.messageService.getMessage("NEUESTICKET.MESSAGES.CHANGE.DETAIL")));
                 }
-                this.logger.info("LOG.TICKET.INFO.SAVE.SUCCESS");
+                this.logger.info("LOG.TICKET.INFO.SAVE.SUCCESS", this.selectedEntity.getId());
                 this.isNewTicket = false;
             } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                     RollbackException | HeuristicMixedException | HeuristicRollbackException e) {

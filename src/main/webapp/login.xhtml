@@ -12,6 +12,7 @@
 </h:head>
 <body>
 <p:growl id="growl" showDetail="true" sticky="true"/>
+</body>
 <h:form>
     <div align="right">
         <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'
@@ -42,11 +43,11 @@
             <p:message for="username" styleClass="message"/>
         </h:panelGroup>
 
-        <p:outputLabel value="#{msg['LOGIN.PASSWORT']}" for="passwort"/>
+        <p:outputLabel value="#{msg['LOGIN.PASSWORT']}" for="password"/>
         <h:panelGroup>
-            <p:password id="passwort" required="true"
+            <p:password id="password" required="true"
                         value="#{loginController.passwort}"/>
-            <p:message for="passwort" styleClass="message"/>
+            <p:message for="password" styleClass="message"/>
         </h:panelGroup>
         <h:panelGroup/>
         <h:panelGroup>
@@ -57,6 +58,5 @@
         <p:commandButton action="${loginController.login}" value="#{msg['LOGIN.LOGIN']}"/>
     </p:panelGrid>
 </h:form>
-</body>
-<f:event listener="#{initializerController.emptyMethod()}" type="preRenderComponent"/>
+<f:event listener="#{initializerController.emptyMethod}" type="preRenderComponent"/>
 </html>

@@ -77,5 +77,6 @@
     </div>
 </h:body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
+<f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
 <f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
 </html>

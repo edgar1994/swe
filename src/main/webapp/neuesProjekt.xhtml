@@ -102,4 +102,5 @@
 </h:form>
 </body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
+<f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
 </html>

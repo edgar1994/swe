@@ -180,7 +180,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                             this.messageService.getMessage("GROUP.MESSAGE.SAVE.SUMMARY.EDIT"),
                             this.messageService.getMessage("GROUP.MESSAGE.SAVE.DETAIL.EDIT")));
                 }
-                this.logger.info("LOG.GROUP.SAVE.SUCCESS");
+                this.logger.info("LOG.GROUP.SAVE.SUCCESS", this.selectedEntity.getTitel());
             } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                     RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
                 this.logger.error("LOG.GROUP.SAVE.FAILED", e.getMessage());

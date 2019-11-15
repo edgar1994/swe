@@ -86,6 +86,8 @@
         </div>
     </h:form>
 </h:body>
+<f:event type="preRenderView" listener="#{loginController.checkLoggedIn}"/>
+<f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
 <f:event type="preRenderView" listener="#{loginController.userAwareGroupTable}"/>
 <f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
 </html>

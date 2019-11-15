@@ -29,10 +29,10 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
     @Resource
     protected UserTransaction utx;
 
-    protected CustomLogService<T> logger;
+    protected CustomLogService<?> logger;
 
     public AbstractCrudRepository() {
-        this.logger = new CustomLogService<>(this.getRepositoryClass());
+        this.logger = new CustomLogService<>(this.getClass());
     }
 
     /**

@@ -42,4 +42,6 @@ public class RedirectUtils {
 
     public static final String PROJEKT_INDEX_XHTML = "index.xhtml";
 
+    public static final String CHANGE_PASSWORD_XHTML = "changePassword.xhtml";
+
 }
