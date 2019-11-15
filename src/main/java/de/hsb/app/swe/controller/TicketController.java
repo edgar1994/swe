@@ -3,7 +3,6 @@ package de.hsb.app.swe.controller;
 import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.Ticket;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
-import de.hsb.app.swe.service.MessageService;
 import de.hsb.app.swe.utils.RedirectUtils;
 
 import javax.annotation.Nonnull;
@@ -26,8 +25,6 @@ import java.util.Optional;
 public class TicketController extends AbstractCrudRepository<Ticket> {
 
     private List<Ticket> ticketList = new ArrayList<>();
-
-    private final MessageService messageService = new MessageService();
 
     private boolean isNewTicket = false;
 
@@ -91,19 +88,20 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
                 this.utx.commit();
                 if (this.isNewTicket) {
                     context.addMessage(null, new FacesMessage(
-                            this.messageService.getMessage("NEUESTICKET.MESSAGE.SAVE.SUMMARY"),
-                            this.messageService.getMessage("NEUESTICKET.MESSAGE.SAVE.DETAIL")));
+                            this.messageService.getMessage("NEUESTICKET.MESSAGES.SAVE.SUMMARY"),
+                            this.messageService.getMessage("NEUESTICKET.MESSAGES.SAVE.DETAIL")));
                 } else {
                     context.addMessage(null, new FacesMessage(
-                            this.messageService.getMessage("NEUESTICKET.MESSAGE.CHANGE.SUMMARY"),
-                            this.messageService.getMessage("NEUESTICKET.MESSAGE.CHANGE.DETAIL")));
+                            this.messageService.getMessage("NEUESTICKET.MESSAGES.CHANGE.SUMMARY"),
+                            this.messageService.getMessage("NEUESTICKET.MESSAGES.CHANGE.DETAIL")));
                 }
+                this.logger.info("LOG.TICKET.INFO.SAVE.SUCCESS");
                 this.isNewTicket = false;
             } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                     RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        this.messageService.getMessage("NEUESTICKET.MESSAGE.ERROR.SUMMARY"),
-                        this.messageService.getMessage("NEUESTICKET.MESSAGE.ERROR.DETAIL")));
+                        this.messageService.getMessage("NEUESTICKET.MESSAGES.ERROR.SUMMARY"),
+                        this.messageService.getMessage("NEUESTICKET.MESSAGES.ERROR.DETAIL")));
                 this.logger.error(this.messageService.getMessage("LOG.TICKET.SAVING.ERROR", e.getMessage()));
             }
         }

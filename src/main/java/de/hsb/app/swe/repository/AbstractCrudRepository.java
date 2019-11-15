@@ -2,6 +2,7 @@ package de.hsb.app.swe.repository;
 
 import de.hsb.app.swe.interfaces.CrudRepository;
 import de.hsb.app.swe.service.CustomLogService;
+import de.hsb.app.swe.service.MessageService;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Resource;
@@ -17,6 +18,8 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
 
     @Resource
     protected DataModel<T> entityList;
+
+    protected final MessageService messageService = new MessageService();
 
     protected T selectedEntity;
 

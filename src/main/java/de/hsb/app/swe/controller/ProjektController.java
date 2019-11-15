@@ -14,8 +14,10 @@ import de.hsb.app.swe.utils.UserUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.persistence.Query;
 import javax.transaction.*;
 import java.time.Instant;
@@ -33,6 +35,8 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
 
     private int choosenGroupId;
 
+    private boolean isNewProject = false;
+
     /**
      * Findet anhand der uebergebenen projectId das gewaehlte {@link Projekt} und redirected auf
      * {@link RedirectUtils#PROJEKT_ANSICHT_XHTML}. Wird kein {@link Projekt} gefunden wird auf
@@ -44,6 +48,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     public String chooseProject(final int projectId) {
         final Optional<Projekt> optionalProjekt = this.findById(projectId);
         if (optionalProjekt.isPresent()) {
+            this.isNewProject = false;
             this.selectedEntity = optionalProjekt.get();
             return RedirectUtils.PROJEKT_ANSICHT_XHTML;
         }
@@ -69,6 +74,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      */
     @Nonnull
     public String newProject(@Nonnull final User projektLeiter) {
+        this.isNewProject = true;
         this.selectedEntity = new Projekt();
         this.selectedEntity.setLeiterId(projektLeiter.getId());
         this.selectedEntity.setErstellungsdatum(Date.from(Instant.now()));
@@ -130,24 +136,28 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @return List<Projekt>
      */
     @Nonnull
-    public List<Projekt> userAwareFindAllByGruppe(@Nonnull final User loggedUser) {
-        switch (loggedUser.getRolle()) {
-            case KUNDE:
-            case MITARBEITER:
-                final List<Projekt> projektList = new ArrayList<>();
-                for (final Gruppe gruppe : loggedUser.getGruppen()) {
-                    final Query query = this.em.createQuery("select pr from Projekt pr where pr.gruppenId = :gruppenId");
-                    query.setParameter("gruppenId", gruppe.getId());
-                    projektList.addAll(this.uncheckedSolver(query.getResultList()));
-                }
-                return projektList;
-            case ADMIN:
-                return this.findAll();
-            case USER:
-            default:
-                throw new IllegalArgumentException("Role {} can not have any projects!");
+    public List<Projekt> userAwareFindAllByGruppe(final User loggedUser) {
+        if (loggedUser != null) {
+            switch (loggedUser.getRolle()) {
+                case KUNDE:
+                case MITARBEITER:
+                    final List<Projekt> projektList = new ArrayList<>();
+                    for (final Gruppe gruppe : loggedUser.getGruppen()) {
+                        final Query query = this.em.createQuery("select pr from Projekt pr where pr.gruppenId = :gruppenId");
+                        query.setParameter("gruppenId", gruppe.getId());
+                        projektList.addAll(this.uncheckedSolver(query.getResultList()));
+                    }
+                    return projektList;
+                case ADMIN:
+                    return this.findAll();
+                case USER:
+                    throw new IllegalArgumentException(this.messageService.getMessage(
+                            "EXCEPTION.ILLEGALARGUMENT.PROJECT", loggedUser.getRolle()));
+            }
+        } else {
+            this.logger.error("LOG.PROJECT.ERROR.NOUSER");
         }
-
+        return new ArrayList<>();
     }
 
     /**
@@ -200,6 +210,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
      */
     public String saveProject(@CheckForNull final List<Ticket> tickets) {
+        final FacesContext context = FacesContext.getCurrentInstance();
         if (tickets != null) {
             for (final Ticket ticket : tickets) {
                 ticket.setProjekt(this.selectedEntity);
@@ -210,13 +221,29 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
                 this.selectedEntity.setGruppenId(this.choosenGroupId);
                 this.em.persist(this.selectedEntity);
                 this.utx.commit();
+                if (this.isNewProject) {
+                    context.addMessage(null, new FacesMessage(
+                            this.messageService.getMessage("PROJECT.MESSAGE.SAVE.SUMMARY.NEW"),
+                            this.messageService.getMessage(
+                                    "PROJECT.MESSAGE.SAVE.DETAIL.NEW", this.selectedEntity.getTitel())));
+                } else {
+                    context.addMessage(null, new FacesMessage(
+                            this.messageService.getMessage("PROJECT.MESSAGE.SAVE.SUMMARY.EDIT"),
+                            this.messageService.getMessage(
+                                    "PROJECT.MESSAGE.SAVE.DETAIL.EDIT", this.selectedEntity.getTitel())));
+                }
+                this.logger.info("LOG.PROJECT.INFO.SAVE.SUCCESSFULL", this.selectedEntity.getId());
                 return RedirectUtils.PROJEKT_TABELLE_XHTML;
             } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                     RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-                this.logger.error("Saving operation failed -> ", e);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        this.messageService.getMessage("PROJECT.MESSAGE.SAVE.SUMMARY.FAILED"),
+                        this.messageService.getMessage(
+                                "PROJECT.MESSAGE.SAVE.DETAIL.FAILED", this.selectedEntity.getTitel())));
+                this.logger.error("LOG.PROJECT.ERROR.SAVE.FAILED", e.getMessage());
             }
         } else {
-            this.logger.error("Saving operation failed. Entity is null.");
+            this.logger.error("LOG.PROJECT.ERROR.SAVE.NOPROJECT");
         }
         return RedirectUtils.PROJEKT_TABELLE_XHTML;
     }

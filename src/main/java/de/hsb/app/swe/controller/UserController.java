@@ -46,10 +46,6 @@ public class UserController extends AbstractCrudRepository<User> {
         boolean hinzugefuegt = false;
         for (final User hinzugefuegterUser : this.groupmembersSet) {
             hinzugefuegt |= UserUtils.compareUserById(hinzugefuegterUser, user);
-            this.logger.info("User mit ID '{}' erfolgreich hinzugefuegt.", user.getId());
-        }
-        if (!hinzugefuegt) {
-            this.logger.info("Hinzufuegen von User mit ID '{}' fehlgeschlagen!", user.getId());
         }
         return hinzugefuegt;
     }
@@ -258,7 +254,7 @@ public class UserController extends AbstractCrudRepository<User> {
             this.getSelectedEntity().setPasswort("passwort+");
             this.save(this.getSelectedEntity());
         } else {
-            this.logger.error("Selected Entity is not allowed to be null -> {0}", new NullPointerException());
+            this.logger.error("LOG.USER.ERROR.SAVE.FAILED");
         }
         return RedirectUtils.USER_TABELLE_XHTML;
     }

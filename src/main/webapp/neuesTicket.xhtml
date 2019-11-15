@@ -39,10 +39,10 @@
                 <p:panelGrid columns="2">
                     <p:outputLabel value="#{msg['NEUESTICKET.TICKETTITEL']}" for="titel"/>
                     <p:inputText id="titel" value="#{ticketController.selectedEntity.titel}" required="true"
-                                 requiredMessage="#{msg['NEUESTICKET.MESSAGES.TITEL.REQUIRED']}"/>
+                                 requiredMessage="#{msg['NEUESTICKET.MESSAGES.REQUIRED.TITEL']}"/>
                     <p:outputLabel value="#{msg['NEUESTICKET.ABSCHLUSSDATUM']}" for="duedate"/>
                     <p:calendar id="duedate" value="#{ticketController.selectedEntity.abschlussdatum}" required="true"
-                                requiredMessage="#{msg['NEUESTICKET.MESSAGES.DUEDATE.REQUIRED']}"/>
+                                requiredMessage="#{msg['NEUESTICKET.MESSAGES.REQUIRED.DUEDATE']}"/>
                     <p:outputLabel value="#{msg['NEUESTICKET.DESCRIPTION']}" for="description"/>
                     <p:inputTextarea id="description" value="#{ticketController.selectedEntity.beschreibung}"/>
                     <p:outputLabel value="#{msg['NEUESTICKET.PROCESSOR']}"/>
@@ -67,7 +67,7 @@
                 </p:panelGrid>
                 <p:commandButton action="#{ticketController.saveNewTicketToProject(projektController.selectedEntity)}"
                                  value="#{msg['BUTTON.SPEICHERN']}"
-                                 actionListener="#{growlView.showAction(msg['NEUESTICKET.MESSAGE.SUMMARY'], msg['NEUESTICKET.MESSAGE.TEXT'])}"
+                                 actionListener="#{growlView.showAction(msg['NEUESTICKET.MESSAGES.SUMMARY'], msg['NEUESTICKET.MESSAGES.TEXT'])}"
                 />
             </h:form>
         </div>

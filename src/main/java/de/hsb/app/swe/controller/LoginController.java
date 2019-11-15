@@ -1,7 +1,6 @@
 package de.hsb.app.swe.controller;
 
 import de.hsb.app.swe.enumeration.Rolle;
-import de.hsb.app.swe.model.Gruppe;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
 import de.hsb.app.swe.utils.RedirectUtils;
@@ -9,12 +8,11 @@ import de.hsb.app.swe.utils.UserUtils;
 
 import javax.annotation.Nonnull;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.persistence.Query;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,10 +20,8 @@ import java.util.List;
  * Login-Controller
  */
 @ManagedBean(name = "loginController")
-@ApplicationScoped
-public class LoginController extends AbstractCrudRepository<User> implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@SessionScoped
+public class LoginController extends AbstractCrudRepository<User> {
 
     private String username;
 
@@ -53,6 +49,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      * @return {@link RedirectUtils}
      */
     public String login() {
+        final FacesContext context = FacesContext.getCurrentInstance();
         final Query query = this.em.createQuery("select u from User u " +
                 "where u.username = :username and u.passwort = :passwort ");
         query.setParameter("username", this.username);
@@ -60,8 +57,12 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
         final List<User> userList = this.uncheckedSolver(query.getResultList());
         if (userList.size() == 1) {
             this.user = userList.get(0);
+            context.addMessage(null, new FacesMessage(
+                    this.messageService.getMessage("LOGIN.MESSAGE.LOGIN.SUMMARY"),
+                    this.messageService.getMessage("LOGIN.MESSAGE.LOGIN.DETAIL")));
             return RedirectUtils.LOGIN_INDEX_XHTML;
         } else {
+            this.logger.error("LOG.LOGIN.MORETHANONE", this.username, this.passwort);
             return null;
         }
     }
@@ -74,36 +75,8 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
         final List<User> userList = this.uncheckedSolver(query.getResultList());
         if (userList.size() == 1) {
             this.user = userList.get(0);
-        }
-    }
-
-    /**
-     * Prueft ob der {@link User} die Berechtigung ({@link Rolle#MITARBEITER}) hat um eine neue {@link Gruppe} anzulegen.
-     * Andernfalls wird auf {@link RedirectUtils#LOGIN_INDEX_XHTML} redirected;
-     *
-     * @param cse {@link ComponentSystemEvent}
-     */
-    public void userAwareNewGroup(final ComponentSystemEvent cse) {
-        final FacesContext context = FacesContext.getCurrentInstance();
-        this.checkLoggedIn(cse);
-        switch (this.user.getRolle()) {
-            case MITARBEITER:
-                break;
-            case ADMIN:
-            case KUNDE:
-                context.addMessage(null, new FacesMessage("Unerlaubt",
-                        String.format("Sie duerfen keine Gruppe mit der Rolle %s anlegen!", this.user.getRolle())));
-                context.getApplication().getNavigationHandler().
-                        handleNavigation(context, null,
-                                RedirectUtils.GRUPPE_TABELLE_XHTML);
-                break;
-            case USER:
-                context.getApplication().getNavigationHandler().
-                        handleNavigation(context, null,
-                                RedirectUtils.LOGIN_INDEX_XHTML);
-                break;
-            default:
-                throw new IllegalArgumentException(String.format("Rolle %s exestiert nicht", this.user.getRolle()));
+        } else {
+            this.logger.error("LOG.LOGIN.MORETHANONE", this.username, this.passwort);
         }
     }
 
@@ -128,7 +101,8 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                                     RedirectUtils.LOGIN_INDEX_XHTML);
                     break;
                 default:
-                    throw new IllegalArgumentException(String.format("Rolle %s exestiert nicht", this.user.getRolle()));
+                    throw new IllegalArgumentException(this.messageService.getMessage(
+                            "EXCEPTION.ILLEGALARGUMENT.LOGIN", this.user.getRolle()));
             }
         }
     }

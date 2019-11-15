@@ -11,9 +11,9 @@ import javax.faces.bean.SessionScoped;
 public class IndexController {
 
     /**
-     * Switch to Index.xhtml
+     * Switch to {@link RedirectUtils#PROJEKT_INDEX_XHTML};
      *
-     * @return
+     * @return {@link RedirectUtils#PROJEKT_INDEX_XHTML}
      */
     @Nonnull
     public String switchToIndex() {

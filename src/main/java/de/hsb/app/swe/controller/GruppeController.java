@@ -4,7 +4,6 @@ import de.hsb.app.swe.model.Gruppe;
 import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
-import de.hsb.app.swe.service.MessageService;
 import de.hsb.app.swe.utils.ListUtils;
 import de.hsb.app.swe.utils.RedirectUtils;
 import de.hsb.app.swe.utils.UserUtils;
@@ -27,8 +26,6 @@ import java.util.*;
 @ManagedBean(name = "gruppeController")
 @SessionScoped
 public class GruppeController extends AbstractCrudRepository<Gruppe> {
-
-    private final MessageService messageService = new MessageService();
 
     private boolean isNewGroup = false;
 
@@ -135,7 +132,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     this.messageService.getMessage("GROUP.MESSAGE.NEWGROUP.FAILED.SUMMARY"),
                     this.messageService.getMessage("GROUP.MESSAGE.NEWGROUP.FAILED.DETAIL.NOUSER")));
-            this.logger.error("There is no user logged in. Cancel command. ");
+            this.logger.error("LOG.GROUP.ERROR.NOUSER");
             return RedirectUtils.GRUPPE_TABELLE_XHTML;
         }
 
@@ -219,7 +216,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                             "EXCEPTION.ILLEGALARGUMENT.GROUP", user.getRolle()));
             }
         } else {
-            this.logger.error("LOG.GROUP.NOUSER");
+            this.logger.error("LOG.GROUP.ERROR.NOUSER");
             return this.entityList;
         }
     }
@@ -251,7 +248,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                             "EXCEPTION.ILLEGALARGUMENT.GROUP", user.getRolle()));
             }
         } else {
-            this.logger.error("LOG.GROUP.NOUSER");
+            this.logger.error("LOG.GROUP.ERROR.NOUSER");
             return this.entityList;
         }
     }
@@ -276,7 +273,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                             "EXCEPTION.ILLEGALARGUMENT.GROUP", loggedUser.getRolle()));
             }
         } else {
-            this.logger.error("LOG.GROUP.NOUSER");
+            this.logger.error("LOG.GROUP.ERROR.NOUSER");
             return false;
         }
     }
@@ -307,7 +304,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                             "EXCEPTION.ILLEGALARGUMENT.GROUP", loggedUser.getRolle()));
             }
         } else {
-            this.logger.error("LOG.GROUP.NOUSER");
+            this.logger.error("LOG.GROUP.ERROR.NOUSER");
             return false;
         }
     }
