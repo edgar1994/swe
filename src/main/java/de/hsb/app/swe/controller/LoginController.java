@@ -4,6 +4,7 @@ import de.hsb.app.swe.enumeration.Rolle;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
 import de.hsb.app.swe.utils.RedirectUtils;
+import de.hsb.app.swe.utils.StringUtils;
 import de.hsb.app.swe.utils.UserUtils;
 
 import javax.annotation.Nonnull;
@@ -13,6 +14,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ComponentSystemEvent;
 import javax.persistence.Query;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +23,19 @@ import java.util.List;
  */
 @ManagedBean(name = "loginController")
 @SessionScoped
-public class LoginController extends AbstractCrudRepository<User> {
+public class LoginController extends AbstractCrudRepository<User> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String username;
 
     private String passwort;
 
     private User user;
+
+    private String changeFirstPassword = "";
+
+    private String changeSecPassword = "";
 
     /**
      * Logged einen {@link User} aus.
@@ -57,10 +65,15 @@ public class LoginController extends AbstractCrudRepository<User> {
         final List<User> userList = this.uncheckedSolver(query.getResultList());
         if (userList.size() == 1) {
             this.user = userList.get(0);
-            context.addMessage(null, new FacesMessage(
-                    this.messageService.getMessage("LOGIN.MESSAGE.LOGIN.SUMMARY"),
-                    this.messageService.getMessage("LOGIN.MESSAGE.LOGIN.DETAIL")));
-            return RedirectUtils.LOGIN_INDEX_XHTML;
+            if (this.user.isFirstLogin()) {
+                return RedirectUtils.CHANGE_PASSWORD_XHTML;
+            } else {
+                context.addMessage(null, new FacesMessage(
+                        this.messageService.getMessage("LOGIN.MESSAGE.LOGIN.SUMMARY"),
+                        this.messageService.getMessage("LOGIN.MESSAGE.LOGIN.DETAIL",
+                                UserUtils.getNachnameVornameString(this.user))));
+                return RedirectUtils.LOGIN_INDEX_XHTML;
+            }
         } else {
             this.logger.error("LOG.LOGIN.MORETHANONE", this.username, this.passwort);
             return null;
@@ -108,6 +121,25 @@ public class LoginController extends AbstractCrudRepository<User> {
     }
 
     /**
+     * Aendert das Passwort eines {@link User}s und setzt das "Erste Anmeldung"-Flag auf false.
+     * Nach Erfolg wird auf {@link RedirectUtils#LOGIN_INDEX_XHTML}.
+     *
+     * @return {@link RedirectUtils#LOGIN_INDEX_XHTML}
+     */
+    public String changePassword() {
+        if (!StringUtils.isEmptyOrNullOrBlank(this.changeFirstPassword) &&
+                !StringUtils.isEmptyOrNullOrBlank(this.changeSecPassword) &&
+                this.changeFirstPassword.equals(this.changeSecPassword)) {
+            this.user.setPasswort(this.passwort);
+            this.user.setFirstLogin(false);
+            this.save(this.user);
+            return RedirectUtils.PROJEKT_INDEX_XHTML;
+        }
+        return null;
+    }
+
+
+    /**
      * Prueft ob der {@link User} eingeloggt ist.
      *
      * @param cse {@link ComponentSystemEvent}
@@ -118,6 +150,20 @@ public class LoginController extends AbstractCrudRepository<User> {
             context.getApplication().getNavigationHandler().
                     handleNavigation(context, null,
                             RedirectUtils.LOGIN_XHTML);
+        }
+    }
+
+    /**
+     * Prueft ob es das erste mal des Logins ist und redirected auf {@link RedirectUtils#CHANGE_PASSWORD_XHTML}.
+     *
+     * @param cse {@link ComponentSystemEvent}
+     */
+    public void checkFirstLogin(final ComponentSystemEvent cse) {
+        final FacesContext context = FacesContext.getCurrentInstance();
+        if (this.user != null && this.user.isFirstLogin()) {
+            context.getApplication().getNavigationHandler().
+                    handleNavigation(context, null,
+                            RedirectUtils.CHANGE_PASSWORD_XHTML);
         }
     }
 
@@ -213,6 +259,22 @@ public class LoginController extends AbstractCrudRepository<User> {
 
     public void setUser(final User user) {
         this.user = user;
+    }
+
+    public String getChangeFirstPassword() {
+        return this.changeFirstPassword;
+    }
+
+    public void setChangeFirstPassword(final String changeFirstPassword) {
+        this.changeFirstPassword = changeFirstPassword;
+    }
+
+    public String getChangeSecPassword() {
+        return this.changeSecPassword;
+    }
+
+    public void setChangeSecPassword(final String changeSecPassword) {
+        this.changeSecPassword = changeSecPassword;
     }
 
     /**

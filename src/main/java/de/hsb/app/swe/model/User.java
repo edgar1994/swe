@@ -2,7 +2,6 @@ package de.hsb.app.swe.model;
 
 import de.hsb.app.swe.enumeration.Rolle;
 
-import javax.annotation.Nonnull;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -46,6 +45,8 @@ public class User {
 
     @ManyToMany(mappedBy = "mitglieder", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     private Set<Gruppe> gruppen = new HashSet<>();
+
+    private boolean firstLogin = true;
 
     public User() {
         this.rolle = Rolle.USER;
@@ -126,26 +127,12 @@ public class User {
         this.gruppen = gruppen;
     }
 
-    /**
-     * Add-Methode zum sicherstellen, dass die Beziehung zwischen {@link User} zur {@link Gruppe} und {@link Gruppe}
-     * zum {@link User} gesetzt wird.
-     *
-     * @param gruppe {@link Gruppe}
-     */
-    public void addGruppe(@Nonnull final Gruppe gruppe) {
-        this.gruppen.add(gruppe);
-        gruppe.getMitglieder().add(this);
+    public boolean isFirstLogin() {
+        return this.firstLogin;
     }
 
-    /**
-     * Remove-Methode zum sicherstellen, dass die Beziehung zwischen {@link User} zur {@link Gruppe} und {@link Gruppe}
-     * zum {@link User} entfernt wird.
-     *
-     * @param gruppe {@link User}
-     */
-    public void removeGruppe(@Nonnull final Gruppe gruppe) {
-        this.gruppen.remove(gruppe);
-        gruppe.getMitglieder().remove(this);
+    public void setFirstLogin(final boolean firstLogin) {
+        this.firstLogin = firstLogin;
     }
 
 }
