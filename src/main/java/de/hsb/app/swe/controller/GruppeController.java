@@ -4,14 +4,17 @@ import de.hsb.app.swe.model.Gruppe;
 import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
+import de.hsb.app.swe.service.MessageService;
 import de.hsb.app.swe.utils.ListUtils;
 import de.hsb.app.swe.utils.RedirectUtils;
 import de.hsb.app.swe.utils.UserUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.persistence.Query;
 import javax.transaction.*;
@@ -25,6 +28,10 @@ import java.util.*;
 @SessionScoped
 public class GruppeController extends AbstractCrudRepository<Gruppe> {
 
+    private final MessageService messageService = new MessageService();
+
+    private boolean isNewGroup = false;
+
     /**
      * Loescht eine {@link Gruppe} redirected auf {@link RedirectUtils#GRUPPE_TABELLE_XHTML}.
      * Ist der {@link User} dazu nicht berechtigt wird die ausgewaehlte {@link Gruppe} nicht geloescht und er bleibt auf
@@ -35,6 +42,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
     public String deleteGruppe(@CheckForNull final User loggedUser, final int groupId) {
+        final FacesContext context = FacesContext.getCurrentInstance();
         if (loggedUser != null) {
             final Optional<Gruppe> group = this.findById(groupId);
             if (group.isPresent()) {
@@ -43,13 +51,12 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                         UserUtils.isAdmin(loggedUser)) {
                     this.deleteGruppe(loggedUser, this.selectedEntity);
                 } else {
-                    this.logger.error("Could not delete Group with Id '{}'. Permission denied.", groupId);
+                    context.addMessage(null, new FacesMessage(
+                            this.messageService.getMessage("GROUP.MESSAGE.DELETE.FAILED.SUMMARY"),
+                            this.messageService.getMessage("GROUP.MESSAGE.DELETE.FAILED.DETAIL.PERMISSIONDENIED")));
+                    this.logger.error("LOG.GROUP.DELETE.FAILED.PERMISSIONDENIED", groupId);
                 }
-            } else {
-                this.logger.error("Could not delete Group. No Group found.");
             }
-        } else {
-            this.logger.error("User is not allowed to be null.");
         }
         return RedirectUtils.GRUPPE_TABELLE_XHTML;
     }
@@ -59,6 +66,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * gearbeitet hat wird nicht gelöscht bekommt aber keine {@link Gruppe} mehr zugewissen.
      */
     private void deleteGruppe(@CheckForNull final User loggedUser, @CheckForNull final Gruppe group) {
+        final FacesContext context = FacesContext.getCurrentInstance();
         if (loggedUser != null) {
             if (group != null) {
                 try {
@@ -76,18 +84,33 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                     this.selectedEntity = this.em.merge(this.selectedEntity);
                     this.em.remove(this.selectedEntity);
                     this.entityList.setWrappedData(this.userAwareFindAllGruppen(loggedUser).getWrappedData());
-                    this.logger.info("Group '{}'  [ID: {}] was deleted.", this.selectedEntity.getTitel(), group.getId());
+                    context.addMessage(null, new FacesMessage(
+                            this.messageService.getMessage("GROUP.MESSAGE.DELETE.SUMMARY"),
+                            this.messageService.getMessage("GROUP.MESSAGE.DELETE.DETAIL",
+                                    this.selectedEntity.getTitel())));
+                    this.logger.info("LOG.GROUP.DELETE.SUCCSESS", this.selectedEntity.getTitel(), group.getId());
                     this.utx.commit();
                 } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                         RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-                    this.logger.error("Could not delete Group with Id '{}' -> Reason: {}", group, e.getMessage());
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            this.messageService.getMessage("GROUP.MESSAGE.DELETE.FAILED.SUMMARY"),
+                            this.messageService.getMessage("GROUP.MESSAGE.DELETE.FAILED.DETAIL.ERROR",
+                                    group.getTitel())));
+                    this.logger.error(
+                            "LOG.GROUP.DELETE.FAILED", group.getId(), e.getMessage());
                 }
 
             } else {
-                this.logger.error("Could not delete Group. No Group found.");
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        this.messageService.getMessage("GROUP.MESSAGE.DELETE.FAILED.SUMMARY"),
+                        this.messageService.getMessage("GROUP.MESSAGE.DELETE.FAILED.DETAIL.NOTFOUND")));
+                this.logger.error("LOG.GROUP.DELETE.FAILED.NOTFOUND");
             }
         } else {
-            this.logger.error("User is not allowed to be null.");
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    this.messageService.getMessage("GROUP.MESSAGE.DELETE.FAILED.SUMMARY"),
+                    this.messageService.getMessage("GROUP.MESSAGE.DELETE.FAILED.DETAIL.EMPTYUSER")));
+            this.logger.error("LOG.GROUP.DELETE.FAILED.NOTFOUND");
         }
     }
 
@@ -100,13 +123,18 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      */
     @CheckForNull
     public String newGroup(@CheckForNull final User loggedUser) {
+        final FacesContext context = FacesContext.getCurrentInstance();
         if (loggedUser != null) {
+            this.isNewGroup = true;
             this.selectedEntity = new Gruppe();
             this.selectedEntity.setLeiterId(loggedUser.getId());
             this.selectedEntity.addUser(loggedUser);
             this.selectedEntity.setErstellungsdatum(Date.from(Instant.now()));
             return RedirectUtils.NEUE_GRUPPE_XHTML;
         } else {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    this.messageService.getMessage("GROUP.MESSAGE.NEWGROUP.FAILED.SUMMARY"),
+                    this.messageService.getMessage("GROUP.MESSAGE.NEWGROUP.FAILED.DETAIL.NOUSER")));
             this.logger.error("There is no user logged in. Cancel command. ");
             return RedirectUtils.GRUPPE_TABELLE_XHTML;
         }
@@ -122,6 +150,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      */
     public String userAwareEditGroup(@Nonnull final User user) {
         this.checkEntityList();
+        this.isNewGroup = false;
         final Gruppe gruppeToCheck = this.entityList.getRowData();
         if (gruppeToCheck != null && UserUtils.compareUserById(gruppeToCheck.getLeiterId(), user)) {
             this.selectedEntity = gruppeToCheck;
@@ -137,6 +166,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      */
     @Nonnull
     public String saveGroup(@CheckForNull final Set<User> members) {
+        final FacesContext context = FacesContext.getCurrentInstance();
         if (members != null) {
             try {
                 this.utx.begin();
@@ -144,10 +174,21 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                 this.selectedEntity = this.em.merge(this.selectedEntity);
                 this.em.persist(this.selectedEntity);
                 this.utx.commit();
+                if (this.isNewGroup) {
+                    context.addMessage(null, new FacesMessage(
+                            this.messageService.getMessage("GROUP.MESSAGE.SAVE.SUMMARY.NEW"),
+                            this.messageService.getMessage("GROUP.MESSAGE.SAVE.DETAIL.NEW")));
+                } else {
+                    context.addMessage(null, new FacesMessage(
+                            this.messageService.getMessage("GROUP.MESSAGE.SAVE.SUMMARY.EDIT"),
+                            this.messageService.getMessage("GROUP.MESSAGE.SAVE.DETAIL.EDIT")));
+                }
+                this.logger.info("LOG.GROUP.SAVE.SUCCESS");
             } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                     RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
-                this.logger.error("Saving operation failed -> ", e);
+                this.logger.error("LOG.GROUP.SAVE.FAILED", e.getMessage());
             }
+            this.isNewGroup = false;
             return RedirectUtils.GRUPPE_TABELLE_XHTML;
         } else {
             return RedirectUtils.NEUE_GRUPPE_XHTML;
@@ -174,10 +215,11 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                     return this.entityList;
                 case USER:
                 default:
-                    throw new IllegalArgumentException(String.format("Role %s has now permission to be in a Group.", user.getRolle()));
+                    throw new IllegalArgumentException(this.messageService.getMessage(
+                            "EXCEPTION.ILLEGALARGUMENT.GROUP", user.getRolle()));
             }
         } else {
-            this.logger.error("User is not allowed to be null.");
+            this.logger.error("LOG.GROUP.NOUSER");
             return this.entityList;
         }
     }
@@ -205,10 +247,11 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                 case USER:
                 case KUNDE:
                 default:
-                    throw new IllegalArgumentException(String.format("Role %s has now permission to be in a Group.", user.getRolle()));
+                    throw new IllegalArgumentException(this.messageService.getMessage(
+                            "EXCEPTION.ILLEGALARGUMENT.GROUP", user.getRolle()));
             }
         } else {
-            this.logger.error("User is not allowed to be null.");
+            this.logger.error("LOG.GROUP.NOUSER");
             return this.entityList;
         }
     }
@@ -229,11 +272,11 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                 case MITARBEITER:
                     return true;
                 default:
-                    throw new IllegalArgumentException(String.format("User with Role %s does not exist.",
-                            loggedUser.getRolle()));
+                    throw new IllegalArgumentException(this.messageService.getMessage(
+                            "EXCEPTION.ILLEGALARGUMENT.GROUP", loggedUser.getRolle()));
             }
         } else {
-            this.logger.error("User is not allowed to be null.");
+            this.logger.error("LOG.GROUP.NOUSER");
             return false;
         }
     }
@@ -254,17 +297,17 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                     if (currentGroup != null) {
                         return UserUtils.compareUserById(currentGroup.getLeiterId(), loggedUser);
                     } else {
-                        this.logger.error("Group is not allowed to be null.");
+                        this.logger.error("LOG.GROUP.ERROR.NOTNULL");
                         return false;
                     }
                 case ADMIN:
                     return true;
                 default:
-                    throw new IllegalArgumentException(String.format("User with Role %s does not exist.",
-                            loggedUser.getRolle()));
+                    throw new IllegalArgumentException(this.messageService.getMessage(
+                            "EXCEPTION.ILLEGALARGUMENT.GROUP", loggedUser.getRolle()));
             }
         } else {
-            this.logger.error("User is not allowed to be null.");
+            this.logger.error("LOG.GROUP.NOUSER");
             return false;
         }
     }

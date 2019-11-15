@@ -3,13 +3,12 @@ package de.hsb.app.swe.controller;
 import de.hsb.app.swe.enumeration.Rolle;
 import de.hsb.app.swe.enumeration.Status;
 import de.hsb.app.swe.model.*;
+import de.hsb.app.swe.service.CustomLogService;
 import de.hsb.app.swe.utils.ListUtils;
 import de.hsb.app.swe.utils.StringUtils;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarStyle;
 import org.primefaces.push.annotation.Singleton;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -40,7 +39,7 @@ public class InitializerController {
     @Resource
     private UserTransaction utx;
 
-    private final Logger logger = LoggerFactory.getLogger(InitializerController.class);
+    private final CustomLogService logger = new CustomLogService<>(InitializerController.class);
 
     private boolean constructed = false;
 

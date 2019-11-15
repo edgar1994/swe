@@ -1,8 +1,7 @@
 package de.hsb.app.swe.repository;
 
 import de.hsb.app.swe.interfaces.CrudRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import de.hsb.app.swe.service.CustomLogService;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Resource;
@@ -27,7 +26,11 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
     @Resource
     protected UserTransaction utx;
 
-    protected Logger logger = LoggerFactory.getLogger(AbstractCrudRepository.class);
+    protected CustomLogService<T> logger;
+
+    public AbstractCrudRepository() {
+        this.logger = new CustomLogService<>(this.getRepositoryClass());
+    }
 
     /**
      * {@inheritDoc}
