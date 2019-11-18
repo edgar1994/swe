@@ -13,9 +13,9 @@
 <h:body>
     <h:form>
         <div align="right">
-            <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
-            <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
-            <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
+            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
+            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
+            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
         </div>
     </h:form>
     <div>
@@ -36,44 +36,44 @@
         <h:form>
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
-                <h:dataTable id="projektTabelle" var="projekt"
+                <p:dataTable id="projektTabelle" var="projekt"
                              value="#{projektController.userAwareFindAllByGruppe(loginController.user)}"
                              rowClasses="odd,even" headerClass="header">
-                    <h:column>
+                    <p:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.TITEL']}</f:facet>
                         <h:outputText value="#{projekt.titel}"/>
-                    </h:column>
-                    <h:column>
+                    </p:column>
+                    <p:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.LEITER']}</f:facet>
                         <h:outputText
                                 value="#{userController.formatedName(userController.findById(projekt.leiterId).get(),
                                 enumController.rolleEmployee)}"/>
-                    </h:column>
-                    <h:column>
+                    </p:column>
+                    <p:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.TICKETS.OFFEN']}</f:facet>
                         <h:outputText value="#{projektController.openTickets(projekt)}"/>
-                    </h:column>
-                    <h:column>
+                    </p:column>
+                    <p:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.TICKETS.GESAMT']}</f:facet>
                         <h:outputText value="#{projekt.ticket.size()}"/>
-                    </h:column>
-                    <h:column>
+                    </p:column>
+                    <p:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.DUEDATE']}</f:facet>
                         <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(projekt.abschlussdatum)}"/>
-                    </h:column>
-                    <h:column>
+                    </p:column>
+                    <p:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.CREATEDDATE']}</f:facet>
                         <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(projekt.erstellungsdatum)}"/>
-                    </h:column>
-                    <h:column>
+                    </p:column>
+                    <p:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.CHOOSE']}</f:facet>
                         <p:commandButton
                                 value="#{msg['PROJEKTTABELLE.CHOOSE']}"
                                 action="#{projektController.chooseProject(projekt.id)}"/>
-                    </h:column>
-                </h:dataTable>
+                    </p:column>
+                </p:dataTable>
             </ui:insert>
-            <h:commandButton action="#{projektController.newProject(loginController.user)}"
+            <p:commandButton action="#{projektController.newProject(loginController.user)}"
                              value="#{msg['PROJEKTTABELLE.BUTTON.NEU']}"
                              rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
         </h:form>

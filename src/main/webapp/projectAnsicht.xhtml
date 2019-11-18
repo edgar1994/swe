@@ -13,9 +13,9 @@
 <h:body>
     <h:form>
         <div align="right">
-            <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
-            <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
-            <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
+            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
+            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
+            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
         </div>
     </h:form>
     <div>
@@ -37,33 +37,33 @@
             <h:form>
                 <p:growl id="growl" showDetail="true" sticky="true"/>
                 <ui:insert name="content">
-                    <h:dataTable id="ticketTabelle" var="ticket"
+                    <p:dataTable id="ticketTabelle" var="ticket"
                                  value="#{projektController.selectedEntity.ticket}"
                                  rowClasses="odd,even" headerClass="header">
-                        <h:column>
+                        <p:column>
                             <f:facet name="header">#{msg['PROJEKTANSICHT.TITEL']}</f:facet>
                             <p:outputLabel value="#{ticket.titel}"/>
-                        </h:column>
-                        <h:column>
+                        </p:column>
+                        <p:column>
                             <f:facet name="header">#{msg['PROJEKTANSICHT.STATUS']}</f:facet>
                             <p:outputLabel value="#{msg[ticket.status.status]}"/>
-                        </h:column>
-                        <h:column>
+                        </p:column>
+                        <p:column>
                             <f:facet name="header">#{msg['PROJEKTANSICHT.BEARBEITER']}</f:facet>
                             <p:outputLabel
                                     value="#{userController.formatedName(userController.findById(ticket.bearbeiterId),
                                      enumController.getRolleEmployee())}"/>
-                        </h:column>
-                        <h:column>
+                        </p:column>
+                        <p:column>
                             <f:facet name="header">#{msg['PROJEKTANSICHT.ABSCHLUSSDATUM']}</f:facet>
                             <p:outputLabel value="#{dateController.getFormatedDateDDMMYYYY(ticket.abschlussdatum)}"/>
-                        </h:column>
-                        <h:column>
+                        </p:column>
+                        <p:column>
                             <f:facet name="header">#{msg['PROJEKTANSICHT.CHANGETICKET']}</f:facet>
                             <p:commandButton action="#{ticketController.editTicket(ticket.id)}"
                                              value="#{msg['PROJEKTANSICHT.CHANGETICKET']}"/>
-                        </h:column>
-                    </h:dataTable>
+                        </p:column>
+                    </p:dataTable>
                 </ui:insert>
                 <div id="footer">
                     <ui:insert name="footer">

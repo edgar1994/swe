@@ -13,9 +13,9 @@
 <h:body>
     <h:form>
         <div align="right">
-            <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
-            <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
-            <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}' immediate="true"/>
+            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
+            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
+            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}' immediate="true"/>
         </div>
     </h:form>
     <div>
@@ -35,39 +35,47 @@
     <div id="content">
         <p:growl id="growl" showDetail="true" sticky="true"/>
         <ui:insert name="content">
-            <h:dataTable id="userTabelle" var="user" value="#{userController.entityList}"
-                         rowClasses="odd,even" headerClass="header">
-                <h:column>
+            <p:dataTable id="userTabelle" var="user" value="#{userController.entityList}" widgetVar="userTabelleJS"
+                         emptyMessage="No user found with given criteria"
+                         filteredValue="#{userController.filteredList}">
+                <f:facet name="header">
+                    <p:outputPanel>
+                        <h:outputText value="Search all fields:"/>
+                        <p:inputText id="globalFilter" onkeyup="PF('userTabelleJS').filter()" style="width:150px"
+                                     placeholder="Enter keyword"/>
+                    </p:outputPanel>
+                </f:facet>
+                <p:column>
                     <f:facet name="header">#{msg['USER.NACHNAME']}</f:facet>
                     <h:outputText value="#{user.nachname}"/>
-                </h:column>
-                <h:column>
+                </p:column>
+                <p:column>
                     <f:facet name="header">#{msg['USER.VORNAME']}</f:facet>
                     <h:outputText value="#{user.vorname}"/>
-                </h:column>
-                <h:column>
+                </p:column>
+                <p:column>
                     <f:facet name="header">#{msg['USER.ADRESSE']}</f:facet>
                     <h:outputText value="#{userController.formatedAdresse(user)}"/>
-                </h:column>
-                <h:column rendered="#{loginController.adminRole()}">
+                </p:column>
+                <p:column rendered="#{loginController.adminRole()}">
                     <div align="center">
                         <f:facet name="header">#{msg['USER.LOESCHEN']}</f:facet>
                         <h:form>
-                            <h:commandButton class="customerButton" action="#{userController.deleteRow}"
+                            <p:commandButton class="customerButton" action="#{userController.deleteRow}"
                                              value="#{msg['USER.LOESCHEN']}"/>
                         </h:form>
                     </div>
-                </h:column>
-                <h:column rendered="#{loginController.adminRole()}">
+                </p:column>
+                <p:column rendered="#{loginController.adminRole()}">
                     <div align="center">
                         <f:facet name="header">#{msg['USER.BEARBEITEN']}</f:facet>
                         <h:form>
-                            <h:commandButton class="customerButton" action="#{userController.edit}"
+                            <p:commandButton class="customerButton" action="#{userController.edit}"
                                              value="#{msg['USER.BEARBEITEN']}"/>
                         </h:form>
                     </div>
-                </h:column>
-            </h:dataTable>
+                </p:column>
+            </p:dataTable>
             <h:form rendered="#{loginController.adminRole()}">
                 <h:commandButton rendered="#{loginController.adminRole()}"
                                  action="#{userController.newUser}"

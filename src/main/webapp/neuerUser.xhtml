@@ -15,11 +15,11 @@
 <body>
 <h:form>
     <div align="right">
-        <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'
+        <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'
                          immediate="true"/>
-        <h:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'
+        <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'
                          immediate="true"/>
-        <h:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
+        <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
     </div>
     <div>
         <h:form>
@@ -39,7 +39,7 @@
         <ui:insert name="content">
             <h:form>
                 <p:growl id="growl" showDetail="true" sticky="true"/>
-                <h:panelGrid var="user" value="#{userController.selectedEntity}" columns="2"
+                <p:panelGrid var="user" value="#{userController.selectedEntity}" columns="2"
                              headerClass="header"
                              footerClass="footer">
                     <h:outputLabel value="#{msg['NEUERUSER.ROLLE']}" for="rolle"/>
@@ -65,13 +65,13 @@
                     <p:outputLabel value="#{msg['NEUERUSER.ADRESSE.STADT']}:"/>
                     <p:inputText value="#{userController.selectedEntity.adresse.stadt}"/>
 
-                </h:panelGrid>
-                <h:commandButton
+                </p:panelGrid>
+                <p:commandButton
                         action="#{userController.save()}"
                         value="#{msg['BUTTON.SPEICHERN']}"
                         actionListener="#{growlView.showAction(msg['NEUERUSER.MESSAGE.SUMMARY'], msg['NEUERUSER.MESSAGE.TEXT'])}"
                         update=":growl"/>
-                <h:commandButton action="#{userController.cancel}" value="#{msg['BUTTON.ABBRECHEN']}"
+                <p:commandButton action="#{userController.cancel}" value="#{msg['BUTTON.ABBRECHEN']}"
                                  immediate="true"/>
             </h:form>
         </ui:insert>
