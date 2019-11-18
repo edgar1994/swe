@@ -12,8 +12,10 @@ import de.hsb.app.swe.utils.UserUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.persistence.Query;
 import java.util.*;
@@ -83,6 +85,13 @@ public class UserController extends AbstractCrudRepository<User> {
      * @return {@link RedirectUtils#USER_TABELLE_XHTML}
      */
     public String switchToUser() {
+        final FacesContext context = FacesContext.getCurrentInstance();
+        context.getApplication().getNavigationHandler().
+                handleNavigation(context, "userController.switchToUser",
+                        RedirectUtils.LOGIN_XHTML);
+        context.addMessage(null, new FacesMessage(
+                this.messageService.getMessage("NEUESTICKET.MESSAGES.SAVE.SUMMARY"),
+                this.messageService.getMessage("NEUESTICKET.MESSAGES.SAVE.DETAIL")));
         return RedirectUtils.USER_TABELLE_XHTML;
     }
 
@@ -250,9 +259,16 @@ public class UserController extends AbstractCrudRepository<User> {
      * @return {@link RedirectUtils#USER_TABELLE_XHTML}
      */
     public String save() {
+        final FacesContext context = FacesContext.getCurrentInstance();
         if (this.selectedEntity != null) {
             this.getSelectedEntity().setPasswort("passwort+");
             this.save(this.getSelectedEntity());
+            context.getApplication().getNavigationHandler().
+                    handleNavigation(context, "userController.save",
+                            RedirectUtils.USER_TABELLE_XHTML);
+            context.addMessage(null, new FacesMessage(
+                    this.messageService.getMessage("USER.MESSAGES.SAVE.SUMMARY"),
+                    this.messageService.getMessage("USER.MESSAGES.SAVE.DETAIL")));
         } else {
             this.logger.error("LOG.USER.ERROR.SAVE.FAILED");
         }

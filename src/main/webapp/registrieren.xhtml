@@ -12,6 +12,7 @@
 </h:head>
 <body>
 <h:form>
+    <p:growl id="growl" showDetail="true" sticky="true"/>
     <div align="right">
         <h:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='${languageHandler.actionLanguage("de")}'
                          immediate="true"/>
@@ -59,13 +60,15 @@
                     <p:inputText value="#{loginController.selectedEntity.adresse.stadt}"/>
 
                 </h:panelGrid>
-                <h:commandButton
+                <p:commandButton
                         action="#{loginController.speichern()}"
-                        value="#{msg['BUTTON.SPEICHERN']}"
-                        actionListener="#{growlView.showAction(msg['NEUERUSER.MESSAGE.SUMMARY'], msg['NEUERUSER.MESSAGE'])}"
-                        update=":growl"/>
-                <h:commandButton action="#{userController.cancel}" value="#{msg['BUTTON.ABBRECHEN']}"
-                                 immediate="true"/>
+                        value="#{msg['BUTTON.SPEICHERN']}">
+                    <f:ajax event="click" listener="#{userController.save()}"/>
+                </p:commandButton>
+                <p:commandButton value="#{msg['BUTTON.ABBRECHEN']}" id="cancel"
+                                 immediate="true">
+                    <f:ajax event="click" listener="#{userController.switchToUser()}"/>
+                </p:commandButton>
             </h:form>
         </ui:insert>
     </div>

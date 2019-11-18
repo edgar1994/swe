@@ -87,7 +87,7 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
                 this.em.persist(this.selectedEntity);
                 this.utx.commit();
                 if (this.isNewTicket) {
-                    context.addMessage(null, new FacesMessage(
+                    context.addMessage("cancel", new FacesMessage(
                             this.messageService.getMessage("NEUESTICKET.MESSAGES.SAVE.SUMMARY"),
                             this.messageService.getMessage("NEUESTICKET.MESSAGES.SAVE.DETAIL")));
                 } else {
