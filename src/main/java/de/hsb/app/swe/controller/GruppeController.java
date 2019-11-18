@@ -149,7 +149,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
         this.checkEntityList();
         this.isNewGroup = false;
         final Gruppe gruppeToCheck = this.entityList.getRowData();
-        if (gruppeToCheck != null && UserUtils.compareUserById(gruppeToCheck.getLeiterId(), user)) {
+        if (gruppeToCheck != null && (UserUtils.compareUserById(gruppeToCheck.getLeiterId(), user) || UserUtils.isAdmin(user))) {
             this.selectedEntity = gruppeToCheck;
             return RedirectUtils.NEUE_GRUPPE_XHTML;
         }

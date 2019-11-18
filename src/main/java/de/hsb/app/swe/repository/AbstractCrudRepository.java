@@ -6,6 +6,8 @@ import de.hsb.app.swe.service.MessageService;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Resource;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.persistence.EntityManager;
@@ -64,11 +66,17 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      */
     @Override
     public boolean save(@Nonnull T entity) {
+        final FacesContext context = FacesContext.getCurrentInstance();
         try {
             this.utx.begin();
             entity = this.em.merge(entity);
             this.em.persist(entity);
             this.utx.commit();
+            context.addMessage(null, new FacesMessage(
+                    this.messageService.getMessage("GROUP.MESSAGE.SAVE.DETAIL.NEW"),
+                    this.messageService.getMessage(
+                            "GROUP.MESSAGE.SAVE.SUMMARY.NEW")));
+
             return true;
         } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                 RollbackException | HeuristicMixedException | HeuristicRollbackException e) {

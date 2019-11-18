@@ -11,78 +11,86 @@
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
-    <h:form>
-        <div align="right">
-            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
-            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
-            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}' immediate="true"/>
-        </div>
-    </h:form>
-    <div>
-        <h:form>
-            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
-            <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
-                             action="${userController.switchToUser()}"
-                             immediate="true"/>
-            <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
-                             action="${gruppeController.switchToGruppe()}"
-                             immediate="true"/>
-            <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
-                             action="${projektController.switchToProjekt()}"
-                             immediate="true"/>
-        </h:form>
-    </div>
+
+
     <div id="content">
-        <p:growl id="growl" showDetail="true" sticky="true"/>
-        <ui:insert name="content">
-            <p:dataTable id="userTabelle" var="user" value="#{userController.entityList}" widgetVar="userTabelleJS"
-                         emptyMessage="No user found with given criteria"
-                         filteredValue="#{userController.filteredList}">
-                <f:facet name="header">
-                    <p:outputPanel>
-                        <h:outputText value="Search all fields:"/>
-                        <p:inputText id="globalFilter" onkeyup="PF('userTabelleJS').filter()" style="width:150px"
-                                     placeholder="Enter keyword"/>
-                    </p:outputPanel>
-                </f:facet>
-                <p:column>
-                    <f:facet name="header">#{msg['USER.NACHNAME']}</f:facet>
-                    <h:outputText value="#{user.nachname}"/>
-                </p:column>
-                <p:column>
-                    <f:facet name="header">#{msg['USER.VORNAME']}</f:facet>
-                    <h:outputText value="#{user.vorname}"/>
-                </p:column>
-                <p:column>
-                    <f:facet name="header">#{msg['USER.ADRESSE']}</f:facet>
-                    <h:outputText value="#{userController.formatedAdresse(user)}"/>
-                </p:column>
-                <p:column rendered="#{loginController.adminRole()}">
-                    <div align="center">
-                        <f:facet name="header">#{msg['USER.LOESCHEN']}</f:facet>
-                        <h:form>
-                            <p:commandButton class="customerButton" action="#{userController.deleteRow}"
+        <h:form>
+            <p:growl id="growl" showDetail="true" sticky="true"/>
+            <ui:insert name="content">
+                <p:dataTable var="user" value="#{userController.entityList}" widgetVar="userTabelleJS"
+                             emptyMessage="No user found with given criteria"
+                             filteredValue="#{userController.filteredList}">
+                    <f:facet name="header">
+                        <div align="left">
+                            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
+                                             immediate="true"/>
+                            <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
+                                             action="${userController.switchToUser()}"
+                                             immediate="true"/>
+                            <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
+                                             action="${gruppeController.switchToGruppe()}"
+                                             immediate="true"/>
+                            <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
+                                             action="${projektController.switchToProjekt()}"
+                                             immediate="true"/>
+
+                            <p:outputPanel>
+                                <p:inputText id="globalFilter" onkeyup="PF('userTabelleJS').filter()"
+                                             style="width:150px"
+                                             placeholder="Enter keyword"/>
+                            </p:outputPanel>
+                        </div>
+                        <div align="right">
+
+                            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
+                                             action='#{languageHandler.actionLanguage("de")}'/>
+                            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
+                                             action='#{languageHandler.actionLanguage("en")}'/>
+                            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
+                                             immediate="true"/>
+
+                        </div>
+                    </f:facet>
+                    <p:column filterBy="#{user.nachname}" headerText="#{msg['USER.NACHNAME']}"
+                              filterMatchMode="contains">
+                        <h:outputText value="#{user.nachname}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{msg['USER.VORNAME']}</f:facet>
+                        <h:outputText value="#{user.vorname}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{msg['USER.ADRESSE']}</f:facet>
+                        <h:outputText value="#{userController.formatedAdresse(user)}"/>
+                    </p:column>
+                    <p:column rendered="#{loginController.adminRole()}">
+                        <div align="center">
+                            <f:facet name="header">#{msg['USER.LOESCHEN']}</f:facet>
+
+                            <p:commandButton class="customerButton" action="${userController.deleteRow()}"
                                              value="#{msg['USER.LOESCHEN']}"/>
-                        </h:form>
-                    </div>
-                </p:column>
-                <p:column rendered="#{loginController.adminRole()}">
-                    <div align="center">
-                        <f:facet name="header">#{msg['USER.BEARBEITEN']}</f:facet>
-                        <h:form>
+
+                        </div>
+                    </p:column>
+                    <p:column rendered="#{loginController.adminRole()}">
+                        <div align="center">
+                            <f:facet name="header">#{msg['USER.BEARBEITEN']}</f:facet>
+
                             <p:commandButton class="customerButton" action="#{userController.edit}"
                                              value="#{msg['USER.BEARBEITEN']}"/>
-                        </h:form>
-                    </div>
-                </p:column>
-            </p:dataTable>
-            <h:form rendered="#{loginController.adminRole()}">
-                <h:commandButton rendered="#{loginController.adminRole()}"
-                                 action="#{userController.newUser}"
+
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:commandButton rendered="#{loginController.adminRole()}"
+                                 action="${userController.newUser}"
                                  value="#{msg['USER.NEU']}"/>
-            </h:form>
-        </ui:insert>
+
+            </ui:insert>
+        </h:form>
     </div>
+
 </h:body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>

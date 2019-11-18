@@ -11,14 +11,17 @@
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
-    <h:form>
-        <div align="right">
+
+    <div align="right">
+        <h:form>
             <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
             <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
             <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
-        </div>
+        </h:form>
+    </div>
 
-        <div>
+    <div>
+        <h:form>
             <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
             <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
                              action="${userController.switchToUser()}"
@@ -29,8 +32,10 @@
             <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
                              action="${projektController.switchToProjekt()}"
                              immediate="true"/>
-        </div>
-        <div id="content">
+        </h:form>
+    </div>
+    <div id="content">
+        <h:form>
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
                 <p:dataTable id="gruppeTabelle" var="gruppe"
@@ -83,8 +88,9 @@
                         onclick="#{userController.resetGroupmembersSet(loginController.user)}"
                         rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
             </ui:insert>
-        </div>
-    </h:form>
+        </h:form>
+    </div>
+
 </h:body>
 <f:event type="preRenderView" listener="#{loginController.checkLoggedIn}"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
