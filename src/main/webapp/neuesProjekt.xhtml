@@ -11,95 +11,96 @@
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <body>
-<h:form>
-    <div align="right">
+
+<div align="right">
+    <h:form>
         <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'
                          immediate="true"/>
         <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'
                          immediate="true"/>
         <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
-    </div>
-    <div>
+    </h:form>
+</div>
+<div>
+    <h:form>
+        <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
+        <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
+                         action="${userController.switchToUser()}"
+                         immediate="true"/>
+        <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
+                         action="${gruppeController.switchToGruppe()}"
+                         immediate="true"/>
+        <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
+                         action="${projektController.switchToProjekt()}"
+                         immediate="true"/>
+    </h:form>
+</div>
+<div id="content">
+    <ui:insert name="content">
         <h:form>
-            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
-            <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
-                             action="${userController.switchToUser()}"
-                             immediate="true"/>
-            <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
-                             action="${gruppeController.switchToGruppe()}"
-                             immediate="true"/>
-            <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
-                             action="${projektController.switchToProjekt()}"
+            <p:growl id="growl" showDetail="true" sticky="true"/>
+            <h:panelGrid var="gruppe" value="#{gruppeController.selectedEntity}" columns="2"
+                         headerClass="header"
+                         footerClass="footer">
+                <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.TITEL']}" for="titel"/>
+                <h:panelGroup>
+                    <p:inputText id="titel" value="#{projektController.selectedEntity.titel}" required="true"
+                                 requiredMessage="#{msg['NEUESPROJEKT.TITEL.MESSAGE']}">
+                    </p:inputText>
+                </h:panelGroup>
+                <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.ABSCHLUSSDATUM']}" for="abschlussdatum"/>
+                <h:panelGroup>
+                    <p:calendar id="abschlussdatum" value="#{projektController.selectedEntity.abschlussdatum}"
+                                mode="popup" navigator="true"
+                                showOn="button" pattern="dd.MM.yyy" required="true"
+                                requiredMessage="Gültigkeitsdatum wir benötigt."/>
+                </h:panelGroup>
+                <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.BESCHREIBUNG']}" for="beschreibung"/>
+                <h:panelGroup>
+                    <p:inputTextarea id="beschreibung" value="#{projektController.selectedEntity.beschreibung}"/>
+                </h:panelGroup>
+            </h:panelGrid>
+            <p:dataTable id="gruppeTabelle" var="gruppe"
+                         value="#{gruppeController.userAwareFindAllGruppenByLeiterId(loginController.user)}"
+                         rowClasses="odd,even" headerClass="header">
+                <p:column>
+                    <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENTITEL']}</f:facet>
+                    <h:outputText value="#{gruppe.titel}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
+                    <h:outputText
+                            value="#{userController.formatedName(userController.findById(gruppe.leiterId).get(),
+                                    enumController.getRolleEmployee())}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
+                    <h:outputText value="#{gruppe.mitglieder.size()}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">#{msg['GRUPPENTABELLE.KUNDE']}</f:facet>
+                    <h:outputText
+                            value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder),
+                                    enumController.getRolleCustomer())}"/>
+                </p:column>
+                <p:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
+                    <f:facet name="header">#{msg['NEUESPROJEKT.WORKING.GROUP']}</f:facet>
+                    <p:commandButton action="#{projektController.addGroupToProjekt(gruppe)}"
+                                     value="#{msg['BUTTON.ADD']}"
+                                     immediate="true"
+                                     rendered="#{!projektController.isChoosenGroup(gruppe)}"/>
+                    <h:outputText value="#{msg['NEUESPROJEKT.CHOOSENGROUP']}"
+                                  rendered="#{projektController.isChoosenGroup(gruppe)}"/>
+                </p:column>
+            </p:dataTable>
+            <p:commandButton value="#{msg['BUTTON.SPEICHERN']}"
+                             action="#{projektController.saveProject(ticketController.getTicketList())}"/>
+            <p:commandButton value="#{msg['BUTTON.ABBRECHEN']}"
+                             action="#{projektController.switchToProjekt()}"
                              immediate="true"/>
         </h:form>
-    </div>
-    <div id="content">
-        <ui:insert name="content">
-            <h:form>
-                <p:growl id="growl" showDetail="true" sticky="true"/>
-                <h:panelGrid var="gruppe" value="#{gruppeController.selectedEntity}" columns="2"
-                             headerClass="header"
-                             footerClass="footer">
-                    <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.TITEL']}" for="titel"/>
-                    <h:panelGroup>
-                        <p:inputText id="titel" value="#{projektController.selectedEntity.titel}" required="true"
-                                     requiredMessage="#{msg['NEUESPROJEKT.TITEL.MESSAGE']}">
-                        </p:inputText>
-                    </h:panelGroup>
-                    <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.ABSCHLUSSDATUM']}" for="abschlussdatum"/>
-                    <h:panelGroup>
-                        <p:calendar id="abschlussdatum" value="#{projektController.selectedEntity.abschlussdatum}"
-                                    mode="popup" navigator="true"
-                                    showOn="button" pattern="dd.MM.yyy" required="true"
-                                    requiredMessage="Gültigkeitsdatum wir benötigt."/>
-                    </h:panelGroup>
-                    <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.BESCHREIBUNG']}" for="beschreibung"/>
-                    <h:panelGroup>
-                        <p:inputTextarea id="beschreibung" value="#{projektController.selectedEntity.beschreibung}"/>
-                    </h:panelGroup>
-                </h:panelGrid>
-                <p:dataTable id="gruppeTabelle" var="gruppe"
-                             value="#{gruppeController.userAwareFindAllGruppenByLeiterId(loginController.user)}"
-                             rowClasses="odd,even" headerClass="header">
-                    <p:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENTITEL']}</f:facet>
-                        <h:outputText value="#{gruppe.titel}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
-                        <h:outputText
-                                value="#{userController.formatedName(userController.findById(gruppe.leiterId).get(),
-                                    enumController.getRolleEmployee())}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
-                        <h:outputText value="#{gruppe.mitglieder.size()}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.KUNDE']}</f:facet>
-                        <h:outputText
-                                value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder),
-                                    enumController.getRolleCustomer())}"/>
-                    </p:column>
-                    <p:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
-                        <f:facet name="header">#{msg['NEUESPROJEKT.WORKING.GROUP']}</f:facet>
-                        <p:commandButton action="#{projektController.addGroupToProjekt(gruppe)}"
-                                         value="#{msg['BUTTON.ADD']}"
-                                         immediate="true"
-                                         rendered="#{!projektController.isChoosenGroup(gruppe)}"/>
-                        <h:outputText value="#{msg['NEUESPROJEKT.CHOOSENGROUP']}"
-                                      rendered="#{projektController.isChoosenGroup(gruppe)}"/>
-                    </p:column>
-                </p:dataTable>
-                <p:commandButton value="#{msg['BUTTON.SPEICHERN']}"
-                                 action="#{projektController.saveProject(ticketController.getTicketList())}"/>
-                <p:commandButton value="#{msg['BUTTON.ABBRECHEN']}"
-                                 action="#{projektController.switchToProjekt()}"
-                                 immediate="true"/>
-            </h:form>
-        </ui:insert>
-    </div>
-</h:form>
+    </ui:insert>
+</div>
 </body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
