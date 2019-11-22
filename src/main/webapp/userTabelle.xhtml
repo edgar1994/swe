@@ -21,7 +21,7 @@
                              emptyMessage="No user found with given criteria"
                              filteredValue="#{userController.filteredList}">
                     <f:facet name="header">
-                        <div align="left">
+                        <div>
                             <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
                                              immediate="true"/>
                             <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
@@ -39,8 +39,7 @@
                                              style="width:150px"
                                              placeholder="Enter keyword"/>
                             </p:outputPanel>
-                        </div>
-                        <div align="right">
+
 
                             <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
                                              action='#{languageHandler.actionLanguage("de")}'/>
