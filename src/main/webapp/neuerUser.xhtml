@@ -51,23 +51,40 @@
                     <h:selectOneMenu id="rolle" value="#{userController.selectedEntity.rolle}">
                         <f:selectItems var="form" value="#{enumController.getRolleValues()}" itemValue="#{form}"
                                        itemLabel="#{msg[form.rolle]}"/>
+                        <p:ajax event="change"/>
                     </h:selectOneMenu>
                 </h:panelGroup>
                 <p:outputLabel value="#{msg['NEUERUSER.USERNAME']}"/>
                 <p:inputText value="#{userController.selectedEntity.username}" required="true"
                              requiredMessage="#{msg['NEUERUSER.USERNAME.MESSAGE']}">
+                    <p:ajax event="change"/>
                     <f:validator validatorId="usernameValidator"/>
                 </p:inputText>
-                <p:outputLabel value="#{msg['NEUERUSER.VORNAME']}:"/>
-                <p:inputText value="#{userController.selectedEntity.vorname}"/>
-                <p:outputLabel value="#{msg['NEUERUSER.NACHNAME']}:"/>
-                <p:inputText value="#{userController.selectedEntity.nachname}"/>
+
+                <p:outputLabel for="vorname" value="#{msg['NEUERUSER.VORNAME']}:"/>
+                <p:inputText id="vorname" value="#{userController.selectedEntity.vorname}">
+                    <p:ajax event="change"/>
+                </p:inputText>
+
+                <p:outputLabel for="nachname" value="#{msg['NEUERUSER.NACHNAME']}:"/>
+                <p:inputText id="nachname" value="#{userController.selectedEntity.nachname}">
+                    <p:ajax event="change"/>
+                </p:inputText>
+
                 <p:outputLabel value="#{msg['NEUERUSER.ADRESSE.STRASSE']}:"/>
-                <p:inputText value="#{userController.selectedEntity.adresse.strasse}"/>
+                <p:inputText value="#{userController.selectedEntity.adresse.strasse}">
+                    <p:ajax event="change"/>
+                </p:inputText>
+
                 <p:outputLabel value="#{msg['NEUERUSER.ADRESSE.PLZ']}:"/>
-                <p:inputText value="#{userController.selectedEntity.adresse.plz}"/>
+                <p:inputText value="#{userController.selectedEntity.adresse.plz}">
+                    <p:ajax event="change"/>
+                </p:inputText>
+
                 <p:outputLabel value="#{msg['NEUERUSER.ADRESSE.STADT']}:"/>
-                <p:inputText value="#{userController.selectedEntity.adresse.stadt}"/>
+                <p:inputText value="#{userController.selectedEntity.adresse.stadt}">
+                    <p:ajax event="change"/>
+                </p:inputText>
 
             </p:panelGrid>
             <p:commandButton value="#{msg['BUTTON.SPEICHERN']}" action="${userController.save()}" immediate="true"/>

@@ -21,7 +21,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
     @Resource
     protected DataModel<T> entityList;
 
-    protected DataModel<T> filteredList;
+    private List<T> filteredList;
 
     protected final MessageService messageService = new MessageService();
 
@@ -158,26 +158,6 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
     }
 
     /**
-     * Getter fuer {@link DataModel<T>}.
-     *
-     * @return {@link DataModel<T>}
-     */
-    public DataModel<T> getfilteredList() {
-        this.filteredList = new ListDataModel<>(this.findAll());
-        return this.filteredList;
-    }
-
-    /**
-     * Setter fuer {@link DataModel<T>}
-     *
-     * @param filteredList {@link DataModel<T>}
-     */
-    public void setfilteredList(final DataModel<T> filteredList) {
-        this.filteredList = filteredList;
-    }
-
-
-    /**
      * Getter fuer {@link T}
      */
     public T getSelectedEntity() {
@@ -201,4 +181,21 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      */
     protected abstract List<T> uncheckedSolver(@Nonnull Object var);
 
+    /**
+     * Getter fuer filteredList.
+     *
+     * @return filteredList
+     */
+    public List<T> getFilteredList() {
+        return this.filteredList;
+    }
+
+    /**
+     * Setter fuer filteredList.
+     *
+     * @param filteredList Liste mit gefilterten Elementen.
+     */
+    public void setFilteredList(final List<T> filteredList) {
+        this.filteredList = filteredList;
+    }
 }

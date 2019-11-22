@@ -27,8 +27,6 @@ public class UserController extends AbstractCrudRepository<User> {
 
     private Set<User> groupmembersSet;
 
-    private List<User> filteredList;
-
 
     /**
      * Fuegt einen User dem Groupmember-Set hinzu.
@@ -369,12 +367,4 @@ public class UserController extends AbstractCrudRepository<User> {
         this.groupmembersSet = groupmembersSet;
     }
 
-
-    public List<User> getFilteredList() {
-        return this.filteredList;
-    }
-
-    public void setFilteredList(final List<User> filteredList) {
-        this.filteredList = filteredList;
-    }
 }
