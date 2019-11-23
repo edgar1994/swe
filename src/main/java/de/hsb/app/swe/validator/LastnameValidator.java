@@ -12,7 +12,7 @@ import javax.faces.validator.ValidatorException;
 public class LastnameValidator extends AbstractValidator {
 
     /**
-     * Liefert eine Error-Message zurueck wenn der Username leer oder zu kurz ist.
+     * Liefert eine Error-Message zurueck wenn der nachname leer oder zu kurz/lang ist.
      *
      * @param context   {@link FacesContext}
      * @param component {@link UIComponent}

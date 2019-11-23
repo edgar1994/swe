@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 public class ZipValidator extends AbstractValidator {
 
     /**
-     * Liefert eine Error-Message zurueck wenn der Username leer oder zu kurz ist.
+     * Liefert eine Error-Message zurueck wenn die Postleitzahl leer ist oder nicht zu dem Pattern "[0-9]{5}" passt.
      *
      * @param context   {@link FacesContext}
      * @param component {@link UIComponent}

@@ -16,7 +16,7 @@ public class UsernameValidator implements Validator {
     private final MessageService messageService = new MessageService();
 
     /**
-     * Liefert eine Error-Message zurueck wenn der Username leer oder zu kurz ist.
+     * Liefert eine Error-Message zurueck wenn der Username leer oder zu kurz/lang ist.
      *
      * @param context   {@link FacesContext}
      * @param component {@link UIComponent}

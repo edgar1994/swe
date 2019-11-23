@@ -12,7 +12,7 @@ import javax.faces.validator.ValidatorException;
 public class CityValidator extends AbstractValidator {
 
     /**
-     * Liefert eine Error-Message zurueck wenn der Username leer oder zu kurz ist.
+     * Liefert eine Error-Message zurueck wenn der Stadtname leer oder zu kurz/lang ist.
      *
      * @param context   {@link FacesContext}
      * @param component {@link UIComponent}
@@ -32,8 +32,7 @@ public class CityValidator extends AbstractValidator {
         } else if (city.length() < 3 || city.length() > 30) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     this.messageService.getMessage("USER.VALIDATOR.ADRESS.CITY.SUMMARY"),
-                    this.messageService.getMessage("USER.VALIDATOR.ADRESS.CITY.DETAIL.LENGTH",
-                            city.length()));
+                    this.messageService.getMessage("USER.VALIDATOR.ADRESS.CITY.DETAIL.LENGTH"));
             throw new ValidatorException(message);
         }
     }

@@ -12,7 +12,7 @@ import javax.faces.validator.ValidatorException;
 public class StreetnameValidator extends AbstractValidator {
 
     /**
-     * Liefert eine Error-Message zurueck wenn der Username leer oder zu kurz ist.
+     * Liefert eine Error-Message zurueck wenn der Strassenname leer oder zu kurz/lang ist.
      *
      * @param context   {@link FacesContext}
      * @param component {@link UIComponent}
@@ -32,8 +32,7 @@ public class StreetnameValidator extends AbstractValidator {
         } else if (streetname.length() < 3 || streetname.length() > 30) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                     this.messageService.getMessage("USER.VALIDATOR.ADRESS.STREET.SUMMARY"),
-                    this.messageService.getMessage("USER.VALIDATOR.ADRESS.STREET.DETAIL.LENGTH",
-                            streetname.length()));
+                    this.messageService.getMessage("USER.VALIDATOR.ADRESS.STREET.DETAIL.LENGTH"));
             throw new ValidatorException(message);
         }
     }
