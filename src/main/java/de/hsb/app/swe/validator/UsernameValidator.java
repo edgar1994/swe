@@ -3,19 +3,17 @@ package de.hsb.app.swe.validator;
 import de.hsb.app.swe.utils.StringUtils;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-@ManagedBean(name = "usernameValidator")
 @FacesValidator(value = "usernameValidator")
 public class UsernameValidator implements Validator {
 
     /**
-     * Liefert eine Error-Message zurueck wenn der Username leer oder bereits vorhanden ist.
+     * Liefert eine Error-Message zurueck wenn der Username leer oder zu kurz ist.
      *
      * @param context   {@link FacesContext}
      * @param component {@link UIComponent}

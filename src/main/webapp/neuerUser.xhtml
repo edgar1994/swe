@@ -39,27 +39,31 @@
 
 
 <div id="content">
-    <h:form>
+    <h:form id="formTag">
         <ui:insert name="content">
 
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <p:panelGrid var="user" value="#{userController.selectedEntity}" columns="2"
                          headerClass="header"
                          footerClass="footer">
-                <h:outputLabel value="#{msg['NEUERUSER.ROLLE']}" for="rolle"/>
+
+                <h:outputLabel for="rolle" value="#{msg['NEUERUSER.ROLLE']}"/>
                 <h:panelGroup>
                     <h:selectOneMenu id="rolle" value="#{userController.selectedEntity.rolle}">
                         <f:selectItems var="form" value="#{enumController.getRolleValues()}" itemValue="#{form}"
                                        itemLabel="#{msg[form.rolle]}"/>
-                        <p:ajax event="change"/>
+                        <p:ajax event="change" update="formTag"/>
                     </h:selectOneMenu>
                 </h:panelGroup>
-                <p:outputLabel value="#{msg['NEUERUSER.USERNAME']}"/>
-                <p:inputText value="#{userController.selectedEntity.username}" required="true"
-                             requiredMessage="#{msg['NEUERUSER.USERNAME.MESSAGE']}">
-                    <p:ajax event="change"/>
-                    <f:validator validatorId="usernameValidator"/>
-                </p:inputText>
+
+                <h:outputLabel for="username" value="#{msg['NEUERUSER.USERNAME']}"/>
+                <h:panelGroup>
+                    <p:inputText id="username" value="#{userController.selectedEntity.username}" required="true"
+                                 requiredMessage="#{msg['NEUERUSER.USERNAME.MESSAGE']}">
+                        <f:validator validatorId="usernameValidator"/>
+                        <p:ajax event="change" listener="#{userController.doesUsernameExists}" update="formTag"/>
+                    </p:inputText>
+                </h:panelGroup>
 
                 <p:outputLabel for="vorname" value="#{msg['NEUERUSER.VORNAME']}:"/>
                 <p:inputText id="vorname" value="#{userController.selectedEntity.vorname}">
@@ -87,10 +91,11 @@
                 </p:inputText>
 
             </p:panelGrid>
-            <p:commandButton value="#{msg['BUTTON.SPEICHERN']}" action="${userController.save()}" immediate="true"/>
-            <p:commandButton action="#{userController.switchToUser}" value="#{msg['BUTTON.ABBRECHEN']}"
+            <p:commandButton value="#{msg['BUTTON.SPEICHERN']}"
+                             action="${userController.saveUser(loginController.user)}" update="formTag"/>
+            <p:commandButton value="#{msg['BUTTON.ABBRECHEN']}"
+                             action="#{userController.switchToUser}"
                              immediate="true"/>
-
         </ui:insert>
     </h:form>
 </div>

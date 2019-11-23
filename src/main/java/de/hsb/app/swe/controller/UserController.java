@@ -12,8 +12,10 @@ import de.hsb.app.swe.utils.UserUtils;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.persistence.Query;
 import java.util.*;
@@ -26,6 +28,8 @@ import java.util.*;
 public class UserController extends AbstractCrudRepository<User> {
 
     private Set<User> groupmembersSet;
+
+    private String username;
 
 
     /**
@@ -247,13 +251,23 @@ public class UserController extends AbstractCrudRepository<User> {
 
     /**
      * Abspeichern eines neuen {@link User}s. Nach Erfolg wird auf {@link RedirectUtils#USER_TABELLE_XHTML} redirected.
+     * Ist kein Passwort gesetzt wird
      *
      * @return {@link RedirectUtils#USER_TABELLE_XHTML}
      */
-    public String save() {
+    public String saveUser(final User loggedUser) {
+        final FacesContext facesContext = FacesContext.getCurrentInstance();
         if (this.selectedEntity != null) {
-            this.getSelectedEntity().setPasswort("passwort+");
-            this.save(this.getSelectedEntity());
+            if (!this.doesUsernameExists()) {
+                if (UserUtils.isAdmin(loggedUser) && StringUtils.isEmptyOrNullOrBlank(this.selectedEntity.getPasswort())) {
+                    this.getSelectedEntity().setPasswort("passwort+");
+                }
+                if (!this.save(this.getSelectedEntity())) {
+                    facesContext.addMessage(null, new FacesMessage("Fehlgeschlagen", "Fehlgeschlagen"));
+                }
+            } else {
+                return RedirectUtils.NEUER_USER_XHTML;
+            }
         } else {
             this.logger.error("LOG.USER.ERROR.SAVE.FAILED");
         }
@@ -295,6 +309,18 @@ public class UserController extends AbstractCrudRepository<User> {
         }
         return this.entityList;
     }
+
+    public boolean doesUsernameExists() {
+        final Query query = this.em.createQuery("select u.username from User u");
+        final List<String> usernameList = StringUtils.uncheckedSolver(query.getResultList());
+        final FacesContext context = FacesContext.getCurrentInstance();
+        if (this.selectedEntity.getUsername() != null && usernameList.contains(this.selectedEntity.getUsername())) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Username exestiert", ""));
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * {@inheritDoc}
