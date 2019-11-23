@@ -88,10 +88,13 @@
                     </p:inputText>
                 </h:panelGroup>
 
-                <p:outputLabel value="#{msg['NEUERUSER.ADRESSE.PLZ']}:"/>
-                <p:inputText value="#{userController.selectedEntity.adresse.plz}">
-                    <p:ajax event="change"/>
-                </p:inputText>
+                <p:outputLabel for="postcode" value="#{msg['NEUERUSER.ADRESSE.PLZ']}:"/>
+                <h:panelGroup>
+                    <p:inputText id="postcode" value="#{userController.selectedEntity.adresse.plz}">
+                        <f:validator validatorId="zipValidator"/>
+                        <p:ajax event="change"/>
+                    </p:inputText>
+                </h:panelGroup>
 
                 <p:outputLabel for="city" value="#{msg['NEUERUSER.ADRESSE.STADT']}:"/>
                 <h:panelGroup>
