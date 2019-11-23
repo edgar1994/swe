@@ -1,5 +1,6 @@
 package de.hsb.app.swe.validator;
 
+import de.hsb.app.swe.service.MessageService;
 import de.hsb.app.swe.utils.StringUtils;
 
 import javax.faces.application.FacesMessage;
@@ -11,6 +12,8 @@ import javax.faces.validator.ValidatorException;
 
 @FacesValidator(value = "usernameValidator")
 public class UsernameValidator implements Validator {
+
+    private final MessageService messageService = new MessageService();
 
     /**
      * Liefert eine Error-Message zurueck wenn der Username leer oder zu kurz ist.
@@ -25,12 +28,14 @@ public class UsernameValidator implements Validator {
         final String username = String.valueOf(value);
         final FacesMessage message;
         if (StringUtils.isEmptyOrNullOrBlank(username)) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ungültiger Username",
-                    "Der Username darf nicht leer sein oder aus Leerzeichen bestehen!");
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    this.messageService.getMessage("USER.VALIDATOR.USERNAME.SUMMARY"),
+                    this.messageService.getMessage("USER.VALIDATOR.USERNAME.DETAIL.NOTNULL"));
             throw new ValidatorException(message);
         } else if (username.length() < 5 || username.length() > 15) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ungültiger Username",
-                    "Der Username ist zu kurz!");
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    this.messageService.getMessage("USER.VALIDATOR.USERNAME.SUMMARY"),
+                    this.messageService.getMessage("USER.VALIDATOR.USERNAME.DETAIL.LENGTH", username.length()));
             throw new ValidatorException(message);
         }
     }
