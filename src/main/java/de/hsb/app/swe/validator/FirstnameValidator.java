@@ -1,19 +1,15 @@
 package de.hsb.app.swe.validator;
 
-import de.hsb.app.swe.service.MessageService;
 import de.hsb.app.swe.utils.StringUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
-import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-@FacesValidator(value = "usernameValidator")
-public class UsernameValidator implements Validator {
-
-    private final MessageService messageService = new MessageService();
+@FacesValidator(value = "firstnameValidator")
+public class FirstnameValidator extends AbstractValidator {
 
     /**
      * Liefert eine Error-Message zurueck wenn der Username leer oder zu kurz ist.
@@ -26,17 +22,18 @@ public class UsernameValidator implements Validator {
     @Override
     public void validate(final FacesContext context, final UIComponent component, final Object value)
             throws ValidatorException {
-        final String username = String.valueOf(value);
+        final String firstname = String.valueOf(value);
         final FacesMessage message;
-        if (StringUtils.isEmptyOrNullOrBlank(username)) {
+        if (StringUtils.isEmptyOrNullOrBlank(firstname)) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    this.messageService.getMessage("USER.VALIDATOR.USERNAME.SUMMARY"),
-                    this.messageService.getMessage("USER.VALIDATOR.USERNAME.DETAIL.NOTNULL"));
+                    this.messageService.getMessage("USER.VALIDATOR.FIRSTNAME.SUMMARY"),
+                    this.messageService.getMessage("USER.VALIDATOR.FIRSTNAME.DETAIL.NOTNULL"));
             throw new ValidatorException(message);
-        } else if (username.length() < 5 || username.length() > 15) {
+        } else if (firstname.length() < 3 || firstname.length() > 30) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    this.messageService.getMessage("USER.VALIDATOR.USERNAME.SUMMARY"),
-                    this.messageService.getMessage("USER.VALIDATOR.USERNAME.DETAIL.LENGTH", username.length()));
+                    this.messageService.getMessage("USER.VALIDATOR.FIRSTNAME.SUMMARY"),
+                    this.messageService.getMessage("USER.VALIDATOR.FIRSTNAME.DETAIL.LENGTH",
+                            firstname.length()));
             throw new ValidatorException(message);
         }
     }

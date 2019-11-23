@@ -23,7 +23,6 @@ public class User {
     @GeneratedValue
     int id;
 
-    @Size(min = 3, max = 30)
     @NotNull
     private String vorname;
 
