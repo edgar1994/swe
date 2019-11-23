@@ -52,28 +52,33 @@
                     <h:selectOneMenu id="rolle" value="#{userController.selectedEntity.rolle}">
                         <f:selectItems var="form" value="#{enumController.getRolleValues()}" itemValue="#{form}"
                                        itemLabel="#{msg[form.rolle]}"/>
-                        <p:ajax event="change" update="formTag"/>
+                        <p:ajax event="change"/>
                     </h:selectOneMenu>
                 </h:panelGroup>
 
                 <h:outputLabel for="username" value="#{msg['NEUERUSER.USERNAME']}"/>
                 <h:panelGroup>
-                    <p:inputText id="username" value="#{userController.selectedEntity.username}" required="true"
-                                 requiredMessage="#{msg['NEUERUSER.USERNAME.MESSAGE']}">
+                    <p:inputText id="username" value="#{userController.selectedEntity.username}" required="true">
                         <f:validator validatorId="usernameValidator"/>
                         <p:ajax event="change" listener="#{userController.doesUsernameExists}" update="formTag"/>
                     </p:inputText>
                 </h:panelGroup>
 
-                <p:outputLabel for="vorname" value="#{msg['NEUERUSER.VORNAME']}:"/>
-                <p:inputText id="vorname" value="#{userController.selectedEntity.vorname}">
-                    <p:ajax event="change"/>
-                </p:inputText>
+                <p:outputLabel for="firstname" value="#{msg['NEUERUSER.VORNAME']}:"/>
+                <h:panelGroup>
+                    <p:inputText id="firstname" value="#{userController.selectedEntity.vorname}">
+                        <f:validator validatorId="firstnameValidator"/>
+                        <p:ajax event="change"/>
+                    </p:inputText>
+                </h:panelGroup>
 
-                <p:outputLabel for="nachname" value="#{msg['NEUERUSER.NACHNAME']}:"/>
-                <p:inputText id="nachname" value="#{userController.selectedEntity.nachname}">
-                    <p:ajax event="change"/>
-                </p:inputText>
+                <p:outputLabel for="lastname" value="#{msg['NEUERUSER.NACHNAME']}:"/>
+                <h:panelGroup>
+                    <p:inputText id="lastname" value="#{userController.selectedEntity.nachname}">
+                        <f:validator validatorId="lastnameValidator"/>
+                        <p:ajax event="change"/>
+                    </p:inputText>
+                </h:panelGroup>
 
                 <p:outputLabel value="#{msg['NEUERUSER.ADRESSE.STRASSE']}:"/>
                 <p:inputText value="#{userController.selectedEntity.adresse.strasse}">

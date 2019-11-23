@@ -4,7 +4,6 @@ import de.hsb.app.swe.enumeration.Rolle;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +25,6 @@ public class User {
     @NotNull
     private String vorname;
 
-    @Size(min = 3, max = 30)
     @NotNull
     private String nachname;
 
