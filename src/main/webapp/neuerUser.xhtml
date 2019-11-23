@@ -80,10 +80,13 @@
                     </p:inputText>
                 </h:panelGroup>
 
-                <p:outputLabel value="#{msg['NEUERUSER.ADRESSE.STRASSE']}:"/>
-                <p:inputText value="#{userController.selectedEntity.adresse.strasse}">
-                    <p:ajax event="change"/>
-                </p:inputText>
+                <p:outputLabel for="street" value="#{msg['NEUERUSER.ADRESSE.STRASSE']}:"/>
+                <h:panelGroup>
+                    <p:inputText id="street" value="#{userController.selectedEntity.adresse.strasse}">
+                        <f:validator validatorId="streetnameValidator"/>
+                        <p:ajax event="change"/>
+                    </p:inputText>
+                </h:panelGroup>
 
                 <p:outputLabel value="#{msg['NEUERUSER.ADRESSE.PLZ']}:"/>
                 <p:inputText value="#{userController.selectedEntity.adresse.plz}">

@@ -5,7 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * {@link Adresse}-Model
@@ -23,15 +22,12 @@ public class Adresse {
     private int id;
 
     @NotNull
-    @Size(min = 3, max = 30)
     private String strasse;
 
     @NotNull
-    @Size(min = 3, max = 30)
     private String plz;
 
     @NotNull
-    @Size(min = 3, max = 30)
     private String stadt;
 
     public Adresse() {
