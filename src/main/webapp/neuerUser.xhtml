@@ -60,7 +60,7 @@
                 <h:panelGroup>
                     <p:inputText id="username" value="#{userController.selectedEntity.username}" required="true">
                         <f:validator validatorId="usernameValidator"/>
-                        <p:ajax event="change" listener="#{userController.doesUsernameExists}" update="formTag"/>
+                        <p:ajax event="change" listener="#{userController.doesUsernameExists()}" update="formTag"/>
                     </p:inputText>
                 </h:panelGroup>
 
@@ -93,10 +93,13 @@
                     <p:ajax event="change"/>
                 </p:inputText>
 
-                <p:outputLabel value="#{msg['NEUERUSER.ADRESSE.STADT']}:"/>
-                <p:inputText value="#{userController.selectedEntity.adresse.stadt}">
-                    <p:ajax event="change"/>
-                </p:inputText>
+                <p:outputLabel for="city" value="#{msg['NEUERUSER.ADRESSE.STADT']}:"/>
+                <h:panelGroup>
+                    <p:inputText id="city" value="#{userController.selectedEntity.adresse.stadt}">
+                        <f:validator validatorId="cityValidator"/>
+                        <p:ajax event="change"/>
+                    </p:inputText>
+                </h:panelGroup>
 
             </p:panelGrid>
             <p:commandButton value="#{msg['BUTTON.SPEICHERN']}"
