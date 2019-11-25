@@ -125,6 +125,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
             this.isNewGroup = true;
             this.selectedEntity = new Gruppe();
             this.selectedEntity.setLeiterId(loggedUser.getId());
+            this.selectedEntity.setLeiterName(UserUtils.getNachnameVornameString(loggedUser));
             this.selectedEntity.addUser(loggedUser);
             this.selectedEntity.setErstellungsdatum(Date.from(Instant.now()));
             return RedirectUtils.NEUE_GRUPPE_XHTML;

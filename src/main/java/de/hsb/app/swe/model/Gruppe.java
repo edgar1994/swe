@@ -24,6 +24,8 @@ public class Gruppe {
 
     private int leiterId;
 
+    private String leiterName = "";
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "ID", nullable = false)
     private Set<User> mitglieder = new HashSet<>();
@@ -39,11 +41,12 @@ public class Gruppe {
         this.erstellungsdatum = Date.from(Instant.now());
     }
 
-    public Gruppe(final int leiterId, final Set<User> mitglieder, final String titel) {
+    public Gruppe(final int leiterId, final Set<User> mitglieder, final String titel, final String leiterName) {
         this.leiterId = leiterId;
         this.mitglieder = mitglieder;
         this.erstellungsdatum = Date.from(Instant.now());
         this.titel = titel;
+        this.leiterName = leiterName;
     }
 
     public int getId() {
@@ -84,6 +87,14 @@ public class Gruppe {
 
     public void setTitel(@Nonnull final String name) {
         this.titel = name;
+    }
+
+    public String getLeiterName() {
+        return this.leiterName;
+    }
+
+    public void setLeiterName(final String leiterName) {
+        this.leiterName = leiterName;
     }
 
     /**

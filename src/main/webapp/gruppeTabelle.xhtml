@@ -40,13 +40,15 @@
             <ui:insert name="content">
                 <p:dataTable id="gruppeTabelle" var="gruppe"
                              value="#{gruppeController.userAwareFindAllGruppen(loginController.user)}"
-                             rowClasses="odd,even" headerClass="header">
-                    <p:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENTITEL']}</f:facet>
+                             widgetVar="gruppeTabelleJS"
+                             emptyMessage="#{msg['TABELLE.EMPTY']}"
+                             filteredValue="#{gruppeController.filteredList}">
+                    <p:column headerText="#{msg['GRUPPENTABELLE.GRUPPENTITEL']}" filterBy="#{gruppe.titel}"
+                              filterMatchMode="contains">
                         <h:outputText value="#{gruppe.titel}"/>
                     </p:column>
-                    <p:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
+                    <p:column headerText="#{msg['GRUPPENTABELLE.GRUPPENLEITER']}" filterBy="#{gruppe.leiterName}"
+                              filterMatchMode="contains">
                         <h:outputText
                                 value="#{userController.formatedName(gruppe.leiterId, enumController.getRolleEmployee())}"/>
                     </p:column>
@@ -54,14 +56,19 @@
                         <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
                         <h:outputText value="#{gruppe.mitglieder.size()}"/>
                     </p:column>
-                    <p:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.KUNDE']}</f:facet>
+                    <p:column headerText="#{msg['GRUPPENTABELLE.KUNDE']}" filterBy="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder),
+                                    enumController.getRolleCustomer())}"
+                              filterMatchMode="contains">
                         <h:outputText
                                 value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder),
                                     enumController.getRolleCustomer())}"/>
                     </p:column>
-                    <p:column rendered="#{loginController.adminRole()}">
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.ERSTELLUNGSDATUM']}</f:facet>
+                    <p:column filterBy="#{dateController.getFormatedDateDDMMYYYY(gruppe.erstellungsdatum)}"
+                              filterMatchMode="contains"
+                              rendered="#{loginController.adminRole()}">
+
+                        <f:facet name="header">
+                            #{msg['GRUPPENTABELLE.ERSTELLUNGSDATUM']}</f:facet>
                         <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(gruppe.erstellungsdatum)}"/>
                     </p:column>
                     <p:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
