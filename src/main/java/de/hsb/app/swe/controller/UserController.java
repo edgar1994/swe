@@ -27,9 +27,9 @@ import java.util.*;
 @SessionScoped
 public class UserController extends AbstractCrudRepository<User> {
 
-    private Set<User> groupmembersSet;
+    private boolean existingUser = false;
 
-    private String username;
+    private Set<User> groupmembersSet;
 
 
     /**
@@ -88,6 +88,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @return {@link RedirectUtils#USER_TABELLE_XHTML}
      */
     public String switchToUser() {
+        this.existingUser = false;
         return RedirectUtils.USER_TABELLE_XHTML;
     }
 
@@ -226,6 +227,7 @@ public class UserController extends AbstractCrudRepository<User> {
      */
     public String edit() {
         this.selectedEntity = this.entityList.getRowData();
+        this.existingUser = true;
         return RedirectUtils.NEUER_USER_XHTML;
     }
 
@@ -246,6 +248,7 @@ public class UserController extends AbstractCrudRepository<User> {
      */
     public String newUser() {
         this.setSelectedEntity(new User());
+        this.existingUser = false;
         return RedirectUtils.NEUER_USER_XHTML;
     }
 
@@ -271,6 +274,7 @@ public class UserController extends AbstractCrudRepository<User> {
         } else {
             this.logger.error("LOG.USER.ERROR.SAVE.FAILED");
         }
+        this.existingUser = false;
         return RedirectUtils.USER_TABELLE_XHTML;
     }
 
@@ -310,13 +314,22 @@ public class UserController extends AbstractCrudRepository<User> {
         return this.entityList;
     }
 
+    /**
+     * Prueft ob der Username bereits existiert.
+     *
+     * @return boolean
+     */
     public boolean doesUsernameExists() {
-        final Query query = this.em.createQuery("select u.username from User u");
-        final List<String> usernameList = StringUtils.uncheckedSolver(query.getResultList());
-        final FacesContext context = FacesContext.getCurrentInstance();
-        if (this.selectedEntity.getUsername() != null && usernameList.contains(this.selectedEntity.getUsername())) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Username exestiert", ""));
-            return true;
+        if (!this.existingUser) {
+            final Query query = this.em.createQuery("select u.username from User u");
+            final List<String> usernameList = StringUtils.uncheckedSolver(query.getResultList());
+            final FacesContext context = FacesContext.getCurrentInstance();
+            if (this.selectedEntity.getUsername() != null && usernameList.contains(this.selectedEntity.getUsername())) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        this.messageService.getMessage("USER.VALIDATOR.USERNAME.SUMMARY"),
+                        this.messageService.getMessage("USER.VALIDATOR.USERNAME.DETAIL.EXISTS")));
+                return true;
+            }
         }
         return false;
     }
@@ -393,4 +406,11 @@ public class UserController extends AbstractCrudRepository<User> {
         this.groupmembersSet = groupmembersSet;
     }
 
+    public boolean isExistingUser() {
+        return this.existingUser;
+    }
+
+    public void setExistingUser(final boolean existingUser) {
+        this.existingUser = existingUser;
+    }
 }

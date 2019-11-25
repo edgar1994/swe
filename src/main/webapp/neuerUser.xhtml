@@ -39,7 +39,7 @@
 
 
 <div id="content">
-    <h:form id="formTag">
+    <h:form>
         <ui:insert name="content">
 
             <p:growl id="growl" showDetail="true" sticky="true"/>
@@ -58,9 +58,12 @@
 
                 <h:outputLabel for="username" value="#{msg['NEUERUSER.USERNAME']}"/>
                 <h:panelGroup>
-                    <p:inputText id="username" value="#{userController.selectedEntity.username}" required="true">
+                    <p:inputText id="username" value="#{userController.selectedEntity.username}"
+                                 disabled="#{userController.existingUser}"
+                                 required="true"
+                                 requiredMessage="#{msg['USER.VALIDATOR.USERNAME.DETAIL.NOTNULL']}">
                         <f:validator validatorId="usernameValidator"/>
-                        <p:ajax event="change" listener="#{userController.doesUsernameExists()}" update="formTag"/>
+                        <p:ajax event="change" listener="#{userController.doesUsernameExists()}" update="growl"/>
                     </p:inputText>
                 </h:panelGroup>
 
@@ -106,7 +109,7 @@
 
             </p:panelGrid>
             <p:commandButton value="#{msg['BUTTON.SPEICHERN']}"
-                             action="${userController.saveUser(loginController.user)}" update="formTag"/>
+                             action="${userController.saveUser(loginController.user)}" update="growl"/>
             <p:commandButton value="#{msg['BUTTON.ABBRECHEN']}"
                              action="#{userController.switchToUser}"
                              immediate="true"/>
