@@ -10,8 +10,6 @@ import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarStyle;
 import org.primefaces.push.annotation.Singleton;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.faces.bean.ApplicationScoped;
@@ -374,7 +372,7 @@ public class InitializerController {
      *
      * @param entity {@link User}
      */
-    private void saveUser(@Nonnull User entity) {
+    private void saveUser(User entity) {
         try {
             this.utx.begin();
             entity = this.em.merge(entity);
@@ -392,7 +390,7 @@ public class InitializerController {
      * @param entity  {@link Gruppe}
      * @param members MemberSet {@link Set<User>}
      */
-    private void saveGroup(@Nonnull Gruppe entity, @CheckForNull final Set<User> members) {
+    private void saveGroup(Gruppe entity, final Set<User> members) {
         if (members != null) {
             try {
                 this.utx.begin();
@@ -415,7 +413,7 @@ public class InitializerController {
      * @param entity  {@link Projekt}
      * @param tickets MemberSet {@link Set<Ticket>}
      */
-    private void saveProject(@Nonnull final Projekt entity, @CheckForNull final List<Ticket> tickets) {
+    private void saveProject(final Projekt entity, final List<Ticket> tickets) {
         if (tickets != null) {
             for (final Ticket ticket : tickets) {
                 ticket.setProjekt(entity);

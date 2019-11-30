@@ -2,8 +2,6 @@ package de.hsb.app.swe.controller;
 
 import de.hsb.app.swe.utils.DateUtils;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import java.util.Date;
@@ -22,8 +20,7 @@ public class DateController {
      * @param date Date
      * @return dd.MM.yyyy
      */
-    @Nonnull
-    public String getFormatedDateDDMMYYYY(@CheckForNull final Date date) {
+    public String getFormatedDateDDMMYYYY(final Date date) {
         if (date != null) {
             return DateUtils.formatedDateDDMMYYYY(date);
         } else {

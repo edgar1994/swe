@@ -10,8 +10,6 @@ import de.hsb.app.swe.utils.RedirectUtils;
 import de.hsb.app.swe.utils.StringUtils;
 import de.hsb.app.swe.utils.UserUtils;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -47,7 +45,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param user {@link User}
      * @return boolean
      */
-    public boolean isAdded(@Nonnull final User user) {
+    public boolean isAdded(final User user) {
         boolean hinzugefuegt = false;
         for (final User hinzugefuegterUser : this.groupmembersSet) {
             hinzugefuegt |= UserUtils.compareUserById(hinzugefuegterUser, user);
@@ -75,7 +73,7 @@ public class UserController extends AbstractCrudRepository<User> {
      *
      * @param loggedUser Eingeloggter User
      */
-    public void resetGroupmembersSet(@CheckForNull final User loggedUser) {
+    public void resetGroupmembersSet(final User loggedUser) {
         this.groupmembersSet = new HashSet<>();
         if (loggedUser != null) {
             this.groupmembersSet.add(loggedUser);
@@ -98,7 +96,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param user {@link User}
      * @return Straße Hausnummer, Stadt, Postleitzahl
      */
-    public String formatedAdresse(@Nonnull final User user) {
+    public String formatedAdresse(final User user) {
         return AdressUtils.formatAdresse(user.getAdresse());
     }
 
@@ -110,7 +108,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param rolle {@link Rolle} fuer die Dummy-Option
      * @return "Nachname, Vorname"
      */
-    public String formatedName(@CheckForNull final User user, final Rolle rolle) {
+    public String formatedName(final User user, final Rolle rolle) {
         if (user != null) {
             return UserUtils.getNachnameVornameString(user);
         } else {
@@ -147,7 +145,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param projectToCheck zu pruefendes Projekt
      * @return List<User>
      */
-    public List<User> findAllEmployeesInProjectExceptLeader(@CheckForNull final Projekt projectToCheck) {
+    public List<User> findAllEmployeesInProjectExceptLeader(final Projekt projectToCheck) {
         final List<User> userList = new ArrayList<>();
         if (projectToCheck != null && projectToCheck.getGruppenId() != 0) {
             final Gruppe groupToCheck = this.em.find(Gruppe.class, projectToCheck.getGruppenId());
@@ -173,7 +171,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param projectToCheck zu pruefendes Projekt
      * @return List<User>
      */
-    public List<User> findAllCustomers(@CheckForNull final Projekt projectToCheck) {
+    public List<User> findAllCustomers(final Projekt projectToCheck) {
         final List<User> userList = new ArrayList<>();
         if (projectToCheck != null && projectToCheck.getGruppenId() != 0) {
             final Gruppe groupToCheck = this.em.find(Gruppe.class, projectToCheck.getGruppenId());
@@ -210,8 +208,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param userList {@link Set<User>}
      * @return User mit {@link Rolle#KUNDE} || {@link UserUtils#DUMMY_USER_KUNDE}
      */
-    @Nonnull
-    public User getKundeUser(@Nonnull final Set<User> userList) {
+    public User getKundeUser(final Set<User> userList) {
         for (final User user : userList) {
             if (Rolle.KUNDE.equals(user.getRolle())) {
                 return user;
@@ -303,7 +300,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * @param loggedUser eingeloggter {@link User}
      * @return DataModel<User>
      */
-    public DataModel<User> entityListForGruppenerstellung(@Nonnull final User loggedUser) {
+    public DataModel<User> entityListForGruppenerstellung(final User loggedUser) {
         final List<User> userList = this.findAllUserForGruppenerstellung();
         userList.removeIf(user -> UserUtils.compareUserById(loggedUser, user) || Rolle.ADMIN.equals(user.getRolle())
                 || Rolle.USER.equals(user.getRolle()));
@@ -339,7 +336,6 @@ public class UserController extends AbstractCrudRepository<User> {
      * {@inheritDoc}
      */
     @Override
-    @Nonnull
     protected Class<User> getRepositoryClass() {
         return User.class;
     }
@@ -348,7 +344,6 @@ public class UserController extends AbstractCrudRepository<User> {
      * {@inheritDoc}
      */
     @Override
-    @Nonnull
     protected String getQueryCommand() {
         return User.NAMED_QUERY_QUERY;
     }
@@ -357,7 +352,6 @@ public class UserController extends AbstractCrudRepository<User> {
      * {@inheritDoc}
      */
     @Override
-    @Nonnull
     protected String getSelect() {
         return User.NAMED_QUERY_NAME;
     }
@@ -366,7 +360,7 @@ public class UserController extends AbstractCrudRepository<User> {
      * {@inheritDoc}
      */
     @Override
-    protected List<User> uncheckedSolver(@Nonnull final Object var) {
+    protected List<User> uncheckedSolver(final Object var) {
         final List<User> result = new ArrayList<>();
         if (var instanceof List) {
             for (int i = 0; i < ((List<?>) var).size(); i++) {
@@ -384,7 +378,7 @@ public class UserController extends AbstractCrudRepository<User> {
      *
      * @param groupmembersSet {@link Set<User>}
      */
-    public void updateGroupMemberSet(@CheckForNull final Set<User> groupmembersSet) {
+    public void updateGroupMemberSet(final Set<User> groupmembersSet) {
         if (groupmembersSet != null) {
             this.groupmembersSet = groupmembersSet;
         }

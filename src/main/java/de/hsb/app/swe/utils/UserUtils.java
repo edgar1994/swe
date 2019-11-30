@@ -3,7 +3,6 @@ package de.hsb.app.swe.utils;
 import de.hsb.app.swe.enumeration.Rolle;
 import de.hsb.app.swe.model.User;
 
-import javax.annotation.Nonnull;
 import java.util.HashSet;
 
 /**
@@ -26,8 +25,7 @@ public class UserUtils {
      * @param user {@link User}
      * @return "Nachname, Vorname"
      */
-    @Nonnull
-    public static String getNachnameVornameString(@Nonnull final User user) {
+    public static String getNachnameVornameString(final User user) {
         return user.getNachname().concat(", ").concat(user.getVorname());
     }
 
@@ -38,7 +36,7 @@ public class UserUtils {
      * @param userToCheck {@link User} zu pruefen
      * @return boolean
      */
-    public static boolean compareUserById(@Nonnull final User user, @Nonnull final User userToCheck) {
+    public static boolean compareUserById(final User user, final User userToCheck) {
         return user.getId() == userToCheck.getId();
     }
 
@@ -49,7 +47,7 @@ public class UserUtils {
      * @param userToCheck {@link User} zu pruefen
      * @return boolean
      */
-    public static boolean compareUserByFields(@Nonnull final User user, @Nonnull final User userToCheck) {
+    public static boolean compareUserByFields(final User user, final User userToCheck) {
         boolean same;
         same = user.getRolle().equals(userToCheck.getRolle());
         same &= user.getNachname().equals(userToCheck.getNachname());
@@ -66,7 +64,7 @@ public class UserUtils {
      * @param userToCheck {@link User} to check
      * @return boolean
      */
-    public static boolean compareUserById(final int userId, @Nonnull final User userToCheck) {
+    public static boolean compareUserById(final int userId, final User userToCheck) {
         return userToCheck.getId() == userId;
     }
 
@@ -76,7 +74,7 @@ public class UserUtils {
      * @param userToCheck {@link User} to check
      * @return boolean
      */
-    public static boolean isEmployee(@Nonnull final User userToCheck) {
+    public static boolean isEmployee(final User userToCheck) {
         return Rolle.MITARBEITER.equals(userToCheck.getRolle());
     }
 
@@ -86,7 +84,7 @@ public class UserUtils {
      * @param userToCheck {@link User} to check
      * @return boolean
      */
-    public static boolean isAdmin(@Nonnull final User userToCheck) {
+    public static boolean isAdmin(final User userToCheck) {
         return Rolle.ADMIN.equals(userToCheck.getRolle());
     }
 
@@ -96,7 +94,7 @@ public class UserUtils {
      * @param userToCheck {@link User} to check
      * @return boolean
      */
-    public static boolean isCustomer(@Nonnull final User userToCheck) {
+    public static boolean isCustomer(final User userToCheck) {
         return Rolle.KUNDE.equals(userToCheck.getRolle());
     }
 
@@ -126,7 +124,7 @@ public class UserUtils {
      * @param userToCheck {@link User} to check
      * @return boolean
      */
-    public static boolean isUser(@Nonnull final User userToCheck) {
+    public static boolean isUser(final User userToCheck) {
         return Rolle.USER.equals(userToCheck.getRolle());
     }
 

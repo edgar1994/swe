@@ -2,8 +2,6 @@ package de.hsb.app.swe.utils;
 
 import de.hsb.app.swe.model.Gruppe;
 
-import javax.annotation.Nonnull;
-
 /**
  * Utils-Klasse fuer {@link Gruppe}
  */
@@ -16,7 +14,7 @@ public class GruppeUtils {
      * @param gruppeToCheck {@link Gruppe}
      * @return boolean
      */
-    public static boolean compareGruppeById(@Nonnull final Gruppe gruppe, @Nonnull final Gruppe gruppeToCheck) {
+    public static boolean compareGruppeById(final Gruppe gruppe, final Gruppe gruppeToCheck) {
         return gruppe.getId() == gruppeToCheck.getId();
     }
 
@@ -27,7 +25,7 @@ public class GruppeUtils {
      * @param gruppeToCheck {@link Gruppe}
      * @return boolean
      */
-    public static boolean compareGruppeById(final int gruppeId, @Nonnull final Gruppe gruppeToCheck) {
+    public static boolean compareGruppeById(final int gruppeId, final Gruppe gruppeToCheck) {
         return gruppeId == gruppeToCheck.getId();
     }
 

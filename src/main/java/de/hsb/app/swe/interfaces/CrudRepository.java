@@ -1,7 +1,5 @@
 package de.hsb.app.swe.interfaces;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +14,6 @@ public interface CrudRepository<T> {
      * @param id int
      * @return {@link Optional<T>}
      */
-    @CheckForNull
     Optional<T> findById(final int id);
 
     /**
@@ -24,7 +21,6 @@ public interface CrudRepository<T> {
      *
      * @return {@link List<T>}
      */
-    @Nonnull
     List<T> findAll();
 
     /**
@@ -33,7 +29,7 @@ public interface CrudRepository<T> {
      * @param entity {@link T}.
      * @return boolean
      */
-    boolean save(@Nonnull final T entity);
+    boolean save(final T entity);
 
     /**
      * Löscht {@link T} aus der Datenbank.

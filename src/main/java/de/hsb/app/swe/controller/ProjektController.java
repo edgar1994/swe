@@ -72,8 +72,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      *
      * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
      */
-    @Nonnull
-    public String newProject(@Nonnull final User projektLeiter) {
+    public String newProject(final User projektLeiter) {
         this.isNewProject = true;
         this.selectedEntity = new Projekt();
         this.selectedEntity.setLeiterId(projektLeiter.getId());
@@ -107,7 +106,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @param projekt {@link Projekt}
      * @return Anzahl der offenen Tickets
      */
-    public long openTickets(@CheckForNull final Projekt projekt) {
+    public long openTickets(final Projekt projekt) {
         int open = 0;
         if (projekt != null) {
             for (final Ticket ticket : projekt.getTicket()) {
@@ -124,7 +123,6 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      *
      * @return {@link RedirectUtils#PROJEKT_TABELLE_XHTML}
      */
-    @Nonnull
     public String switchToProjekt() {
         return RedirectUtils.PROJEKT_TABELLE_XHTML;
     }
@@ -135,7 +133,6 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @param loggedUser eingeloggter {@link User}
      * @return List<Projekt>
      */
-    @Nonnull
     public List<Projekt> userAwareFindAllByGruppe(final User loggedUser) {
         if (loggedUser != null) {
             switch (loggedUser.getRolle()) {
@@ -178,7 +175,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @param gruppe zu pruefende Gruppe
      * @return boolean
      */
-    public boolean isChoosenGroup(@Nonnull final Gruppe gruppe) {
+    public boolean isChoosenGroup(final Gruppe gruppe) {
         return GruppeUtils.compareGruppeById(this.choosenGroupId, gruppe);
     }
 
@@ -189,7 +186,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @param gruppe  {@link Gruppe}
      * @return boolean
      */
-    public boolean isChoosenGroup(@Nonnull final Projekt projekt, @Nonnull final Gruppe gruppe) {
+    public boolean isChoosenGroup(final Projekt projekt, final Gruppe gruppe) {
         return ProjectUtils.isChoosenGroup(projekt, gruppe);
     }
 
@@ -199,7 +196,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * @param gruppe {@link Gruppe}
      * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
      */
-    public String addGroupToProjekt(@Nonnull final Gruppe gruppe) {
+    public String addGroupToProjekt(final Gruppe gruppe) {
         this.choosenGroupId = gruppe.getId();
         return RedirectUtils.NEUES_PROJEKT_XHTML;
     }
@@ -209,7 +206,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      *
      * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
      */
-    public String saveProject(@CheckForNull final List<Ticket> tickets) {
+    public String saveProject(final List<Ticket> tickets) {
         final FacesContext context = FacesContext.getCurrentInstance();
         if (tickets != null) {
             for (final Ticket ticket : tickets) {
@@ -251,7 +248,6 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     protected Class<Projekt> getRepositoryClass() {
         return Projekt.class;
@@ -260,7 +256,6 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     protected String getQueryCommand() {
         return Projekt.NAMED_QUERY_QUERY;
@@ -269,7 +264,6 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     protected String getSelect() {
         return Projekt.NAMED_QUERY_NAME;
@@ -279,7 +273,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
      * {@inheritDoc}
      */
     @Override
-    protected List<Projekt> uncheckedSolver(@Nonnull final Object var) {
+    protected List<Projekt> uncheckedSolver(final Object var) {
         final List<Projekt> result = new ArrayList<>();
         if (var instanceof List) {
             for (int i = 0; i < ((List<?>) var).size(); i++) {

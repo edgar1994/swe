@@ -4,7 +4,6 @@ import de.hsb.app.swe.interfaces.CrudRepository;
 import de.hsb.app.swe.service.CustomLogService;
 import de.hsb.app.swe.service.MessageService;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Resource;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -43,7 +42,6 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    @Nonnull
     public Optional<T> findById(final int id) {
         final T entity = this.em.find(this.getRepositoryClass(), id);
         if (entity != null) {
@@ -56,7 +54,6 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    @Nonnull
     public List<T> findAll() {
         return this.uncheckedSolver(this.em.createQuery(this.getQueryCommand()).getResultList());
     }
@@ -65,7 +62,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      * {@inheritDoc}
      */
     @Override
-    public boolean save(@Nonnull T entity) {
+    public boolean save(T entity) {
         final FacesContext context = FacesContext.getCurrentInstance();
         try {
             this.utx.begin();
@@ -110,7 +107,6 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      *
      * @return {@link Class<T>}
      */
-    @Nonnull
     protected abstract Class<T> getRepositoryClass();
 
     /**
@@ -118,7 +114,6 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      *
      * @return "Select v from {@link T} v"
      */
-    @Nonnull
     protected abstract String getQueryCommand();
 
     /**
@@ -126,7 +121,6 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      *
      * @return Select{@link T}
      */
-    @Nonnull
     protected abstract String getSelect();
 
     /**
@@ -179,7 +173,7 @@ public abstract class AbstractCrudRepository<T> implements CrudRepository<T> {
      * @param var Object
      * @return List<T>
      */
-    protected abstract List<T> uncheckedSolver(@Nonnull Object var);
+    protected abstract List<T> uncheckedSolver(Object var);
 
     /**
      * Getter fuer filteredList.

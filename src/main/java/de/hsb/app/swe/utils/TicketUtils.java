@@ -2,8 +2,6 @@ package de.hsb.app.swe.utils;
 
 import de.hsb.app.swe.model.Ticket;
 
-import javax.annotation.Nonnull;
-
 /**
  * Utils-Klasse fuer {@link Ticket}.
  */
@@ -15,7 +13,7 @@ public class TicketUtils {
      * @param ticketToCheck {@link Ticket} zu pruefen
      * @return boolean
      */
-    public static boolean compareUserById(@Nonnull final Ticket ticket, @Nonnull final Ticket ticketToCheck) {
+    public static boolean compareUserById(final Ticket ticket, final Ticket ticketToCheck) {
         return ticket.getId() == ticketToCheck.getId();
     }
 
@@ -26,7 +24,7 @@ public class TicketUtils {
      * @param ticketToCheck {@link Ticket} to check
      * @return boolean
      */
-    public static boolean compareUserById(final int ticketId, @Nonnull final Ticket ticketToCheck) {
+    public static boolean compareUserById(final int ticketId, final Ticket ticketToCheck) {
         return ticketToCheck.getId() == ticketId;
     }
 }

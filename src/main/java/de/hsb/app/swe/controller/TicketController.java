@@ -5,7 +5,6 @@ import de.hsb.app.swe.model.Ticket;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
 import de.hsb.app.swe.utils.RedirectUtils;
 
-import javax.annotation.Nonnull;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -111,7 +110,6 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     protected Class<Ticket> getRepositoryClass() {
         return Ticket.class;
@@ -120,7 +118,6 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     protected String getQueryCommand() {
         return Ticket.NAMED_QUERY_QUERY;
@@ -129,7 +126,6 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     protected String getSelect() {
         return Ticket.NAMED_QUERY_NAME;
@@ -139,7 +135,7 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
      * {@inheritDoc}
      */
     @Override
-    protected List<Ticket> uncheckedSolver(@Nonnull final Object var) {
+    protected List<Ticket> uncheckedSolver(final Object var) {
         final List<Ticket> result = new ArrayList<>();
         if (var instanceof List) {
             for (int i = 0; i < ((List<?>) var).size(); i++) {

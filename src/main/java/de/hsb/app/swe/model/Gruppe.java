@@ -1,10 +1,7 @@
 package de.hsb.app.swe.model;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
@@ -32,7 +29,6 @@ public class Gruppe {
     @NotNull
     private Date erstellungsdatum;
 
-    @Size(min = 3, max = 30)
     private String titel;
 
     public Gruppe() {
@@ -66,7 +62,7 @@ public class Gruppe {
         return this.mitglieder;
     }
 
-    public void setMitglieder(@Nonnull final Set<User> mitglieder) {
+    public void setMitglieder(final Set<User> mitglieder) {
         this.mitglieder = mitglieder;
     }
 
@@ -74,7 +70,7 @@ public class Gruppe {
         return this.erstellungsdatum;
     }
 
-    public void setErstellungsdatum(@CheckForNull final Date erstellungsdatum) {
+    public void setErstellungsdatum(final Date erstellungsdatum) {
         this.erstellungsdatum = erstellungsdatum;
     }
 
@@ -82,7 +78,7 @@ public class Gruppe {
         return this.titel;
     }
 
-    public void setTitel(@Nonnull final String name) {
+    public void setTitel(final String name) {
         this.titel = name;
     }
 
@@ -92,7 +88,7 @@ public class Gruppe {
      *
      * @param user {@link User}
      */
-    public void addUser(@Nonnull final User user) {
+    public void addUser(final User user) {
         this.mitglieder.add(user);
         user.getGruppen().add(this);
     }

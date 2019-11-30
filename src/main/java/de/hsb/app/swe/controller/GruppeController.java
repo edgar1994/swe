@@ -8,8 +8,6 @@ import de.hsb.app.swe.utils.ListUtils;
 import de.hsb.app.swe.utils.RedirectUtils;
 import de.hsb.app.swe.utils.UserUtils;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -38,7 +36,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param groupId    Gruppen-ID
      * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
-    public String deleteGruppe(@CheckForNull final User loggedUser, final int groupId) {
+    public String deleteGruppe(final User loggedUser, final int groupId) {
         final FacesContext context = FacesContext.getCurrentInstance();
         if (loggedUser != null) {
             final Optional<Gruppe> group = this.findById(groupId);
@@ -62,7 +60,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * Loescht eine {@link Gruppe} und entfernt vorher dessen {@link User}. Das {@link Projekt} an dem die {@link Gruppe}
      * gearbeitet hat wird nicht gelöscht bekommt aber keine {@link Gruppe} mehr zugewissen.
      */
-    private void deleteGruppe(@CheckForNull final User loggedUser, @CheckForNull final Gruppe group) {
+    private void deleteGruppe(final User loggedUser, final Gruppe group) {
         final FacesContext context = FacesContext.getCurrentInstance();
         if (loggedUser != null) {
             if (group != null) {
@@ -118,8 +116,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param loggedUser Eingeloggter {@link User}
      * @return {@link RedirectUtils#NEUE_GRUPPE_XHTML}
      */
-    @CheckForNull
-    public String newGroup(@CheckForNull final User loggedUser) {
+    public String newGroup(final User loggedUser) {
         final FacesContext context = FacesContext.getCurrentInstance();
         if (loggedUser != null) {
             this.isNewGroup = true;
@@ -145,7 +142,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      *
      * @return {@link RedirectUtils#NEUE_GRUPPE_XHTML} || {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
-    public String userAwareEditGroup(@Nonnull final User user) {
+    public String userAwareEditGroup(final User user) {
         this.checkEntityList();
         this.isNewGroup = false;
         final Gruppe gruppeToCheck = this.entityList.getRowData();
@@ -161,8 +158,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      *
      * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
-    @Nonnull
-    public String saveGroup(@CheckForNull final Set<User> members) {
+    public String saveGroup(final Set<User> members) {
         final FacesContext context = FacesContext.getCurrentInstance();
         if (members != null) {
             try {
@@ -198,8 +194,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param user {@link User}
      * @return List<Gruppe>
      */
-    @Nonnull
-    public DataModel<Gruppe> userAwareFindAllGruppen(@CheckForNull final User user) {
+    public DataModel<Gruppe> userAwareFindAllGruppen(final User user) {
         this.checkEntityList();
         if (user != null) {
             switch (user.getRolle()) {
@@ -227,8 +222,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param user {@link User}
      * @return List<Gruppe>
      */
-    @Nonnull
-    public DataModel<Gruppe> userAwareFindAllGruppenByLeiterId(@CheckForNull final User user) {
+    public DataModel<Gruppe> userAwareFindAllGruppenByLeiterId(final User user) {
         this.checkEntityList();
         if (user != null) {
             switch (user.getRolle()) {
@@ -259,7 +253,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param loggedUser eingeloggter User
      * @return boolean
      */
-    public boolean userAwareNewGroup(@CheckForNull final User loggedUser) {
+    public boolean userAwareNewGroup(final User loggedUser) {
         if (loggedUser != null) {
             switch (loggedUser.getRolle()) {
                 case KUNDE:
@@ -284,7 +278,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * @param loggedUser eingeloggter User
      * @return boolean
      */
-    public boolean userAwareIsGroupLeader(@CheckForNull final User loggedUser, @CheckForNull final Gruppe currentGroup) {
+    public boolean userAwareIsGroupLeader(final User loggedUser, final Gruppe currentGroup) {
         if (loggedUser != null) {
             switch (loggedUser.getRolle()) {
                 case KUNDE:
@@ -314,7 +308,6 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      *
      * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
-    @Nonnull
     public String switchToGruppe() {
         return RedirectUtils.GRUPPE_TABELLE_XHTML;
     }
@@ -322,7 +315,6 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     protected Class<Gruppe> getRepositoryClass() {
         return Gruppe.class;
@@ -331,7 +323,6 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     protected String getQueryCommand() {
         return Gruppe.NAMED_QUERY_QUERY;
@@ -340,7 +331,6 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     protected String getSelect() {
         return Gruppe.NAMED_QUERY_NAME;
@@ -350,7 +340,7 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
      * {@inheritDoc}
      */
     @Override
-    protected List<Gruppe> uncheckedSolver(@Nonnull final Object var) {
+    protected List<Gruppe> uncheckedSolver(final Object var) {
         final List<Gruppe> result = new ArrayList<>();
         if (var instanceof List) {
             for (int i = 0; i < ((List<?>) var).size(); i++) {

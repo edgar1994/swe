@@ -7,7 +7,6 @@ import de.hsb.app.swe.utils.RedirectUtils;
 import de.hsb.app.swe.utils.StringUtils;
 import de.hsb.app.swe.utils.UserUtils;
 
-import javax.annotation.Nonnull;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -193,7 +192,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      * @param loggedUser eingeloggter {@link User}
      * @return boolean
      */
-    public boolean isKundeOrUser(@Nonnull final User loggedUser) {
+    public boolean isKundeOrUser(final User loggedUser) {
         return UserUtils.isCustomer(loggedUser) || UserUtils.isUser(loggedUser);
     }
 
@@ -213,7 +212,6 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     protected Class<User> getRepositoryClass() {
         return User.class;
@@ -222,7 +220,6 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     protected String getQueryCommand() {
         return User.NAMED_QUERY_QUERY;
@@ -231,7 +228,6 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     /**
      * {@inheritDoc}
      */
-    @Nonnull
     @Override
     protected String getSelect() {
         return User.NAMED_QUERY_NAME;
@@ -281,7 +277,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      * {@inheritDoc}
      */
     @Override
-    protected List<User> uncheckedSolver(@Nonnull final Object var) {
+    protected List<User> uncheckedSolver(final Object var) {
         final List<User> result = new ArrayList<>();
         if (var instanceof List) {
             for (int i = 0; i < ((List<?>) var).size(); i++) {

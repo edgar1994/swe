@@ -1,6 +1,5 @@
 package de.hsb.app.swe.utils;
 
-import javax.annotation.Nonnull;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -20,7 +19,7 @@ public class DateUtils {
      * @param date {@link Date}
      * @return "dd.MM.yyyy"
      */
-    public static String formatedDateDDMMYYYY(@Nonnull final Date date) {
+    public static String formatedDateDDMMYYYY(final Date date) {
         return new SimpleDateFormat(DATE_TIME_DDMMYYYY, Locale.GERMAN).format(date);
     }
 
@@ -30,7 +29,7 @@ public class DateUtils {
      * @param date {@link Date}
      * @return "h:m:s,S"
      */
-    public static String formatedDateHMSS(@Nonnull final Date date) {
+    public static String formatedDateHMSS(final Date date) {
         return new SimpleDateFormat(DATE_TIME_HMSS, Locale.GERMAN).format(date);
     }
 }
