@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
 >
 <h:head>
     <title>#{msg['NEUEGRUPPE.TITEL']}</title>
@@ -46,6 +48,8 @@
                 <h:panelGroup>
                     <p:inputText id="titel" value="#{projektController.selectedEntity.titel}" required="true"
                                  requiredMessage="#{msg['NEUESPROJEKT.TITEL.MESSAGE']}">
+                        <f:validator validatorId="titleValidator"/>
+                        <p:ajax event="change" listener="#{projektController.doesTitleExists()}" update="growl"/>
                     </p:inputText>
                 </h:panelGroup>
                 <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.ABSCHLUSSDATUM']}" for="abschlussdatum"/>
@@ -53,14 +57,14 @@
                     <p:calendar id="abschlussdatum" value="#{projektController.selectedEntity.abschlussdatum}"
                                 mode="popup" navigator="true"
                                 showOn="button" pattern="dd.MM.yyy" required="true"
-                                requiredMessage="Gültigkeitsdatum wir benötigt."/>
+                                requiredMessage="#{msg['PROJECT.VALIDATOR.MESSAGE.SAVE.DETAIL.DUEDATE']}"/>
                 </h:panelGroup>
-                <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.BESCHREIBUNG']}" for="beschreibung"/>
+                <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.BESCHREIBUNG']}" for="description"/>
                 <h:panelGroup>
-                    <p:inputTextarea id="beschreibung" value="#{projektController.selectedEntity.beschreibung}"/>
+                    <p:inputTextarea id="description" value="#{projektController.selectedEntity.beschreibung}"/>
                 </h:panelGroup>
             </h:panelGrid>
-            <p:dataTable id="gruppeTabelle" var="gruppe"
+            <p:dataTable id="groupTable" var="gruppe"
                          value="#{gruppeController.userAwareFindAllGruppenByLeiterId(loginController.user)}"
                          rowClasses="odd,even" headerClass="header">
                 <p:column>
@@ -94,7 +98,8 @@
                 </p:column>
             </p:dataTable>
             <p:commandButton value="#{msg['BUTTON.SPEICHERN']}"
-                             action="#{projektController.saveProject(ticketController.getTicketList())}"/>
+                             action="#{projektController.saveProject(ticketController.getTicketList())}"
+                             update="growl"/>
             <p:commandButton value="#{msg['BUTTON.ABBRECHEN']}"
                              action="#{projektController.switchToProjekt()}"
                              immediate="true"/>

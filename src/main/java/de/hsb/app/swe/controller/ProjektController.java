@@ -7,13 +7,8 @@ import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.Ticket;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
-import de.hsb.app.swe.utils.GruppeUtils;
-import de.hsb.app.swe.utils.ProjectUtils;
-import de.hsb.app.swe.utils.RedirectUtils;
-import de.hsb.app.swe.utils.UserUtils;
+import de.hsb.app.swe.utils.*;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -65,6 +60,35 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
             return this.selectedEntity.getTicket().isEmpty();
         }
         return true;
+    }
+
+    /**
+     * Findet alle Titel die existierende Projekte haben und liefert sie als {@link List<String>} zurueck.
+     *
+     * @return {@link List<String>}
+     */
+    private List<String> findAllProjectTitles() {
+        final Query query = this.em.createQuery("select pr.titel from Projekt pr");
+        return StringUtils.uncheckedSolver(query.getResultList());
+    }
+
+    /**
+     * Prueft ob der uebergebene Titel existiert.
+     *
+     * @return boolean.
+     */
+    public boolean doesTitleExists() {
+        final FacesContext context = FacesContext.getCurrentInstance();
+        if (this.isNewProject) {
+            final List<String> titles = this.findAllProjectTitles();
+            if (titles.contains(this.selectedEntity.getTitel())) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.SAVE.SUMMARY.FAILED"),
+                        this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.SAVE.DETAIL.EXISTS")));
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -212,6 +236,9 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
             for (final Ticket ticket : tickets) {
                 ticket.setProjekt(this.selectedEntity);
             }
+            if (this.isNewProject && this.doesTitleExists()) {
+                return RedirectUtils.NEUES_PROJEKT_XHTML;
+            }
             try {
                 this.utx.begin();
                 this.selectedEntity.setTicket(tickets);
@@ -220,21 +247,21 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
                 this.utx.commit();
                 if (this.isNewProject) {
                     context.addMessage(null, new FacesMessage(
-                            this.messageService.getMessage("PROJECT.MESSAGE.SAVE.SUMMARY.NEW"),
+                            this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.SAVE.SUMMARY.NEW"),
                             this.messageService.getMessage(
-                                    "PROJECT.MESSAGE.SAVE.DETAIL.NEW", this.selectedEntity.getTitel())));
+                                    "PROJECT.VALIDATOR.MESSAGE.SAVE.DETAIL.NEW", this.selectedEntity.getTitel())));
                 } else {
                     context.addMessage(null, new FacesMessage(
-                            this.messageService.getMessage("PROJECT.MESSAGE.SAVE.SUMMARY.EDIT"),
+                            this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.SAVE.SUMMARY.EDIT"),
                             this.messageService.getMessage(
-                                    "PROJECT.MESSAGE.SAVE.DETAIL.EDIT", this.selectedEntity.getTitel())));
+                                    "PROJECT.VALIDATOR.MESSAGE.SAVE.DETAIL.EDIT", this.selectedEntity.getTitel())));
                 }
                 this.logger.info("LOG.PROJECT.INFO.SAVE.SUCCESSFULL", this.selectedEntity.getId());
                 return RedirectUtils.PROJEKT_TABELLE_XHTML;
             } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                     RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        this.messageService.getMessage("PROJECT.MESSAGE.SAVE.SUMMARY.FAILED"),
+                        this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.SAVE.SUMMARY.FAILED"),
                         this.messageService.getMessage(
                                 "PROJECT.MESSAGE.SAVE.DETAIL.FAILED", this.selectedEntity.getTitel())));
                 this.logger.error("LOG.PROJECT.ERROR.SAVE.FAILED", e.getMessage());

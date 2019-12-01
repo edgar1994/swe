@@ -3,7 +3,6 @@ package de.hsb.app.swe.model;
 import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +19,6 @@ public class Projekt {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Size(min = 3, max = 30)
     private String titel;
 
     @NotNull
