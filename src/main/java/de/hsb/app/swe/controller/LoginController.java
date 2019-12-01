@@ -74,6 +74,10 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                 return RedirectUtils.LOGIN_INDEX_XHTML;
             }
         } else {
+            context.addMessage(null, new FacesMessage(
+                    this.messageService.getMessage(""),
+                    this.messageService.getMessage("")));
+            this.user = null;
             this.logger.error("LOG.LOGIN.MORETHANONE", this.username, this.passwort);
             return null;
         }
@@ -88,6 +92,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
         if (userList.size() == 1) {
             this.user = userList.get(0);
         } else {
+            this.user = null;
             this.logger.error("LOG.LOGIN.MORETHANONE", this.username, this.passwort);
         }
     }

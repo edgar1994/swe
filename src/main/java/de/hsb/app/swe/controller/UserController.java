@@ -16,6 +16,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.persistence.Query;
+import javax.transaction.*;
 import java.util.*;
 
 /**
@@ -233,9 +234,56 @@ public class UserController extends AbstractCrudRepository<User> {
      *
      * @return {@link RedirectUtils#USER_TABELLE_XHTML}.
      */
-    public String deleteRow() {
-        this.delete();
+    public String deleteRow(final User loggedUser) {
+        if (loggedUser != null) {
+            this.delete(loggedUser);
+        }
         return RedirectUtils.USER_TABELLE_XHTML;
+    }
+
+    /**
+     * Loescht einen User sofern er es nicht selbst ist und ADMIN ist.
+     *
+     * @param loggedUser Eingeloggter {@link User}
+     */
+    private boolean delete(final User loggedUser) {
+        final FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            if (loggedUser != null && UserUtils.isAdmin(loggedUser)) {
+                this.selectedEntity = this.entityList.getRowData();
+                this.utx.begin();
+                if (this.selectedEntity != null && !UserUtils.compareUserById(loggedUser, this.selectedEntity)) {
+                    for (Gruppe gruppe : this.selectedEntity.getGruppen()) {
+                        gruppe.getMitglieder().removeIf(user -> UserUtils.compareUserById(user, this.selectedEntity));
+                        gruppe = this.em.merge(gruppe);
+                        this.em.persist(gruppe);
+                    }
+                    this.selectedEntity = this.em.merge(this.selectedEntity);
+                    this.em.remove(this.selectedEntity);
+                    this.entityList.setWrappedData(this.em.createNamedQuery(this.getSelect()).getResultList());
+                    this.utx.commit();
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            this.messageService.getMessage("GRUPPE.DELETE.MESSAGE.SUCCESS.SUMMARY"),
+                            this.messageService.getMessage("GRUPPE.DELETE.MESSAGE.SUCCESS.DETAIL")
+                    ));
+                    return true;
+                } else {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            this.messageService.getMessage("GRUPPE.DELETE.MESSAGE.FAILED.SUMMARY"),
+                            this.messageService.getMessage("GRUPPE.DELETE.MESSAGE.FAILED.DETAIL.ITSELF")));
+                    return false;
+                }
+            }
+        } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
+                RollbackException | HeuristicMixedException |
+                HeuristicRollbackException e) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    this.messageService.getMessage("GRUPPE.DELETE.MESSAGE.FAILED.SUMMARY"),
+                    this.messageService.getMessage("GRUPPE.DELETE.MESSAGE.FAILED.DETAIL.ERROR", e.getMessage())
+            ));
+            this.logger.error("GRUPPE.DELETE.MESSAGE.FAILED.DETAIL.ERROR", e);
+        }
+        return false;
     }
 
     /**
