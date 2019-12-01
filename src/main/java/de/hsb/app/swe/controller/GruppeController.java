@@ -6,6 +6,7 @@ import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
 import de.hsb.app.swe.utils.ListUtils;
 import de.hsb.app.swe.utils.RedirectUtils;
+import de.hsb.app.swe.utils.StringUtils;
 import de.hsb.app.swe.utils.UserUtils;
 
 import javax.faces.application.FacesMessage;
@@ -110,6 +111,36 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     }
 
     /**
+     * Findet alle Gruppentitel die bereits in der Datenbank gespeichert wurden.
+     *
+     * @return {@link List<String>}
+     */
+    private List<String> findAllGrouptitles() {
+        final Query query = this.em.createQuery("select gr.titel from Gruppe gr");
+        return StringUtils.uncheckedSolver(query.getResultList());
+    }
+
+    /**
+     * Wenn der Titel bereits existiert wird eine {@link FacesMessage} geschmissen.
+     *
+     * @return boolean
+     */
+    public boolean doesGrouptitleExists() {
+        if (this.isNewGroup && this.selectedEntity != null) {
+            final FacesContext context = FacesContext.getCurrentInstance();
+            final List<String> titles = this.findAllGrouptitles();
+            if (titles.contains(this.selectedEntity.getTitel())) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        this.messageService.getMessage("GROUP.MESSAGE.NEWGROUP.FAILED.SUMMARY"),
+                        this.messageService.getMessage("GROUP.VALIDATOR.MESSAGE.SAVE.DETAIL.EXISTS")
+                ));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Erstellt eine neue {@link Gruppe} setzt den uebergenen {@link User} loggedUser als Leiter und fuegt ihn als
      * Mitglied hinzu. Redirected auf {@link RedirectUtils#NEUE_GRUPPE_XHTML}.
      *
@@ -161,6 +192,9 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     public String saveGroup(final Set<User> members) {
         final FacesContext context = FacesContext.getCurrentInstance();
         if (members != null) {
+            if (this.isNewGroup && this.doesGrouptitleExists()) {
+                return RedirectUtils.NEUE_GRUPPE_XHTML;
+            }
             try {
                 this.utx.begin();
                 this.selectedEntity.setMitglieder(members);

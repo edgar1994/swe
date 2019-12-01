@@ -42,9 +42,9 @@
                          headerClass="header"
                          footerClass="footer">
                 <h:outputLabel value="#{msg['NEUEGRUPPE.TABLE.TITEL']}" for="titel"/>
-                <p:inputText id="titel" value="#{gruppeController.selectedEntity.titel}"
-                             onchange="#{gruppeController.selectedEntity.titel}" required="true"
+                <p:inputText id="titel" value="#{gruppeController.selectedEntity.titel}" required="true"
                              requiredMessage="#{msg['NEUEGRUPPE.TITEL.MESSAGE']}">
+                    <p:ajax event="change" listener="#{gruppeController.doesGrouptitleExists}" update="growl"/>
                 </p:inputText>
             </h:panelGrid>
             <p:dataTable id="userTabelle" var="user"
@@ -80,7 +80,7 @@
             </p:dataTable>
             <p:commandButton
                     action="#{gruppeController.saveGroup(userController.groupmembersSet)}"
-                    value="#{msg['BUTTON.SPEICHERN']}"/>
+                    value="#{msg['BUTTON.SPEICHERN']}" update="growl"/>
             <p:commandButton
                     action="#{gruppeController.switchToGruppe}"
                     value="#{msg['BUTTON.ABBRECHEN']}"
