@@ -5,7 +5,6 @@ import de.hsb.app.swe.enumeration.Status;
 import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Date;
 
@@ -30,7 +29,6 @@ public class Ticket {
     @NotNull
     private Date erstellungsdatum;
 
-    @Size(min = 3, max = 30)
     @NotNull
     private String titel;
 

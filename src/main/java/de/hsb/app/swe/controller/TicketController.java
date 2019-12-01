@@ -67,6 +67,26 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
     }
 
     /**
+     * Prueft ob es den Tickettitel bereits im Projekt existiert. Schmeist eine GrowlMessage, wenn es existiert.
+     *
+     * @param project {@link Projekt}
+     */
+    public boolean doesTicketExistsInProject(final Projekt project) {
+        final FacesContext context = FacesContext.getCurrentInstance();
+        if (this.isNewTicket && project != null) {
+            for (final Ticket ticket : project.getTicket()) {
+                if (ticket.getTitel().equalsIgnoreCase(this.selectedEntity.getTitel())) {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            this.messageService.getMessage("TICKET.VALIDATOR.MESSAGE.SAVE.SUMMARY"),
+                            this.messageService.getMessage("TICKET.VALIDATOR.MESSAGE.SAVE.DETAIL.EXISTS")));
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Speichert und fuegt ein {@link Ticket} an ein {@link Projekt} an und redirected auf
      * {@link RedirectUtils#PROJEKT_ANSICHT_XHTML}.
      *
@@ -76,6 +96,9 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
     public String saveNewTicketToProject(final Projekt projekt) {
         final FacesContext context = FacesContext.getCurrentInstance();
         if (projekt != null && this.selectedEntity != null) {
+            if (this.isNewTicket && this.doesTicketExistsInProject(projekt)) {
+                return RedirectUtils.NEUES_TICKET_XHTML;
+            }
             projekt.getTicket().removeIf(ticket -> ticket.getId() == this.selectedEntity.getId());
             projekt.getTicket().add(this.selectedEntity);
             this.selectedEntity.setProjekt(projekt);

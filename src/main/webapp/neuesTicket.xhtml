@@ -38,8 +38,14 @@
                 <p:growl id="growl" showDetail="true" sticky="true"/>
                 <p:panelGrid columns="2">
                     <p:outputLabel value="#{msg['NEUESTICKET.TICKETTITEL']}" for="titel"/>
-                    <p:inputText id="titel" value="#{ticketController.selectedEntity.titel}" required="true"
-                                 requiredMessage="#{msg['NEUESTICKET.MESSAGES.REQUIRED.TITEL']}"/>
+                    <p:inputText id="titel" value="#{ticketController.selectedEntity.titel}"
+                                 required="true"
+                                 requiredMessage="#{msg['NEUESTICKET.MESSAGES.REQUIRED.TITEL']}">
+                        <f:validator validatorId="titleValidator"/>
+                        <p:ajax event="change"
+                                listener="#{ticketController.doesTicketExistsInProject(projektController.selectedEntity)}"
+                                update="growl"/>
+                    </p:inputText>
                     <p:outputLabel value="#{msg['NEUESTICKET.ABSCHLUSSDATUM']}" for="duedate"/>
                     <p:calendar id="duedate" value="#{ticketController.selectedEntity.abschlussdatum}" required="true"
                                 requiredMessage="#{msg['NEUESTICKET.MESSAGES.REQUIRED.DUEDATE']}"/>
@@ -66,9 +72,7 @@
                     </h:panelGroup>
                 </p:panelGrid>
                 <p:commandButton action="#{ticketController.saveNewTicketToProject(projektController.selectedEntity)}"
-                                 value="#{msg['BUTTON.SPEICHERN']}"
-                                 actionListener="#{growlView.showAction(msg['NEUESTICKET.MESSAGES.SUMMARY'], msg['NEUESTICKET.MESSAGES.TEXT'])}"
-                />
+                                 value="#{msg['BUTTON.SPEICHERN']}" update="growl"/>
             </h:form>
         </div>
         <div id="right">
