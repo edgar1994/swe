@@ -55,7 +55,7 @@
                            immediate="true"/>
         </h:panelGroup>
         <h:panelGroup/>
-        <p:commandButton action="${loginController.login}" value="#{msg['LOGIN.LOGIN']}"/>
+        <p:commandButton action="${loginController.login}" value="#{msg['LOGIN.LOGIN']}" update="growl"/>
     </p:panelGrid>
 </h:form>
 <f:event listener="#{initializerController.emptyMethod}" type="preRenderComponent"/>

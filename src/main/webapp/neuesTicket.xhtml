@@ -48,7 +48,9 @@
                     </p:inputText>
                     <p:outputLabel value="#{msg['NEUESTICKET.ABSCHLUSSDATUM']}" for="duedate"/>
                     <p:calendar id="duedate" value="#{ticketController.selectedEntity.abschlussdatum}" required="true"
-                                requiredMessage="#{msg['NEUESTICKET.MESSAGES.REQUIRED.DUEDATE']}"/>
+                                requiredMessage="#{msg['NEUESTICKET.MESSAGES.REQUIRED.DUEDATE']}">
+                        <f:validator validatorId="dateAfterValidator"/>
+                    </p:calendar>
                     <p:outputLabel value="#{msg['NEUESTICKET.DESCRIPTION']}" for="description"/>
                     <p:inputTextarea id="description" value="#{ticketController.selectedEntity.beschreibung}"/>
                     <p:outputLabel value="#{msg['NEUESTICKET.PROCESSOR']}"/>

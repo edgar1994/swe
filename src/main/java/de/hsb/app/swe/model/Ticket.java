@@ -3,7 +3,6 @@ package de.hsb.app.swe.model;
 import de.hsb.app.swe.enumeration.Status;
 
 import javax.persistence.*;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.Date;
@@ -20,7 +19,6 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Future
     @Temporal(TemporalType.DATE)
     @NotNull
     private Date abschlussdatum;

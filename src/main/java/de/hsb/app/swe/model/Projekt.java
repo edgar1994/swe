@@ -1,7 +1,6 @@
 package de.hsb.app.swe.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,9 +34,7 @@ public class Projekt {
     @NotNull
     private Date erstellungsdatum;
 
-    @Future
     @Temporal(TemporalType.DATE)
-    @NotNull
     private Date abschlussdatum;
 
     private String beschreibung;

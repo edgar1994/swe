@@ -56,8 +56,11 @@
                 <h:panelGroup>
                     <p:calendar id="abschlussdatum" value="#{projektController.selectedEntity.abschlussdatum}"
                                 mode="popup" navigator="true"
-                                showOn="button" pattern="dd.MM.yyy" required="true"
-                                requiredMessage="#{msg['PROJECT.VALIDATOR.MESSAGE.SAVE.DETAIL.DUEDATE']}"/>
+                                showOn="button" pattern="dd.MM.yyy"
+                                required="true"
+                                requiredMessage="#{msg['PROJECT.VALIDATOR.MESSAGE.SAVE.DETAIL.DUEDATE']}">
+                        <f:validator validatorId="dateAfterValidator"/>
+                    </p:calendar>
                 </h:panelGroup>
                 <h:outputLabel value="#{msg['NEUESPROJEKT.TABLE.BESCHREIBUNG']}" for="description"/>
                 <h:panelGroup>

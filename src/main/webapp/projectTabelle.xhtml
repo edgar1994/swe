@@ -46,7 +46,7 @@
                     <p:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.LEITER']}</f:facet>
                         <h:outputText
-                                value="#{userController.formatedName(userController.findById(projekt.leiterId).get(),
+                                value="#{userController.formatedName(userController.findById(projekt.leiterId),
                                 enumController.rolleEmployee)}"/>
                     </p:column>
                     <p:column>
