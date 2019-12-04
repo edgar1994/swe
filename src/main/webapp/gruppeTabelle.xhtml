@@ -46,7 +46,10 @@
                              value="#{gruppeController.userAwareFindAllGruppen(loginController.user)}"
                              widgetVar="gruppeTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
-                             filteredValue="#{gruppeController.filteredList}">
+                             filteredValue="#{gruppeController.filteredList}"
+                             paginator="true" rows="10"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,10,15">
                     <p:column headerText="#{msg['GRUPPENTABELLE.GRUPPENTITEL']}" filterBy="#{gruppe.titel}"
                               filterMatchMode="contains">
                         <h:outputText value="#{gruppe.titel}"/>

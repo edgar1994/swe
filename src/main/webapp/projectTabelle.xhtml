@@ -49,8 +49,10 @@
                              widgetVar="projektTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
                              filteredValue="#{gruppeController.filteredList}"
-
-                             rowClasses="odd,even" headerClass="header">
+                             rowClasses="odd,even" headerClass="header"
+                             paginator="true" rows="10"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,10,15">
                     <p:column headerText="#{msg['PROJEKTTABELLE.TITEL']}" filterBy="#{projekt.titel}"
                               filterMatchMode="contains">
                         <h:outputText value="#{projekt.titel}"/>

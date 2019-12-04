@@ -46,7 +46,10 @@
 
                 <p:dataTable var="user" value="#{userController.entityList}" widgetVar="userTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
-                             filteredValue="#{userController.filteredList}">
+                             filteredValue="#{userController.filteredList}"
+                             paginator="true" rows="10"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,10,15">
                     <f:facet name="header">
 
                     </f:facet>

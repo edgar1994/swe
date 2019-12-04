@@ -48,7 +48,10 @@
                 <ui:insert name="content">
                     <p:dataTable id="ticketTabelle" var="ticket"
                                  value="#{projektController.selectedEntity.ticket}"
-                                 rowClasses="odd,even" headerClass="header">
+                                 rowClasses="odd,even" headerClass="header"
+                                 paginator="true" rows="10"
+                                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                 rowsPerPageTemplate="5,10,15">
                         <p:column>
                             <f:facet name="header">#{msg['PROJEKTANSICHT.TITEL']}</f:facet>
                             <p:outputLabel value="#{ticket.titel}"/>
