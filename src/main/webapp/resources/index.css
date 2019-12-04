@@ -9,6 +9,16 @@ body {
 #content {
     width: 100%;
     flex: 0 0 75%;
+    position: relative;
+    margin-top: 5px;
+}
+
+#contentheader {
+    height: 10%;
+}
+
+#spracheLogout {
+    float: right;
 }
 
 #wrapper {

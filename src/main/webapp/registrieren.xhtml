@@ -12,63 +12,69 @@
 </h:head>
 <body>
 <h:form>
-    <div align="right">
-        <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='${languageHandler.actionLanguage("de")}'
+    <div id="contentheader">
+        <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
                          immediate="true"/>
-        <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='${languageHandler.actionLanguage("en")}'
+        <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
+                         action="${userController.switchToUser()}"
                          immediate="true"/>
-        <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}' immediate="true"/>
-    </div>
-    <div>
-        <h:form>
-            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
-            <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
-                             action="${userController.switchToUser()}"
-                             immediate="true"/>
-            <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
-                             action="${gruppeController.switchToGruppe()}"
-                             immediate="true"/>
-            <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
-                             action="${projektController.switchToProjekt()}"
-                             immediate="true"/>
-        </h:form>
-    </div>
-    <div id="content">
-        <ui:insert name="content">
-            <h:form>
-                <p:growl id="growl" showDetail="true" sticky="true"/>
-                <h:panelGrid var="gruppe" value="#{userController.selectedEntity}" columns="2"
-                             headerClass="header"
-                             footerClass="footer">
-                    <p:outputLabel value="#{msg['REGISTRIEREN.USERNAME']}"/>
-                    <p:inputText value="#{loginController.selectedEntity.username}" required="true"
-                                 requiredMessage="#{msg['REGISTRIREN.REQUIRED.MESSAGE']}">
-                        <f:validator validatorId="usernameValidator"/>
-                    </p:inputText>
-                    <p:outputLabel value="#{msg['REGISTRIEREN.PASSWORT']}"/>
-                    <p:password value="#{loginController.selectedEntity.passwort}"/>
-                    <p:outputLabel value="#{msg['REGISTRIEREN.VORNAME']}"/>
-                    <p:inputText value="#{loginController.selectedEntity.vorname}"/>
-                    <p:outputLabel value="#{msg['REGISTRIEREN.NACHNAME']}"/>
-                    <p:inputText value="#{loginController.selectedEntity.nachname}"/>
-                    <p:outputLabel value="#{msg['REGISTRIEREN.STRASSE']}"/>
-                    <p:inputText value="#{loginController.selectedEntity.adresse.strasse}"/>
-                    <p:outputLabel value="#{msg['REGISTRIEREN.PLZ']}"/>
-                    <p:inputText value="#{loginController.selectedEntity.adresse.plz}"/>
-                    <p:outputLabel value="#{msg['REGISTRIEREN.STADT']}"/>
-                    <p:inputText value="#{loginController.selectedEntity.adresse.stadt}"/>
+        <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
+                         action="${gruppeController.switchToGruppe()}"
+                         immediate="true"/>
+        <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
+                         action="${projektController.switchToProjekt()}"
+                         immediate="true"/>
 
-                </h:panelGrid>
-                <p:commandButton
-                        action="#{loginController.speichern()}"
-                        value="#{msg['BUTTON.SPEICHERN']}"
-                        actionListener="#{growlView.showAction(msg['NEUERUSER.MESSAGE.SUMMARY'], msg['NEUERUSER.MESSAGE'])}"
-                        update=":growl"/>
-                <p:commandButton action="#{userController.cancel}" value="#{msg['BUTTON.ABBRECHEN']}"
-                                 immediate="true"/>
-            </h:form>
-        </ui:insert>
+        <div id="spracheLogout">
+            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
+                             action='#{languageHandler.actionLanguage("de")}'/>
+            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
+                             action='#{languageHandler.actionLanguage("en")}'>
+                <p:ajax event="click"/>
+            </p:commandButton>
+            <p:commandButton id="buttonAusloggen" value="#{msg['LOGIN.AUSLOGGEN']}"
+                             action='${loginController.logout}'
+                             immediate="true"/>
+        </div>
+
     </div>
 </h:form>
+<div id="content">
+    <ui:insert name="content">
+        <h:form>
+            <p:growl id="growl" showDetail="true" sticky="true"/>
+            <h:panelGrid var="gruppe" value="#{userController.selectedEntity}" columns="2"
+                         headerClass="header"
+                         footerClass="footer">
+                <p:outputLabel value="#{msg['REGISTRIEREN.USERNAME']}"/>
+                <p:inputText value="#{loginController.selectedEntity.username}" required="true"
+                             requiredMessage="#{msg['REGISTRIREN.REQUIRED.MESSAGE']}">
+                    <f:validator validatorId="usernameValidator"/>
+                </p:inputText>
+                <p:outputLabel value="#{msg['REGISTRIEREN.PASSWORT']}"/>
+                <p:password value="#{loginController.selectedEntity.passwort}"/>
+                <p:outputLabel value="#{msg['REGISTRIEREN.VORNAME']}"/>
+                <p:inputText value="#{loginController.selectedEntity.vorname}"/>
+                <p:outputLabel value="#{msg['REGISTRIEREN.NACHNAME']}"/>
+                <p:inputText value="#{loginController.selectedEntity.nachname}"/>
+                <p:outputLabel value="#{msg['REGISTRIEREN.STRASSE']}"/>
+                <p:inputText value="#{loginController.selectedEntity.adresse.strasse}"/>
+                <p:outputLabel value="#{msg['REGISTRIEREN.PLZ']}"/>
+                <p:inputText value="#{loginController.selectedEntity.adresse.plz}"/>
+                <p:outputLabel value="#{msg['REGISTRIEREN.STADT']}"/>
+                <p:inputText value="#{loginController.selectedEntity.adresse.stadt}"/>
+
+            </h:panelGrid>
+            <p:commandButton
+                    action="#{loginController.speichern()}"
+                    value="#{msg['BUTTON.SPEICHERN']}"
+                    actionListener="#{growlView.showAction(msg['NEUERUSER.MESSAGE.SUMMARY'], msg['NEUERUSER.MESSAGE'])}"
+                    update=":growl"/>
+            <p:commandButton action="#{userController.cancel}" value="#{msg['BUTTON.ABBRECHEN']}"
+                             immediate="true"/>
+        </h:form>
+    </ui:insert>
+</div>
+
 </body>
 </html>

@@ -12,15 +12,9 @@
 </h:head>
 <h:body>
     <h:form>
-        <div align="right">
-            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
-            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
-            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
-        </div>
-    </h:form>
-    <div>
-        <h:form>
-            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
+        <div id="contentheader">
+            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
+                             immediate="true"/>
             <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
                              action="${userController.switchToUser()}"
                              immediate="true"/>
@@ -30,11 +24,26 @@
             <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
                              action="${projektController.switchToProjekt()}"
                              immediate="true"/>
-        </h:form>
-    </div>
-    <div id="wrapper">
-        <div id="content">
-            <h:form>
+
+            <div id="spracheLogout">
+                <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
+                                 action='#{languageHandler.actionLanguage("de")}'/>
+                <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
+                                 action='#{languageHandler.actionLanguage("en")}'>
+                    <p:ajax event="click"/>
+                </p:commandButton>
+                <p:commandButton id="buttonAusloggen" value="#{msg['LOGIN.AUSLOGGEN']}"
+                                 action='${loginController.logout}'
+                                 immediate="true"/>
+            </div>
+
+        </div>
+    </h:form>
+    <h:form>
+        <div id="wrapper">
+
+            <div id="content">
+
                 <p:growl id="growl" showDetail="true" sticky="true"/>
                 <ui:insert name="content">
                     <p:dataTable id="ticketTabelle" var="ticket"
@@ -56,7 +65,8 @@
                         </p:column>
                         <p:column>
                             <f:facet name="header">#{msg['PROJEKTANSICHT.ABSCHLUSSDATUM']}</f:facet>
-                            <p:outputLabel value="#{dateController.getFormatedDateDDMMYYYY(ticket.abschlussdatum)}"/>
+                            <p:outputLabel
+                                    value="#{dateController.getFormatedDateDDMMYYYY(ticket.abschlussdatum)}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">#{msg['PROJEKTANSICHT.CHANGETICKET']}</f:facet>
@@ -76,57 +86,58 @@
                                  value="#{msg['PROJEKTANSICHT.BUTTON.NEU']}"
                                  rendered="#{projektController.isLeader(loginController.user,
                                     projektController.selectedEntity)}"/>
-            </h:form>
-        </div>
-        <div id="right">
-            <div id="rightAnsicht">
-                <h2>#{msg['PROJEKTANSICHT.DETAILS.INFORMATIONEN']}</h2>
-                <h3>#{msg['PROJEKTANSICHT.DETAILS.LEITER']}</h3>
-                <p:dataList styleClass="datalist-noborder"
-                            value="#{projektController.selectedEntity}"
-                            var="user">
-                    #{userController.formatedName(user.leiterId, enumController.getRolleEmployee())}
-                </p:dataList>
-                <h3>#{msg['PROJEKTANSICHT.DETAIL.EMPLOYEES']}</h3>
-                <p:dataList styleClass="datalist-noborder"
-                            value="#{userController.findAllEmployeesInProjectExceptLeader(projektController.selectedEntity)}"
-                            var="user">
-                    #{userController.formatedName(user, enumController.getRolleEmployee())}
-                </p:dataList>
-                <h3>#{msg['PROJEKTANSICHT.DETAIL.CUSTOMER']}</h3>
-                <p:dataList styleClass="datalist-noborder"
-                            value="#{userController.findAllCustomers(projektController.selectedEntity)}"
-                            var="user">
-                    #{userController.formatedName(user, enumController.getRolleCustomer())}
-                </p:dataList>
-                <h3>#{msg['PROJEKTANSICHT.DETAILS.TICKETS']}</h3>
-                <p:dataList styleClass="datalist-noborder"
-                            value="#{projektController.selectedEntity}"
-                            var="projekt">
-                    #{msg['PROJEKTANSICHT.DETAILS.GESAMT']}
-                    #{projekt.ticket.size()}
-                </p:dataList>
-                <p:dataList styleClass="datalist-noborder"
-                            value="#{projektController.selectedEntity}"
-                            var="projekt">
-                    #{msg['PROJEKTANSICHT.DETAILS.OFFEN']}
-                    #{projektController.openTickets(projektController.selectedEntity)}
-                </p:dataList>
-                <h3>#{msg['PROJEKTANSICHT.DETAILS.CREATEDDATE']}</h3>
-                <p:dataList styleClass="datalist-noborder"
-                            value="#{projektController.selectedEntity}"
-                            var="projekt">
-                    #{dateController.getFormatedDateDDMMYYYY(projekt.erstellungsdatum)}
-                </p:dataList>
-                <h3>#{msg['PROJEKTANSICHT.DETAILS.DUEDATE']}</h3>
-                <p:dataList styleClass="datalist-noborder"
-                            value="#{projektController.selectedEntity}"
-                            var="projekt">
-                    #{dateController.getFormatedDateDDMMYYYY(projekt.abschlussdatum)}
-                </p:dataList>
+
+            </div>
+            <div id="right">
+                <div id="rightAnsicht">
+                    <h2>#{msg['PROJEKTANSICHT.DETAILS.INFORMATIONEN']}</h2>
+                    <h3>#{msg['PROJEKTANSICHT.DETAILS.LEITER']}</h3>
+                    <p:dataList styleClass="datalist-noborder"
+                                value="#{projektController.selectedEntity}"
+                                var="user">
+                        #{userController.formatedName(user.leiterId, enumController.getRolleEmployee())}
+                    </p:dataList>
+                    <h3>#{msg['PROJEKTANSICHT.DETAIL.EMPLOYEES']}</h3>
+                    <p:dataList styleClass="datalist-noborder"
+                                value="#{userController.findAllEmployeesInProjectExceptLeader(projektController.selectedEntity)}"
+                                var="user">
+                        #{userController.formatedName(user, enumController.getRolleEmployee())}
+                    </p:dataList>
+                    <h3>#{msg['PROJEKTANSICHT.DETAIL.CUSTOMER']}</h3>
+                    <p:dataList styleClass="datalist-noborder"
+                                value="#{userController.findAllCustomers(projektController.selectedEntity)}"
+                                var="user">
+                        #{userController.formatedName(user, enumController.getRolleCustomer())}
+                    </p:dataList>
+                    <h3>#{msg['PROJEKTANSICHT.DETAILS.TICKETS']}</h3>
+                    <p:dataList styleClass="datalist-noborder"
+                                value="#{projektController.selectedEntity}"
+                                var="projekt">
+                        #{msg['PROJEKTANSICHT.DETAILS.GESAMT']}
+                        #{projekt.ticket.size()}
+                    </p:dataList>
+                    <p:dataList styleClass="datalist-noborder"
+                                value="#{projektController.selectedEntity}"
+                                var="projekt">
+                        #{msg['PROJEKTANSICHT.DETAILS.OFFEN']}
+                        #{projektController.openTickets(projektController.selectedEntity)}
+                    </p:dataList>
+                    <h3>#{msg['PROJEKTANSICHT.DETAILS.CREATEDDATE']}</h3>
+                    <p:dataList styleClass="datalist-noborder"
+                                value="#{projektController.selectedEntity}"
+                                var="projekt">
+                        #{dateController.getFormatedDateDDMMYYYY(projekt.erstellungsdatum)}
+                    </p:dataList>
+                    <h3>#{msg['PROJEKTANSICHT.DETAILS.DUEDATE']}</h3>
+                    <p:dataList styleClass="datalist-noborder"
+                                value="#{projektController.selectedEntity}"
+                                var="projekt">
+                        #{dateController.getFormatedDateDDMMYYYY(projekt.abschlussdatum)}
+                    </p:dataList>
+                </div>
             </div>
         </div>
-    </div>
+    </h:form>
 </h:body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>

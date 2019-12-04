@@ -14,17 +14,9 @@
 </h:head>
 <body>
 <h:form>
-    <div align="right">
-        <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'
+    <div id="contentheader">
+        <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
                          immediate="true"/>
-        <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'
-                         immediate="true"/>
-        <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
-    </div>
-</h:form>
-<div>
-    <h:form>
-        <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
         <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
                          action="${userController.switchToUser()}"
                          immediate="true"/>
@@ -34,9 +26,21 @@
         <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
                          action="${projektController.switchToProjekt()}"
                          immediate="true"/>
-    </h:form>
-</div>
 
+        <div id="spracheLogout">
+            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
+                             action='#{languageHandler.actionLanguage("de")}'/>
+            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
+                             action='#{languageHandler.actionLanguage("en")}'>
+                <p:ajax event="click"/>
+            </p:commandButton>
+            <p:commandButton id="buttonAusloggen" value="#{msg['LOGIN.AUSLOGGEN']}"
+                             action='${loginController.logout}'
+                             immediate="true"/>
+        </div>
+
+    </div>
+</h:form>
 
 <div id="content">
     <h:form id="formTag">
