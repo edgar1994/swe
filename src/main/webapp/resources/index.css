@@ -8,7 +8,7 @@ body {
 
 #content {
     width: 100%;
-    flex: 0 0 65%;
+    flex: 0 0 75%;
 }
 
 #wrapper {
@@ -17,10 +17,23 @@ body {
 
 .datalist-noborder .ui-widget-content {
     border: none;
+    align-content: center;
+}
+
+.datalist-noborder {
+    border: none;
+    align-content: center;
 }
 
 #right {
     flex: 1;
+    width: 250px;
+}
+
+#rightAnsicht {
+
+    float: right;
+
 }
 
 .customerButton {

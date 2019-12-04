@@ -63,13 +63,15 @@
                                 value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder),
                                     enumController.getRolleCustomer())}"/>
                     </p:column>
-                    <p:column filterBy="#{dateController.getFormatedDateDDMMYYYY(gruppe.erstellungsdatum)}"
+                    <p:column filterBy="#{gruppe.erstellungsdatum}"
                               filterMatchMode="contains"
                               rendered="#{loginController.adminRole()}">
 
                         <f:facet name="header">
                             #{msg['GRUPPENTABELLE.ERSTELLUNGSDATUM']}</f:facet>
-                        <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(gruppe.erstellungsdatum)}"/>
+                        <h:outputText value="#{gruppe.erstellungsdatum}">
+
+                        </h:outputText>
                     </p:column>
                     <p:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
                         <f:facet name="header">#{msg['GRUPPENTABELLE.LOESCHEN']}</f:facet>

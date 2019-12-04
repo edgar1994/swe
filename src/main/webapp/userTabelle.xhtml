@@ -16,30 +16,33 @@
     <div id="content">
 
         <h:form id="userForm">
+            <div>
+                <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
+                                 immediate="true"/>
+                <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
+                                 action="${userController.switchToUser()}"
+                                 immediate="true"/>
+                <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
+                                 action="${gruppeController.switchToGruppe()}"
+                                 immediate="true"/>
+                <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
+                                 action="${projektController.switchToProjekt()}"
+                                 immediate="true"/>
+
+
+                <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
+                                 action='#{languageHandler.actionLanguage("de")}'/>
+                <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
+                                 action='#{languageHandler.actionLanguage("en")}'>
+                    <p:ajax event="click"/>
+                </p:commandButton>
+                <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
+                                 immediate="true"/>
+
+            </div>
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
-                <div>
-                    <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
-                                     immediate="true"/>
-                    <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
-                                     action="${userController.switchToUser()}"
-                                     immediate="true"/>
-                    <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
-                                     action="${gruppeController.switchToGruppe()}"
-                                     immediate="true"/>
-                    <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
-                                     action="${projektController.switchToProjekt()}"
-                                     immediate="true"/>
 
-
-                    <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
-                                     action='#{languageHandler.actionLanguage("de")}'/>
-                    <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
-                                     action='#{languageHandler.actionLanguage("en")}'/>
-                    <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
-                                     immediate="true"/>
-
-                </div>
 
                 <p:dataTable var="user" value="#{userController.entityList}" widgetVar="userTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
@@ -59,14 +62,14 @@
                         <f:facet name="header">#{msg['USER.ADRESSE']}</f:facet>
                         <h:outputText value="#{userController.formatedAdresse(user)}"/>
                     </p:column>
-                    <p:column headerText="USER.LOESCHEN" rendered="#{loginController.adminRole()}">
+                    <p:column headerText="#{msg['USER.LOESCHEN']}" rendered="#{loginController.adminRole()}">
                         <div align="center">
                             <p:commandButton class="customerButton" action="${userController.deleteRow()}"
                                              value="#{msg['USER.LOESCHEN']}"/>
 
                         </div>
                     </p:column>
-                    <p:column headerText="USER.BEARBEITEN" rendered="#{loginController.adminRole()}">
+                    <p:column headerText="#{msg['USER.BEARBEITEN']}" rendered="#{loginController.adminRole()}">
                         <div align="center">
                             <p:commandButton class="customerButton" action="#{userController.edit}"
                                              value="#{msg['USER.BEARBEITEN']}"/>
