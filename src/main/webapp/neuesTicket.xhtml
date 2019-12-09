@@ -38,8 +38,7 @@
             </div>
 
         </div>
-    </h:form>
-    <h:form>
+
         <div id="wrapper">
             <div id="content">
                 <h:form>
@@ -47,7 +46,8 @@
                     <p:panelGrid columns="2">
                         <p:outputLabel value="#{msg['NEUESTICKET.TICKETTITEL']}" for="titel"/>
                         <p:inputText id="titel" value="#{ticketController.selectedEntity.titel}" required="true"
-                                     requiredMessage="#{msg['NEUESTICKET.MESSAGES.REQUIRED.TITEL']}"><f:validator validatorId="titleValidator"/>
+                                     requiredMessage="#{msg['NEUESTICKET.MESSAGES.REQUIRED.TITEL']}"><f:validator
+                                validatorId="titleValidator"/>
                             <p:ajax event="change"
                                     listener="#{ticketController.doesTicketExistsInProject(projektController.selectedEntity)}"
                                     update="growl"/>
@@ -84,7 +84,7 @@
                             action="#{ticketController.saveNewTicketToProject(projektController.selectedEntity)}"
                             value="#{msg['BUTTON.SPEICHERN']}"
                             actionListener="#{growlView.showAction(msg['NEUESTICKET.MESSAGES.SUMMARY'], msg['NEUESTICKET.MESSAGES.TEXT'])}"
-                    update="growl"/>
+                            update="growl"/>
                 </h:form>
             </div>
             <div id="right">

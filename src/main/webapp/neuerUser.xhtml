@@ -40,10 +40,10 @@
         </div>
 
     </div>
-</h:form>
 
-<div id="content">
-    <h:form>
+
+    <div id="content">
+
         <ui:insert name="content">
 
             <p:growl id="growl" showDetail="true" sticky="true"/>
@@ -118,9 +118,9 @@
                              action="#{userController.switchToUser}"
                              immediate="true"/>
         </ui:insert>
-    </h:form>
-</div>
 
+    </div>
+</h:form>
 
 </body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>

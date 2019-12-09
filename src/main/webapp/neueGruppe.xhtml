@@ -36,9 +36,9 @@
                              immediate="true"/>
         </div>
     </div>
-</h:form>
-<div id="content">
-    <h:form>
+
+    <div id="content">
+
         <ui:insert name="content">
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <h:panelGrid var="gruppe" value="#{gruppeController.selectedEntity}" columns="2"
@@ -92,8 +92,9 @@
                     value="#{msg['BUTTON.ABBRECHEN']}"
                     immediate="true"/>
         </ui:insert>
-    </h:form>
-</div>
+
+    </div>
+</h:form>
 </body>
 <f:event type="preRenderView" listener="#{loginController.checkLoggedIn}"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
