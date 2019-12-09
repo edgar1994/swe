@@ -41,6 +41,39 @@
             </div>
         </div>
     </h:form>
+    <h:form>
+        <div id="content">
+            <ui:insert name="content">
+                <p:dataTable id="ticketTabelle" var="ticket"
+                             value="#{ticketController.findAllUserTickets(loginController.user)}"
+                             widgetVar="ticketTabelleJS"
+                             emptyMessage="#{msg['TABELLE.EMPTY']}"
+                             filteredValue="#{gruppeController.filteredList}"
+                             rowClasses="odd,even" headerClass="header"
+                             paginator="true" rows="10"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,10,15">
+                    <p:column headerText="#{msg['PROJEKTTABELLE.TITEL']}" filterBy="#{ticket.projekt.titel}"
+                              filterMatchMode="contains">
+                        <h:outputText value="#{ticket.projekt.titel}"/>
+                    </p:column>
+                    <p:column headerText="#{msg['PROJEKTANSICHT.TITEL']}" filterBy="#{ticket.titel}"
+                              filterMatchMode="contains">
+                        <h:outputText value="#{ticket.titel}"/>
+                    </p:column>
+                    <p:column headerText="#{msg['PROJEKTANSICHT.STATUS']}" filterBy="#{ticket.status}"
+                              filterMatchMode="contains">
+                        <h:outputText value="#{msg[ticket.status.status]}"/>
+                    </p:column>
+                    <p:column headerText="#{msg['PROJEKTANSICHT.ABSCHLUSSDATUM']}"
+                              filterBy="#{ticket.projekt.abschlussdatum}"
+                              filterMatchMode="contains">
+                        <h:outputText value="#{ticket.projekt.abschlussdatum}"/>
+                    </p:column>
+                </p:dataTable>
+            </ui:insert>
+        </div>
+    </h:form>
 </h:body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 <f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
