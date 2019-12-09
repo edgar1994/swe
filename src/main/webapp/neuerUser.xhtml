@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <body>
-<h:form>
+<h:form id="userForm">
     <div id="contentheader">
         <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
                          immediate="true"/>
@@ -29,9 +29,11 @@
 
         <div id="spracheLogout">
             <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
-                             action='#{languageHandler.actionLanguage("de")}'/>
+                             action='#{languageHandler.actionLanguage("de")}'
+                             update="userForm"/>
             <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
-                             action='#{languageHandler.actionLanguage("en")}'>
+                             action='#{languageHandler.actionLanguage("en")}'
+                             update="userForm">
                 <p:ajax event="click"/>
             </p:commandButton>
             <p:commandButton id="buttonAusloggen" value="#{msg['LOGIN.AUSLOGGEN']}"
