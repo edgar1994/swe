@@ -11,18 +11,12 @@
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
+    <p:growl id="growl" showDetail="true" sticky="true"/>
 
-    <div align="right">
-        <h:form>
-            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
-            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
-            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
-        </h:form>
-    </div>
-
-    <div>
-        <h:form>
-            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
+    <h:form>
+        <div id="contentheader">
+            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
+                             immediate="true"/>
             <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
                              action="${userController.switchToUser()}"
                              immediate="true"/>
@@ -32,21 +26,37 @@
             <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
                              action="${projektController.switchToProjekt()}"
                              immediate="true"/>
-        </h:form>
-    </div>
+
+            <div id="spracheLogout">
+                <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
+                                 action='#{languageHandler.actionLanguage("de")}'/>
+                <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
+                                 action='#{languageHandler.actionLanguage("en")}'>
+                    <p:ajax event="click"/>
+                </p:commandButton>
+                <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
+                                 immediate="true"/>
+            </div>
+        </div>
+    </h:form>
     <div id="content">
         <h:form>
-            <p:growl id="growl" showDetail="true" sticky="true"/>
+
             <ui:insert name="content">
                 <p:dataTable id="gruppeTabelle" var="gruppe"
                              value="#{gruppeController.userAwareFindAllGruppen(loginController.user)}"
-                             rowClasses="odd,even" headerClass="header">
-                    <p:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENTITEL']}</f:facet>
+                             widgetVar="gruppeTabelleJS"
+                             emptyMessage="#{msg['TABELLE.EMPTY']}"
+                             filteredValue="#{gruppeController.filteredList}"
+                             paginator="true" rows="10"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,10,15">
+                    <p:column headerText="#{msg['GRUPPENTABELLE.GRUPPENTITEL']}" filterBy="#{gruppe.titel}"
+                              filterMatchMode="contains">
                         <h:outputText value="#{gruppe.titel}"/>
                     </p:column>
-                    <p:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.GRUPPENLEITER']}</f:facet>
+                    <p:column headerText="#{msg['GRUPPENTABELLE.GRUPPENLEITER']}" filterBy="#{gruppe.leiterName}"
+                              filterMatchMode="contains">
                         <h:outputText
                                 value="#{userController.formatedName(gruppe.leiterId, enumController.getRolleEmployee())}"/>
                     </p:column>
@@ -54,32 +64,34 @@
                         <f:facet name="header">#{msg['GRUPPENTABELLE.MITGLIEDER']}</f:facet>
                         <h:outputText value="#{gruppe.mitglieder.size()}"/>
                     </p:column>
-                    <p:column>
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.KUNDE']}</f:facet>
+                    <p:column headerText="#{msg['GRUPPENTABELLE.KUNDE']}" filterBy="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder),
+                                    enumController.getRolleCustomer())}"
+                              filterMatchMode="contains">
                         <h:outputText
                                 value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder),
                                     enumController.getRolleCustomer())}"/>
                     </p:column>
-                    <p:column rendered="#{loginController.adminRole()}">
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.ERSTELLUNGSDATUM']}</f:facet>
-                        <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(gruppe.erstellungsdatum)}"/>
+                    <p:column filterBy="#{gruppe.erstellungsdatum}"
+                              filterMatchMode="contains"
+                              rendered="#{loginController.adminRole()}">
+
+                        <f:facet name="header">
+                            #{msg['GRUPPENTABELLE.ERSTELLUNGSDATUM']}</f:facet>
+                        <h:outputText value="#{gruppe.erstellungsdatum}">
+
+                        </h:outputText>
                     </p:column>
-                    <p:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.LOESCHEN']}</f:facet>
-                        <p:commandButton action="#{gruppeController.deleteGruppe(loginController.user, gruppe.id)}"
-                                         value="#{msg['BUTTON.REMOVE']}"
-                                         rendered="#{gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
-                        <h:outputText value="#{msg['GRUPPENTABELLE.NURLEITER']}"
-                                      rendered="#{!gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
-                    </p:column>
-                    <p:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.EDIT']}</f:facet>
-                        <p:commandButton action="#{gruppeController.userAwareEditGroup(loginController.user)}"
-                                         value="#{msg['BUTTON.EDIT']}"
-                                         actionListener="#{userController.updateGroupMemberSet(gruppe.mitglieder)}"
-                                         rendered="#{gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
-                        <h:outputText value="#{msg['GRUPPENTABELLE.NURLEITER']}"
-                                      rendered="#{!gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
+                    <p:column class="menueButton">
+                        <p:menuButton value="#{msg['USER.TABELLE.MENUE']}">
+                            <p:menuitem value="#{msg['BUTTON.EDIT']}"
+                                        action="#{gruppeController.userAwareEditGroup(loginController.user)}"
+                                        update="growl"
+                                        actionListener="#{userController.updateGroupMemberSet(gruppe.mitglieder)}"/>
+                            <p:menuitem value="#{msg['BUTTON.REMOVE']}"
+                                        action="#{gruppeController.deleteGruppe(loginController.user, gruppe.id)}"
+                                        update="growl"/>
+                            <p:separator/>
+                        </p:menuButton>
                     </p:column>
                 </p:dataTable>
                 <p:commandButton

@@ -11,76 +11,69 @@
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
-
-
     <p:growl id="growl" showDetail="true" sticky="true"/>
-    <div id="content">
-        <h:form>
+    <h:form>
+        <div id="contentheader">
+            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
+                             immediate="true"/>
+            <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
+                             action="${userController.switchToUser()}"
+                             immediate="true"/>
+            <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
+                             action="${gruppeController.switchToGruppe()}"
+                             immediate="true"/>
+            <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
+                             action="${projektController.switchToProjekt()}"
+                             immediate="true"/>
+
+            <div id="spracheLogout">
+                <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
+                                 action='#{languageHandler.actionLanguage("de")}'/>
+                <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
+                                 action='#{languageHandler.actionLanguage("en")}'>
+                    <p:ajax event="click" update="userForm"/>
+                </p:commandButton>
+                <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
+                                 immediate="true"/>
+            </div>
+        </div>
+    </h:form>
+    <h:form id="userForm">
+        <div id="content">
             <ui:insert name="content">
+
+
                 <p:dataTable var="user" value="#{userController.entityList}" widgetVar="userTabelleJS"
-                             emptyMessage="No user found with given criteria"
-                             filteredValue="#{userController.filteredList}">
+                             emptyMessage="#{msg['TABELLE.EMPTY']}"
+                             filteredValue="#{userController.filteredList}"
+                             paginator="true" rows="10"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,10,15">
                     <f:facet name="header">
-                        <div>
-                            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
-                                             immediate="true"/>
-                            <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
-                                             action="${userController.switchToUser()}"
-                                             immediate="true"/>
-                            <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
-                                             action="${gruppeController.switchToGruppe()}"
-                                             immediate="true"/>
-                            <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
-                                             action="${projektController.switchToProjekt()}"
-                                             immediate="true"/>
 
-                            <p:outputPanel>
-                                <p:inputText id="globalFilter" onkeyup="PF('userTabelleJS').filter()"
-                                             style="width:150px"
-                                             placeholder="Enter keyword"/>
-                            </p:outputPanel>
-
-
-                            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
-                                             action='#{languageHandler.actionLanguage("de")}'/>
-                            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
-                                             action='#{languageHandler.actionLanguage("en")}'/>
-                            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
-                                             immediate="true"/>
-
-                        </div>
                     </f:facet>
-                    <p:column filterBy="#{user.nachname}" headerText="#{msg['USER.NACHNAME']}"
+                    <p:column headerText="#{msg['USER.NACHNAME']}" filterBy="#{user.nachname}"
                               filterMatchMode="contains">
                         <h:outputText value="#{user.nachname}"/>
                     </p:column>
-                    <p:column>
-                        <f:facet name="header">#{msg['USER.VORNAME']}</f:facet>
+                    <p:column headerText="#{msg['USER.VORNAME']}" filterBy="#{user.vorname}"
+                              filterMatchMode="contains">
                         <h:outputText value="#{user.vorname}"/>
                     </p:column>
                     <p:column>
                         <f:facet name="header">#{msg['USER.ADRESSE']}</f:facet>
                         <h:outputText value="#{userController.formatedAdresse(user)}"/>
                     </p:column>
-                    <p:column rendered="#{loginController.adminRole()}">
-                        <div align="center">
-                            <f:facet name="header">#{msg['USER.LOESCHEN']}</f:facet>
-
-                            <p:commandButton class="customerButton"
-                                             action="${userController.deleteRow(loginController.user)}"
-                                             value="#{msg['USER.LOESCHEN']}"
-                                             update="growl"/>
-
-                        </div>
-                    </p:column>
-                    <p:column rendered="#{loginController.adminRole()}">
-                        <div align="center">
-                            <f:facet name="header">#{msg['USER.BEARBEITEN']}</f:facet>
-
-                            <p:commandButton class="customerButton" action="#{userController.edit}"
-                                             value="#{msg['USER.BEARBEITEN']}"/>
-
-                        </div>
+                    <p:column class="menueButton" rendered="#{loginController.adminRole()}">
+                        <p:menuButton value="#{msg['USER.TABELLE.MENUE']}">
+                            <p:menuitem value="#{msg['USER.BEARBEITEN']}"
+                                        action="#{userController.edit}"
+                                        update="growl"/>
+                            <p:menuitem value="#{msg['USER.LOESCHEN']}"
+                                        action="${userController.deleteRow(loginController.user)}"
+                                        update="growl"/>
+                            <p:separator/>
+                        </p:menuButton>
                     </p:column>
                 </p:dataTable>
 
@@ -89,8 +82,9 @@
                                  value="#{msg['USER.NEU']}"/>
 
             </ui:insert>
-        </h:form>
-    </div>
+        </div>
+    </h:form>
+
 
 </h:body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>

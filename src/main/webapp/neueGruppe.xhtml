@@ -11,18 +11,10 @@
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <body>
-<div align="right">
-    <h:form>
-        <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'
+<h:form>
+    <div id="contentheader">
+        <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
                          immediate="true"/>
-        <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'
-                         immediate="true"/>
-        <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='#{loginController.logout}' immediate="true"/>
-    </h:form>
-</div>
-<div>
-    <h:form>
-        <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
         <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
                          action="${userController.switchToUser()}"
                          immediate="true"/>
@@ -32,8 +24,19 @@
         <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
                          action="${projektController.switchToProjekt()}"
                          immediate="true"/>
-    </h:form>
-</div>
+
+        <div id="spracheLogout">
+            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
+                             action='#{languageHandler.actionLanguage("de")}'/>
+            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
+                             action='#{languageHandler.actionLanguage("en")}'>
+                <p:ajax event="click"/>
+            </p:commandButton>
+            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
+                             immediate="true"/>
+        </div>
+    </div>
+</h:form>
 <div id="content">
     <h:form>
         <ui:insert name="content">
@@ -49,7 +52,10 @@
             </h:panelGrid>
             <p:dataTable id="userTabelle" var="user"
                          value="#{userController.entityListForGruppenerstellung(loginController.user)}"
-                         rowClasses="odd,even" headerClass="header">
+                         rowClasses="odd,even" headerClass="header"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                         rowsPerPageTemplate="5,10,15">
                 <p:column>
                     <f:facet name="header">#{msg['NEUERUSER.ROLLE']}</f:facet>
                     <h:outputText value="#{msg[user.rolle.rolle]}"/>

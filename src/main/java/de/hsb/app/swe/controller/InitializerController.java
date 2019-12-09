@@ -6,6 +6,7 @@ import de.hsb.app.swe.model.*;
 import de.hsb.app.swe.service.CustomLogService;
 import de.hsb.app.swe.utils.ListUtils;
 import de.hsb.app.swe.utils.StringUtils;
+import de.hsb.app.swe.utils.UserUtils;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarStyle;
 import org.primefaces.push.annotation.Singleton;
@@ -228,64 +229,84 @@ public class InitializerController {
 
         try (final ProgressBar pb = new ProgressBar(StringUtils.createLogforPB(Date.from(Instant.now()), "Create Groups"),
                 20, ProgressBarStyle.UNICODE_BLOCK)) {
-            final Gruppe group1 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "Big Group AG.");
+            final Gruppe group1 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "Big Group AG.",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(0)));
             this.saveGroup(group1, groupMemberSet1);
             pb.step();
-            final Gruppe group2 = new Gruppe(employeeResultList.get(1).getId(), new HashSet<>(), "The Order");
+            final Gruppe group2 = new Gruppe(employeeResultList.get(1).getId(), new HashSet<>(), "The Order",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(1)));
             this.saveGroup(group2, groupMemberSet1);
             pb.step();
-            final Gruppe group3 = new Gruppe(employeeResultList.get(2).getId(), new HashSet<>(), "Great Nerds");
+            final Gruppe group3 = new Gruppe(employeeResultList.get(2).getId(), new HashSet<>(), "Great Nerds",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(2)));
             this.saveGroup(group3, groupMemberSet1);
             pb.step();
-            final Gruppe group4 = new Gruppe(employeeResultList.get(3).getId(), new HashSet<>(), "Irrational Rush");
+            final Gruppe group4 = new Gruppe(employeeResultList.get(3).getId(), new HashSet<>(), "Irrational Rush",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(3)));
             this.saveGroup(group4, groupMemberSet1);
             pb.step();
-            final Gruppe group5 = new Gruppe(employeeResultList.get(4).getId(), new HashSet<>(), "Blue Snakes");
+            final Gruppe group5 = new Gruppe(employeeResultList.get(4).getId(), new HashSet<>(), "Blue Snakes",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(4)));
             this.saveGroup(group5, groupMemberSet1);
             pb.step();
-            final Gruppe group6 = new Gruppe(employeeResultList.get(5).getId(), new HashSet<>(), "Bitter Finish");
+            final Gruppe group6 = new Gruppe(employeeResultList.get(5).getId(), new HashSet<>(), "Bitter Finish",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(5)));
             this.saveGroup(group6, groupMemberSet2);
             pb.step();
-            final Gruppe group7 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "New Flashers");
+            final Gruppe group7 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "New Flashers",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(0)));
             this.saveGroup(group7, groupMemberSet2);
             pb.step();
-            final Gruppe group8 = new Gruppe(employeeResultList.get(1).getId(), new HashSet<>(), "The Hillbillies");
+            final Gruppe group8 = new Gruppe(employeeResultList.get(1).getId(), new HashSet<>(), "The Hillbillies",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(1)));
             this.saveGroup(group8, groupMemberSet2);
             pb.step();
-            final Gruppe group9 = new Gruppe(employeeResultList.get(2).getId(), new HashSet<>(), "Inner Spree");
+            final Gruppe group9 = new Gruppe(employeeResultList.get(2).getId(), new HashSet<>(), "Inner Spree",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(2)));
             this.saveGroup(group9, groupMemberSet2);
             pb.step();
-            final Gruppe group10 = new Gruppe(employeeResultList.get(3).getId(), new HashSet<>(), "Buzzing");
+            final Gruppe group10 = new Gruppe(employeeResultList.get(3).getId(), new HashSet<>(), "Buzzing",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(3)));
             this.saveGroup(group10, groupMemberSet2);
             pb.step();
-            final Gruppe group11 = new Gruppe(employeeResultList.get(4).getId(), new HashSet<>(), "Long Hatters");
+            final Gruppe group11 = new Gruppe(employeeResultList.get(4).getId(), new HashSet<>(), "Long Hatters",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(4)));
             this.saveGroup(group11, groupMemberSet2);
             pb.step();
-            final Gruppe group12 = new Gruppe(employeeResultList.get(5).getId(), new HashSet<>(), "The Crawlers");
+            final Gruppe group12 = new Gruppe(employeeResultList.get(5).getId(), new HashSet<>(), "The Crawlers",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(5)));
             this.saveGroup(group12, groupMemberSet2);
             pb.step();
-            final Gruppe group13 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "Western Wranglers");
+            final Gruppe group13 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "Western Wranglers",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(0)));
             this.saveGroup(group13, groupMemberSet3);
             pb.step();
-            final Gruppe group14 = new Gruppe(employeeResultList.get(1).getId(), new HashSet<>(), "Stiff Deadheads");
+            final Gruppe group14 = new Gruppe(employeeResultList.get(1).getId(), new HashSet<>(), "Stiff Deadheads",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(1)));
             this.saveGroup(group14, groupMemberSet3);
             pb.step();
-            final Gruppe group15 = new Gruppe(employeeResultList.get(2).getId(), new HashSet<>(), "Noble Grinders");
+            final Gruppe group15 = new Gruppe(employeeResultList.get(2).getId(), new HashSet<>(), "Noble Grinders",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(2)));
             this.saveGroup(group15, groupMemberSet1);
             pb.step();
-            final Gruppe group16 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "Breakaway Cacophony");
+            final Gruppe group16 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "Breakaway Cacophony",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(0)));
             this.saveGroup(group16, groupMemberSet3);
             pb.step();
-            final Gruppe group17 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "Atomic Dogs");
+            final Gruppe group17 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "Atomic Dogs",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(0)));
             this.saveGroup(group17, groupMemberSet4);
             pb.step();
-            final Gruppe group18 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "Dancing Blitz");
+            final Gruppe group18 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "Dancing Blitz",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(0)));
             this.saveGroup(group18, groupMemberSet2);
             pb.step();
-            final Gruppe group19 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "Skinny Hurricanes");
+            final Gruppe group19 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "Skinny Hurricanes",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(0)));
             this.saveGroup(group19, groupMemberSet1);
             pb.step();
-            final Gruppe group20 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "The Apocalypse");
+            final Gruppe group20 = new Gruppe(employeeResultList.get(0).getId(), new HashSet<>(), "The Apocalypse",
+                    UserUtils.getNachnameVornameString(employeeResultList.get(0)));
             this.saveGroup(group20, groupMemberSet2);
             pb.step();
         }

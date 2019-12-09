@@ -12,15 +12,9 @@
 </h:head>
 <h:body>
     <h:form>
-        <div align="right">
-            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}" action='#{languageHandler.actionLanguage("de")}'/>
-            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}" action='#{languageHandler.actionLanguage("en")}'/>
-            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout()}' immediate="true"/>
-        </div>
-    </h:form>
-    <div>
-        <h:form>
-            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}" immediate="true"/>
+        <div id="contentheader">
+            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
+                             immediate="true"/>
             <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
                              action="${userController.switchToUser()}"
                              immediate="true"/>
@@ -30,21 +24,42 @@
             <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
                              action="${projektController.switchToProjekt()}"
                              immediate="true"/>
-        </h:form>
-    </div>
-    <div id="content">
-        <h:form>
+
+            <div id="spracheLogout">
+                <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
+                                 action='#{languageHandler.actionLanguage("de")}'/>
+                <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
+                                 action='#{languageHandler.actionLanguage("en")}'>
+                    <p:ajax event="click"/>
+                </p:commandButton>
+                <p:commandButton id="buttonAusloggen" value="#{msg['LOGIN.AUSLOGGEN']}"
+                                 action='${loginController.logout}'
+                                 immediate="true"/>
+            </div>
+
+        </div>
+    </h:form>
+    <h:form>
+        <div id="content">
+
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
                 <p:dataTable id="projektTabelle" var="projekt"
                              value="#{projektController.userAwareFindAllByGruppe(loginController.user)}"
-                             rowClasses="odd,even" headerClass="header">
-                    <p:column>
-                        <f:facet name="header">#{msg['PROJEKTTABELLE.TITEL']}</f:facet>
+                             widgetVar="projektTabelleJS"
+                             emptyMessage="#{msg['TABELLE.EMPTY']}"
+                             filteredValue="#{gruppeController.filteredList}"
+                             rowClasses="odd,even" headerClass="header"
+                             paginator="true" rows="10"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,10,15">
+                    <p:column headerText="#{msg['PROJEKTTABELLE.TITEL']}" filterBy="#{projekt.titel}"
+                              filterMatchMode="contains">
                         <h:outputText value="#{projekt.titel}"/>
                     </p:column>
-                    <p:column>
-                        <f:facet name="header">#{msg['PROJEKTTABELLE.LEITER']}</f:facet>
+                    <p:column headerText="#{msg['PROJEKTTABELLE.LEITER']}" filterBy="#{userController.formatedName(userController.findById(projekt.leiterId).get(),
+                                enumController.rolleEmployee)}"
+                              filterMatchMode="contains">
                         <h:outputText
                                 value="#{userController.formatedName(userController.findById(projekt.leiterId),
                                 enumController.rolleEmployee)}"/>
@@ -76,8 +91,9 @@
             <p:commandButton action="#{projektController.newProject(loginController.user)}"
                              value="#{msg['PROJEKTTABELLE.BUTTON.NEU']}"
                              rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
-        </h:form>
-    </div>
+        </div>
+    </h:form>
+
 </h:body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
