@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
+    <p:growl id="growl" showDetail="true" sticky="true"/>
 
     <h:form>
         <div id="contentheader">
@@ -40,7 +41,7 @@
     </h:form>
     <div id="content">
         <h:form>
-            <p:growl id="growl" showDetail="true" sticky="true"/>
+
             <ui:insert name="content">
                 <p:dataTable id="gruppeTabelle" var="gruppe"
                              value="#{gruppeController.userAwareFindAllGruppen(loginController.user)}"
@@ -80,22 +81,17 @@
 
                         </h:outputText>
                     </p:column>
-                    <p:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.LOESCHEN']}</f:facet>
-                        <p:commandButton action="#{gruppeController.deleteGruppe(loginController.user, gruppe.id)}"
-                                         value="#{msg['BUTTON.REMOVE']}"
-                                         rendered="#{gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
-                        <h:outputText value="#{msg['GRUPPENTABELLE.NURLEITER']}"
-                                      rendered="#{!gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
-                    </p:column>
-                    <p:column rendered="#{!loginController.isKundeOrUser(loginController.user)}">
-                        <f:facet name="header">#{msg['GRUPPENTABELLE.EDIT']}</f:facet>
-                        <p:commandButton action="#{gruppeController.userAwareEditGroup(loginController.user)}"
-                                         value="#{msg['BUTTON.EDIT']}"
-                                         actionListener="#{userController.updateGroupMemberSet(gruppe.mitglieder)}"
-                                         rendered="#{gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
-                        <h:outputText value="#{msg['GRUPPENTABELLE.NURLEITER']}"
-                                      rendered="#{!gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}"/>
+                    <p:column class="menueButton">
+                        <p:menuButton value="#{msg['USER.TABELLE.MENUE']}">
+                            <p:menuitem value="#{msg['BUTTON.EDIT']}"
+                                        action="#{gruppeController.userAwareEditGroup(loginController.user)}"
+                                        update="growl"
+                                        actionListener="#{userController.updateGroupMemberSet(gruppe.mitglieder)}"/>
+                            <p:menuitem value="#{msg['BUTTON.REMOVE']}"
+                                        action="#{gruppeController.deleteGruppe(loginController.user, gruppe.id)}"
+                                        update="growl"/>
+                            <p:separator/>
+                        </p:menuButton>
                     </p:column>
                 </p:dataTable>
                 <p:commandButton

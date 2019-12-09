@@ -21,6 +21,10 @@ body {
     float: right;
 }
 
+.menueButton {
+    width: 50px;
+}
+
 #wrapper {
     display: flex;
 }

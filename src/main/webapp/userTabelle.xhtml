@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
-
+    <p:growl id="growl" showDetail="true" sticky="true"/>
     <h:form>
         <div id="contentheader">
             <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
@@ -31,7 +31,7 @@
                                  action='#{languageHandler.actionLanguage("de")}'/>
                 <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
                                  action='#{languageHandler.actionLanguage("en")}'>
-                    <p:ajax event="click"/>
+                    <p:ajax event="click" update="userForm"/>
                 </p:commandButton>
                 <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
                                  immediate="true"/>
@@ -40,7 +40,6 @@
     </h:form>
     <h:form id="userForm">
         <div id="content">
-            <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
 
 
@@ -65,18 +64,14 @@
                         <f:facet name="header">#{msg['USER.ADRESSE']}</f:facet>
                         <h:outputText value="#{userController.formatedAdresse(user)}"/>
                     </p:column>
-                    <p:column headerText="#{msg['USER.LOESCHEN']}" rendered="#{loginController.adminRole()}">
-                        <div align="center">
-                            <p:commandButton class="customerButton" action="${userController.deleteRow()}"
-                                             value="#{msg['USER.LOESCHEN']}"/>
-
-                        </div>
-                    </p:column>
-                    <p:column headerText="#{msg['USER.BEARBEITEN']}" rendered="#{loginController.adminRole()}">
-                        <div align="center">
-                            <p:commandButton class="customerButton" action="#{userController.edit}"
-                                             value="#{msg['USER.BEARBEITEN']}"/>
-                        </div>
+                    <p:column class="menueButton">
+                        <p:menuButton value="#{msg['USER.TABELLE.MENUE']}">
+                            <p:menuitem value="#{msg['USER.BEARBEITEN']}" action="#{userController.edit}"
+                                        update="growl"/>
+                            <p:menuitem value="#{msg['USER.LOESCHEN']}" action="${userController.deleteRow()}"
+                                        update="growl"/>
+                            <p:separator/>
+                        </p:menuButton>
                     </p:column>
                 </p:dataTable>
 
