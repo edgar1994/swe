@@ -22,19 +22,15 @@ public class User {
     @GeneratedValue
     int id;
 
-    @NotNull
     private String vorname;
 
-    @NotNull
     private String nachname;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Adresse adresse;
 
-    @NotNull
     private String username;
 
-    @NotNull
     private String passwort;
 
     @NotNull

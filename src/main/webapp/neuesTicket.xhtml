@@ -47,8 +47,11 @@
                     <p:growl id="growl" showDetail="true" sticky="true"/>
                     <p:panelGrid columns="2">
                         <p:outputLabel value="#{msg['NEUESTICKET.TICKETTITEL']}" for="titel"/>
-                        <p:inputText id="titel" value="#{ticketController.selectedEntity.titel}" required="true"
-                                     requiredMessage="#{msg['NEUESTICKET.MESSAGES.REQUIRED.TITEL']}"><f:validator
+                        <p:inputText
+                                id="titel"
+                                value="#{ticketController.selectedEntity.titel}"
+                                required="true"
+                                requiredMessage="#{msg['NEUESTICKET.MESSAGES.REQUIRED.TITEL']}"><f:validator
                                 validatorId="titleValidator"/>
                             <p:ajax event="change"
                                     listener="#{ticketController.doesTicketExistsInProject(projektController.selectedEntity)}"
@@ -140,4 +143,5 @@
 </h:body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
+<f:event type="preRenderView" listener="#{loginController.userAwareProjectTable}"/>
 </html>

@@ -32,9 +32,9 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
 
     private User user;
 
-    private String changeFirstPassword = "";
+    private String changeFirstPassword;
 
-    private String changeSecPassword = "";
+    private String changeSecPassword;
 
     /**
      * Logged einen {@link User} aus.
@@ -67,16 +67,12 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
             if (this.user.isFirstLogin()) {
                 return RedirectUtils.CHANGE_PASSWORD_XHTML;
             } else {
-                context.addMessage(null, new FacesMessage(
-                        this.messageService.getMessage("LOGIN.MESSAGE.LOGIN.SUMMARY"),
-                        this.messageService.getMessage("LOGIN.MESSAGE.LOGIN.DETAIL",
-                                UserUtils.getNachnameVornameString(this.user))));
                 return RedirectUtils.LOGIN_INDEX_XHTML;
             }
         } else {
             context.addMessage(null, new FacesMessage(
-                    this.messageService.getMessage(""),
-                    this.messageService.getMessage("")));
+                    this.messageService.getMessage("LOGIN.MESSAGE.ERROR.SUMMARY"),
+                    this.messageService.getMessage("LOGIN.MESSAGE.ERROR.DETAIL")));
             this.user = null;
             this.logger.error("LOG.LOGIN.MORETHANONE", this.username, this.passwort);
             return null;
@@ -125,21 +121,95 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     }
 
     /**
+     * Prueft ob der {@link User} die Berechtigung ({@link Rolle#MITARBEITER}, {@link Rolle#ADMIN}, {@link Rolle#KUNDE})
+     * hat um die Projekttabelle einzusehen. Andernfalls wird auf {@link RedirectUtils#LOGIN_INDEX_XHTML} redirected;
+     *
+     * @param cse {@link ComponentSystemEvent}
+     */
+    public void userAwareProjectTable(final ComponentSystemEvent cse) {
+        final FacesContext context = FacesContext.getCurrentInstance();
+        this.checkLoggedIn(cse);
+        if (this.user != null) {
+            switch (this.user.getRolle()) {
+                case ADMIN:
+                case KUNDE:
+                case MITARBEITER:
+                    break;
+                case USER:
+                    context.getApplication().getNavigationHandler().
+                            handleNavigation(context, null,
+                                    RedirectUtils.LOGIN_INDEX_XHTML);
+                    break;
+                default:
+                    throw new IllegalArgumentException(this.messageService.getMessage(
+                            "EXCEPTION.ILLEGALARGUMENT.LOGIN", this.user.getRolle()));
+            }
+        }
+    }
+
+    /**
      * Aendert das Passwort eines {@link User}s und setzt das "Erste Anmeldung"-Flag auf false.
      * Nach Erfolg wird auf {@link RedirectUtils#LOGIN_INDEX_XHTML}.
      *
      * @return {@link RedirectUtils#LOGIN_INDEX_XHTML}
      */
     public String changePassword() {
-        if (!StringUtils.isEmptyOrNullOrBlank(this.changeFirstPassword) &&
-                !StringUtils.isEmptyOrNullOrBlank(this.changeSecPassword) &&
-                this.changeFirstPassword.equals(this.changeSecPassword)) {
+        if (this.passwordEqualsInSignUp(this.changeFirstPassword, this.changeSecPassword)) {
             this.user.setPasswort(this.passwort);
             this.user.setFirstLogin(false);
             this.save(this.user);
             return RedirectUtils.PROJEKT_INDEX_XHTML;
         }
+
         return null;
+    }
+
+    /**
+     * Prueft ob zwei uebergebene Passwoerter gleich sind.
+     *
+     * @param first Erstes Passwort
+     * @param sec   Zweites Passwort
+     * @return boolean
+     */
+    public boolean passwordEqualsInSignUp(final String first, final String sec) {
+        final FacesContext context = FacesContext.getCurrentInstance();
+        if (StringUtils.isEmptyOrNullOrBlank(first)) {
+            context.addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            this.messageService.getMessage("SIGNUP.VALIDATION.MESSAGES.SUMMARY"),
+                            this.messageService.getMessage("SIGNUP.VALIDATION.MESSAGES.ERROR.FIRST.EMPTY")));
+            return false;
+        } else if (StringUtils.isEmptyOrNullOrBlank(sec)) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    this.messageService.getMessage("SIGNUP.VALIDATION.MESSAGES.SUMMARY"),
+                    this.messageService.getMessage("SIGNUP.VALIDATION.MESSAGES.ERROR.SEC.EMPTY")));
+            return false;
+        } else if (!first.equals(sec)) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    this.messageService.getMessage("SIGNUP.VALIDATION.MESSAGES.SUMMARY"),
+                    this.messageService.getMessage("SIGNUP.VALIDATION.MESSAGES.ERROR.NOT_EQUALS")));
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Prueft ob der Username bereits existiert.
+     *
+     * @return boolean
+     */
+    public boolean doesUsernameExists() {
+        final Query query = this.em.createQuery("select u.username from User u");
+        final List<String> usernameList = StringUtils.uncheckedSolver(query.getResultList());
+        final FacesContext context = FacesContext.getCurrentInstance();
+        if (this.selectedEntity.getUsername() != null && usernameList.contains(this.selectedEntity.getUsername())) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    this.messageService.getMessage("USER.VALIDATOR.USERNAME.SUMMARY"),
+                    this.messageService.getMessage("USER.VALIDATOR.USERNAME.DETAIL.EXISTS")));
+            return true;
+        }
+        return false;
     }
 
 
@@ -177,8 +247,13 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      * @return {@link RedirectUtils#USER_TABELLE_XHTML}
      */
     public String speichern() {
-        this.save(this.getSelectedEntity());
-        return RedirectUtils.USER_TABELLE_XHTML;
+        if (this.passwordEqualsInSignUp(this.changeFirstPassword, this.changeSecPassword) &&
+                !this.doesUsernameExists()) {
+            this.selectedEntity.setPasswort(this.changeFirstPassword);
+            this.save(this.getSelectedEntity());
+            return RedirectUtils.USER_TABELLE_XHTML;
+        }
+        return RedirectUtils.REGISTRIEREN_XHTML;
     }
 
     /**

@@ -273,6 +273,52 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     }
 
     /**
+     * Loescht ein {@link Projekt} und redirected auf {@link RedirectUtils#PROJEKT_TABELLE_XHTML}.
+     *
+     * @param loggedUser Eingeloggter {@link User}
+     * @param project    {@link Projekt}
+     * @return {@link RedirectUtils#PROJEKT_TABELLE_XHTML}
+     */
+    public String deleteProject(final User loggedUser, Projekt project) {
+        final FacesContext context = FacesContext.getCurrentInstance();
+        if (project != null && loggedUser != null) {
+            if (UserUtils.compareUserById(project.getLeiterId(), loggedUser)) {
+                try {
+                    this.utx.begin();
+                    project = this.em.merge(project);
+                    this.em.remove(project);
+                    this.em.flush();
+                    this.utx.commit();
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                            this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.DELETE.SUMMARY.SUCCESS"),
+                            this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.DELETE.DETAIL.SUCCESS",
+                                    project.getTitel())
+                    ));
+                } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
+                        RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.DELETE.SUMMARY.FAILED"),
+                            this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.DELETE.DETAIL.FAILED")
+                    ));
+                    this.logger.error("PROJECT.LOG.MESSAGE.DELETE.DETAIL.FAILED");
+                }
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.DELETE.SUMMARY.NOTAUTHORIZED"),
+                        this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.DELETE.DETAIL.NOTAUTHORIZED")
+                ));
+            }
+        } else {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.DELETE.SUMMARY.FAILED"),
+                    this.messageService.getMessage("PROJECT.VALIDATOR.MESSAGE.DELETE.DETAIL.FAILED")
+            ));
+            this.logger.error("PROJECT.LOG.MESSAGE.DELETE.DETAIL.FAILED");
+        }
+        return RedirectUtils.PROJEKT_TABELLE_XHTML;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

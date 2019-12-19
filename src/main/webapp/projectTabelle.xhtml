@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
+    <p:growl id="growl" showDetail="true" sticky="true"/>
     <h:form id="userForm">
         <div id="contentheader">
             <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
@@ -42,8 +43,6 @@
         </div>
 
         <div id="content">
-
-            <p:growl id="growl" showDetail="true" sticky="true"/>
             <ui:insert name="content">
                 <p:dataTable id="projektTabelle" var="projekt"
                              value="#{projektController.userAwareFindAllByGruppe(loginController.user)}"
@@ -87,6 +86,13 @@
                                 value="#{msg['PROJEKTTABELLE.CHOOSE']}"
                                 action="#{projektController.chooseProject(projekt.id)}"/>
                     </p:column>
+                    <p:column>
+                        <f:facet name="header">#{msg['PROJEKTTABELLE.DELETE']}</f:facet>
+                        <p:commandButton
+                                value="#{msg['PROJEKTTABELLE.DELETE']}"
+                                action="#{projektController.deleteProject(loginController.user, projekt)}"
+                                update="growl projektTabelle"/>
+                    </p:column>
                 </p:dataTable>
             </ui:insert>
             <p:commandButton action="#{projektController.newProject(loginController.user)}"
@@ -96,6 +102,7 @@
     </h:form>
 
 </h:body>
-<f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
+<f:event type="preRenderView" listener="#{loginController.checkLoggedIn}"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
+<f:event type="preRenderView" listener="#{loginController.userAwareProjectTable}"/>
 </html>

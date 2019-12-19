@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui"
 >
 <h:head>
-    <title>#{msg['REGISTRIEREN.TITEL']}</title>
+    <title>#{msg['SIGNUP.TITEL']}</title>
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <body>
@@ -43,34 +43,71 @@
     <ui:insert name="content">
         <h:form>
             <p:growl id="growl" showDetail="true" sticky="true"/>
-            <h:panelGrid var="gruppe" value="#{userController.selectedEntity}" columns="2"
+            <h:panelGrid var="user" value="#{userController.selectedEntity}" columns="2"
                          headerClass="header"
                          footerClass="footer">
-                <p:outputLabel value="#{msg['REGISTRIEREN.USERNAME']}"/>
-                <p:inputText value="#{loginController.selectedEntity.username}" required="true"
+                <p:outputLabel for="username"
+                               value="#{msg['SIGNUP.USERNAME']}"/>
+                <p:inputText id="username"
+                             value="#{loginController.selectedEntity.username}"
+                             required="true"
                              requiredMessage="#{msg['REGISTRIREN.REQUIRED.MESSAGE']}">
                     <f:validator validatorId="usernameValidator"/>
+                    <p:ajax event="change" listener="#{loginController.doesUsernameExists()}" update="growl"/>
                 </p:inputText>
-                <p:outputLabel value="#{msg['REGISTRIEREN.PASSWORT']}"/>
-                <p:password value="#{loginController.selectedEntity.passwort}"/>
-                <p:outputLabel value="#{msg['REGISTRIEREN.VORNAME']}"/>
-                <p:inputText value="#{loginController.selectedEntity.vorname}"/>
-                <p:outputLabel value="#{msg['REGISTRIEREN.NACHNAME']}"/>
-                <p:inputText value="#{loginController.selectedEntity.nachname}"/>
-                <p:outputLabel value="#{msg['REGISTRIEREN.STRASSE']}"/>
-                <p:inputText value="#{loginController.selectedEntity.adresse.strasse}"/>
-                <p:outputLabel value="#{msg['REGISTRIEREN.PLZ']}"/>
-                <p:inputText value="#{loginController.selectedEntity.adresse.plz}"/>
-                <p:outputLabel value="#{msg['REGISTRIEREN.STADT']}"/>
-                <p:inputText value="#{loginController.selectedEntity.adresse.stadt}"/>
-
+                <p:outputLabel for="password"
+                               value="#{msg['SIGNUP.PASSWORT']}"/>
+                <p:password id="password"
+                            value="#{loginController.changeFirstPassword}"
+                            required="true">
+                    <p:ajax event="change"/>
+                </p:password>
+                <p:outputLabel for="repassword"
+                               value="#{msg['SIGNUP.REPASSWORT']}"/>
+                <p:password id="repassword"
+                            value="#{loginController.changeSecPassword}"
+                            required="true">
+                    <p:ajax event="change"
+                            update="growl"
+                            listener="#{loginController.passwordEqualsInSignUp(loginController.changeFirstPassword,
+                                            loginController.changeSecPassword)}"/>
+                </p:password>
+                <p:outputLabel for="firstname"
+                               value="#{msg['SIGNUP.VORNAME']}"/>
+                <p:inputText id="firstname"
+                             value="#{loginController.selectedEntity.vorname}" required="true">
+                    <f:validator validatorId="firstnameValidator"/>
+                </p:inputText>
+                <p:outputLabel for="lastname"
+                               value="#{msg['SIGNUP.NACHNAME']}"/>
+                <p:inputText id="lastname"
+                             value="#{loginController.selectedEntity.nachname}" required="true">
+                    <f:validator validatorId="lastnameValidator"/>
+                </p:inputText>
+                <p:outputLabel for="street"
+                               value="#{msg['SIGNUP.STRASSE']}"/>
+                <p:inputText id="street"
+                             value="#{loginController.selectedEntity.adresse.strasse}" required="true">
+                    <f:validator validatorId="streetnameValidator"/>
+                </p:inputText>
+                <p:outputLabel for="zip"
+                               value="#{msg['SIGNUP.PLZ']}"/>
+                <p:inputText id="zip"
+                             value="#{loginController.selectedEntity.adresse.plz}" required="true">
+                    <f:validator validatorId="zipValidator"/>
+                </p:inputText>
+                <p:outputLabel for="city"
+                               value="#{msg['SIGNUP.STADT']}"/>
+                <p:inputText id="city"
+                             value="#{loginController.selectedEntity.adresse.stadt}" required="true">
+                    <f:validator validatorId="cityValidator"/>
+                </p:inputText>
             </h:panelGrid>
             <p:commandButton
                     action="#{loginController.speichern()}"
                     value="#{msg['BUTTON.SPEICHERN']}"
-                    actionListener="#{growlView.showAction(msg['NEUERUSER.MESSAGE.SUMMARY'], msg['NEUERUSER.MESSAGE'])}"
-                    update=":growl"/>
-            <p:commandButton action="#{userController.cancel}" value="#{msg['BUTTON.ABBRECHEN']}"
+                    update="growl"/>
+            <p:commandButton action="#{userController.switchToUser}" value="#{msg['BUTTON.ABBRECHEN']}"
                              immediate="true"/>
         </h:form>
     </ui:insert>
