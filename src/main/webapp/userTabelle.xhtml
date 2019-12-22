@@ -13,7 +13,8 @@
 <h:body>
     <p:growl id="growl" showDetail="true" sticky="true"/>
     <h:form id="userForm">
-        <div id="contentheader">
+        <div id="header">
+
             <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
                              immediate="true"/>
             <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
@@ -25,19 +26,21 @@
             <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
                              action="${projektController.switchToProjekt()}"
                              immediate="true"/>
-
-            <div id="spracheLogout">
-                <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
-                                 action='#{languageHandler.actionLanguage("de")}'
-                                 update="userForm"/>
-                <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
-                                 action='#{languageHandler.actionLanguage("en")}'
-                                 update="userForm">
-                    <p:ajax event="click"/>
-                </p:commandButton>
-                <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
-                                 immediate="true"/>
-            </div>
+        </div>
+        <div id="namelogin">
+            <p>User: #{userController.formatedName(loginController.user.id, loginController.user.rolle)}</p>
+        </div>
+        <div id="header-right">
+            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
+                             action='#{languageHandler.actionLanguage("de")}'
+                             update="userForm"/>
+            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
+                             action='#{languageHandler.actionLanguage("en")}'
+                             update="userForm">
+                <p:ajax event="click"/>
+            </p:commandButton>
+            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
+                             immediate="true"/>
         </div>
 
 
