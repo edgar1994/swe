@@ -2,6 +2,7 @@ package de.hsb.app.swe.controller;
 
 import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.Ticket;
+import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
 import de.hsb.app.swe.utils.RedirectUtils;
 
@@ -9,12 +10,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.Query;
 import javax.transaction.*;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * {@link Ticket}-Controller
@@ -128,6 +127,17 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
             }
         }
         return RedirectUtils.PROJEKT_ANSICHT_XHTML;
+    }
+
+    public List<Ticket> findAllUserTickets(final User loggedUser) {
+        if (loggedUser != null) {
+            final Query query = this.em.createQuery("Select t from Ticket t where t.bearbeiterId = :userID");
+            query.setParameter("userID", loggedUser.getId());
+
+            return uncheckedSolver(query.getResultList());
+        }
+
+        return Collections.emptyList();
     }
 
     /**
