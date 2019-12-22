@@ -30,6 +30,24 @@ body {
 
 }
 
+#footer {
+    background-color: #ccd2d3;
+    position: fixed;
+    bottom: 0px;
+    height: 120px;
+    width: 100%;
+}
+
+#Firma {
+    float: left;
+}
+
+#Adresse {
+    float: right;
+    margin-right: 10px;
+
+}
+
 
 #header-right {
     margin-left: 84%;
