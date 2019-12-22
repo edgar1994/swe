@@ -44,7 +44,22 @@
     <h:form>
         <div id="content">
             <ui:insert name="content">
+                <p:dataTable id="adminTabelle" var="ticket"
+                             rendered="#{loginController.adminRole()}"
+                             value="#{ticketController.findAllUserTickets(loginController.user)}"
+                             widgetVar="ticketTabelleJS"
+                             emptyMessage="#{msg['TABELLE.EMPTY']}"
+                             filteredValue="#{gruppeController.filteredList}"
+                             rowClasses="odd,even" headerClass="header"
+                             paginator="true" rows="10"
+                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                             rowsPerPageTemplate="5,10,15">
+
+                </p:dataTable>
+
+
                 <p:dataTable id="ticketTabelle" var="ticket"
+                             rendered="#{!loginController.adminRole()}"
                              value="#{ticketController.findAllUserTickets(loginController.user)}"
                              widgetVar="ticketTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
