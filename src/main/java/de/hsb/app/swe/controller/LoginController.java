@@ -74,7 +74,6 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                     this.messageService.getMessage("LOGIN.MESSAGE.ERROR.SUMMARY"),
                     this.messageService.getMessage("LOGIN.MESSAGE.ERROR.DETAIL")));
             this.user = null;
-            this.logger.error("LOG.LOGIN.MORETHANONE", this.username, this.passwort);
             return null;
         }
     }
@@ -89,7 +88,6 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
             this.user = userList.get(0);
         } else {
             this.user = null;
-            this.logger.error("LOG.LOGIN.MORETHANONE", this.username, this.passwort);
         }
     }
 

@@ -318,6 +318,7 @@ public class InitializerController {
     private void initUser() {
         try (final ProgressBar pb = new ProgressBar(StringUtils.createLogforPB(Date.from(Instant.now()), "Create User"),
                 10, ProgressBarStyle.UNICODE_BLOCK)) {
+            final String password = "Passwort+";
             final Adresse adresse1 = new Adresse("Schillerstrasse 3", "86850", "Fischach");
             final Adresse adresse2 = new Adresse("Gruenauer Strasse 68", "21702", "Ahlerstedt");
             final Adresse adresse3 = new Adresse("Flotowstr. 85", "06528", "Beyernaumburg");
@@ -331,52 +332,52 @@ public class InitializerController {
 
             final List<User> users = new ArrayList<>();
             final User user1 = new User("Dan", "Evan", adresse1, "admin",
-                    "passwort+", Rolle.ADMIN, new HashSet<>());
+                    password, Rolle.ADMIN, new HashSet<>());
             users.add(user1);
             pb.step();
 
             final User user2 = new User("Aron", "O'Connor", adresse2, "mitarbeiter1",
-                    "passwort+", Rolle.MITARBEITER, new HashSet<>());
+                    password, Rolle.MITARBEITER, new HashSet<>());
             users.add(user2);
             pb.step();
 
             final User user3 = new User("Maximilian", "Sankt", adresse3, "mitarbeiter2",
-                    "passwort+", Rolle.MITARBEITER, new HashSet<>());
+                    password, Rolle.MITARBEITER, new HashSet<>());
             users.add(user3);
             pb.step();
 
             final User user4 = new User("Malon", "Lonlon", adresse4, "mitarbeiter3",
-                    "passwort+", Rolle.MITARBEITER, new HashSet<>());
+                    password, Rolle.MITARBEITER, new HashSet<>());
             users.add(user4);
             pb.step();
 
             final User user5 = new User("Lea", "Schroeder", adresse5, "mitarbeiter4",
-                    "passwort+", Rolle.MITARBEITER, new HashSet<>());
+                    password, Rolle.MITARBEITER, new HashSet<>());
             users.add(user5);
             pb.step();
 
             final User user6 = new User("Leon", "Blau", adresse6, "mitarbeiter5",
-                    "passwort+", Rolle.MITARBEITER, new HashSet<>());
+                    password, Rolle.MITARBEITER, new HashSet<>());
             users.add(user6);
             pb.step();
 
             final User user7 = new User("Sebastian", "Abend", adresse7, "mitarbeiter6",
-                    "passwort+", Rolle.MITARBEITER, new HashSet<>());
+                    password, Rolle.MITARBEITER, new HashSet<>());
             users.add(user7);
             pb.step();
 
             final User user8 = new User("Max", "Kundenmann", adresse8, "kunde1",
-                    "passwort+", Rolle.KUNDE, new HashSet<>());
+                    password, Rolle.KUNDE, new HashSet<>());
             users.add(user8);
             pb.step();
 
             final User user9 = new User("Johanna", "Saenger", adresse9, "kunde2",
-                    "passwort+", Rolle.KUNDE, new HashSet<>());
+                    password, Rolle.KUNDE, new HashSet<>());
             users.add(user9);
             pb.step();
 
             final User user10 = new User("Stephan", "Beike", adresse10, "user1",
-                    "passwort+", Rolle.USER, new HashSet<>());
+                    password, Rolle.USER, new HashSet<>());
             users.add(user10);
             pb.step();
 

@@ -61,6 +61,7 @@
                             value="#{loginController.changeFirstPassword}"
                             required="true">
                     <p:ajax event="change"/>
+                    <f:validator validatorId="passwordValidator"/>
                 </p:password>
                 <p:outputLabel for="repassword"
                                value="#{msg['SIGNUP.REPASSWORT']}"/>

@@ -256,7 +256,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
                             this.messageService.getMessage(
                                     "PROJECT.VALIDATOR.MESSAGE.SAVE.DETAIL.EDIT", this.selectedEntity.getTitel())));
                 }
-                this.logger.info("LOG.PROJECT.INFO.SAVE.SUCCESSFULL", this.selectedEntity.getId());
+                this.logger.info("LOG.PROJECT.INFO.SAVE.SUCCESSFUL", this.selectedEntity.getId());
                 return RedirectUtils.PROJEKT_TABELLE_XHTML;
             } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                     RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
