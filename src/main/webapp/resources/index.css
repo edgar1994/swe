@@ -1,8 +1,10 @@
 body {
-
-
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 12px;
+}
+
+.deutsch {
+    background-image: url("swe/src/main/webapp/resources/deutsch.png") !important;
 }
 
 #content {
@@ -15,19 +17,17 @@ body {
 #header {
     background-color: #ccd2d3;
     height: 30px;
-
+    border: 1px;
+    border-radius: 2px;
 }
 
 #connectoren {
     float: left;
-
-
 }
 
 #namelogin {
     float: left;
     margin-left: 20px;
-
 }
 
 #footer {
@@ -35,7 +35,9 @@ body {
     position: fixed;
     bottom: 0px;
     height: 120px;
-    width: 100%;
+    width: 99%;
+    border: 1px;
+    border-radius: 2px;
 }
 
 #Firma {
@@ -45,13 +47,11 @@ body {
 #Adresse {
     float: right;
     margin-right: 10px;
-
 }
 
 
 #header-right {
     margin-left: 84%;
-
 }
 
 .menueButton {
@@ -78,14 +78,11 @@ body {
 }
 
 #rightAnsicht {
-
     float: right;
-
 }
 
 .customerButton {
     width: 100%;
-
 }
 
 #customerTable {

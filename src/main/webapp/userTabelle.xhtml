@@ -18,7 +18,8 @@
 
                 <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
                                  immediate="true"/>
-                <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
+                <p:commandButton rendered="#{loginController.adminRole()}"
+                                 value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
                                  action="${userController.switchToUser()}"
                                  immediate="true"/>
                 <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
@@ -32,7 +33,7 @@
                 <p>User: #{userController.formatedName(loginController.user.id, loginController.user.rolle)}</p>
             </div>
             <div id="header-right">
-                <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
+                <p:commandButton icon="deutsch"
                                  action='#{languageHandler.actionLanguage("de")}'
                                  update="userForm"/>
                 <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
@@ -91,12 +92,12 @@
         </div>
         <div id="footer">
             <div id="Firma">
-                <p>Hier könnte ihre Firma Stehen</p>
+                <p>Ticketsystem GmbH</p>
             </div>
             <div id="Adresse">
-                <p>Straßennamen + Hausnummer</p>
-                <p>Postleitzahl</p>
-                <p>Land</p>
+                <p>Taunustor Nr.2</p>
+                <p>60310 Frankfurt am Main</p>
+                <p>Deutschland</p>
             </div>
         </div>
     </h:form>
