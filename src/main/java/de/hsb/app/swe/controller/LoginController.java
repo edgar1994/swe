@@ -124,7 +124,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
      *
      * @param cse {@link ComponentSystemEvent}
      */
-    public void userAwareProjectTable(final ComponentSystemEvent cse) {
+    public void userawareAll(final ComponentSystemEvent cse) {
         final FacesContext context = FacesContext.getCurrentInstance();
         this.checkLoggedIn(cse);
         if (this.user != null) {
@@ -133,6 +133,67 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                 case KUNDE:
                 case MITARBEITER:
                     break;
+                case USER:
+                    context.getApplication().getNavigationHandler().
+                            handleNavigation(context, null,
+                                    RedirectUtils.LOGIN_INDEX_XHTML);
+                    break;
+                default:
+                    throw new IllegalArgumentException(this.messageService.getMessage(
+                            "EXCEPTION.ILLEGALARGUMENT.LOGIN", this.user.getRolle()));
+            }
+        }
+    }
+
+    /**
+     * Prueft ob der {@link User} die Berechtigung ({@link Rolle#MITARBEITER}, {@link Rolle#ADMIN}, {@link Rolle#KUNDE})
+     * hat um die Projekttabelle einzusehen. Andernfalls wird auf {@link RedirectUtils#LOGIN_INDEX_XHTML} redirected;
+     *
+     * @param cse {@link ComponentSystemEvent}
+     */
+    public void userawareHome(final ComponentSystemEvent cse) {
+        final FacesContext context = FacesContext.getCurrentInstance();
+        this.checkLoggedIn(cse);
+        if (this.user != null) {
+            switch (this.user.getRolle()) {
+                case USER:
+                case KUNDE:
+                case MITARBEITER:
+                    break;
+                case ADMIN:
+                    context.getApplication().getNavigationHandler().
+                            handleNavigation(context, null,
+                                    RedirectUtils.GRUPPE_TABELLE_XHTML);
+                    break;
+                default:
+                    throw new IllegalArgumentException(this.messageService.getMessage(
+                            "EXCEPTION.ILLEGALARGUMENT.LOGIN", this.user.getRolle()));
+            }
+        }
+    }
+
+
+    /**
+     * Prueft ob der {@link User} die Berechtigung ({@link Rolle#ADMIN})
+     * hat um die Projekttabelle einzusehen. Andernfalls wird auf {@link RedirectUtils#LOGIN_INDEX_XHTML} redirected;
+     *
+     * @param cse {@link ComponentSystemEvent}
+     */
+    public void userawareAdmin(final ComponentSystemEvent cse) {
+        final FacesContext context = FacesContext.getCurrentInstance();
+        this.checkLoggedIn(cse);
+        if (this.user != null) {
+            switch (this.user.getRolle()) {
+                case ADMIN:
+                    break;
+                case KUNDE:
+                    context.getApplication().getNavigationHandler().
+                            handleNavigation(context, null,
+                                    RedirectUtils.LOGIN_INDEX_XHTML);
+                case MITARBEITER:
+                    context.getApplication().getNavigationHandler().
+                            handleNavigation(context, null,
+                                    RedirectUtils.LOGIN_INDEX_XHTML);
                 case USER:
                     context.getApplication().getNavigationHandler().
                             handleNavigation(context, null,
@@ -260,6 +321,26 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     public boolean adminRole() {
         if (this.user != null) {
             return Rolle.ADMIN.equals(this.user.getRolle());
+        }
+        return false;
+    }
+
+    /**
+     * Prueft ob der angemeldete User Kunde ist.
+     */
+    public boolean customerRole() {
+        if (this.user != null) {
+            return Rolle.KUNDE.equals(this.user.getRolle());
+        }
+        return false;
+    }
+
+    /**
+     * Prueft ob der angemeldete User Mitarbeiter ist.
+     */
+    public boolean employeeRole() {
+        if (this.user != null) {
+            return Rolle.MITARBEITER.equals(this.user.getRolle());
         }
         return false;
     }

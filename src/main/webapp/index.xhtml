@@ -59,9 +59,11 @@
         <!--<h:form>-->
         <div id="content">
             <ui:insert name="content">
-                <p:dataTable id="adminTabelle" var="ticket"
-                             rendered="#{loginController.adminRole()}"
-                             value="#{ticketController.findAllUserTickets(loginController.user)}"
+
+
+                <p:dataTable id="kundeTabelle" var="projekt"
+                             rendered="#{loginController.customerRole()}"
+                             value="#{projektController.userAwareFindAllByGruppe(loginController.user)}"
                              widgetVar="ticketTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
                              filteredValue="#{gruppeController.filteredList}"
@@ -69,12 +71,45 @@
                              paginator="true" rows="15"
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
-
+                    <f:facet name="header">
+                        #{msg['INDEX.CUSTEMER.HEADER']}
+                    </f:facet>
+                    <p:column headerText="#{msg['PROJEKTTABELLE.TITEL']}" filterBy="#{projekt.titel}"
+                              filterMatchMode="contains">
+                        <h:outputText value="#{projekt.titel}"/>
+                    </p:column>
+                    <p:column headerText="#{msg['PROJEKTTABELLE.LEITER']}" filterBy="#{userController.formatedName(userController.findById(projekt.leiterId).get(),
+                                enumController.rolleEmployee)}"
+                              filterMatchMode="contains">
+                        <h:outputText
+                                value="#{userController.formatedName(userController.findById(projekt.leiterId),
+                                enumController.rolleEmployee)}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{msg['PROJEKTTABELLE.TICKETS.OFFEN']}</f:facet>
+                        <h:outputText value="#{projektController.openTickets(projekt)}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{msg['PROJEKTTABELLE.TICKETS.GESAMT']}</f:facet>
+                        <h:outputText value="#{projekt.ticket.size()}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{msg['PROJEKTTABELLE.DUEDATE']}</f:facet>
+                        <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(projekt.abschlussdatum)}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{msg['PROJEKTTABELLE.CREATEDDATE']}</f:facet>
+                        <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(projekt.erstellungsdatum)}"/>
+                    </p:column>
+                    <p:column>
+                        <p:commandButton value="#{msg['PROJEKTTABELLE.CHOOSE']}"
+                                         action="#{projektController.chooseProject(projekt.id)}"/>
+                    </p:column>
                 </p:dataTable>
 
 
                 <p:dataTable id="ticketTabelle" var="ticket"
-                             rendered="#{!loginController.adminRole()}"
+                             rendered="#{loginController.employeeRole()}"
                              value="#{ticketController.findAllUserTickets(loginController.user)}"
                              widgetVar="ticketTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
@@ -83,6 +118,9 @@
                              paginator="true" rows="15"
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
+                    <f:facet name="header">
+                        #{msg['INDEX.HEADER']}
+                    </f:facet>
                     <p:column headerText="#{msg['PROJEKTTABELLE.TITEL']}" filterBy="#{ticket.projekt.titel}"
                               filterMatchMode="contains">
                         <h:outputText value="#{ticket.projekt.titel}"/>
@@ -96,9 +134,13 @@
                         <h:outputText value="#{msg[ticket.status.status]}"/>
                     </p:column>
                     <p:column headerText="#{msg['PROJEKTANSICHT.ABSCHLUSSDATUM']}"
-                              filterBy="#{ticket.projekt.abschlussdatum}"
                               filterMatchMode="contains">
-                        <h:outputText value="#{ticket.projekt.abschlussdatum}"/>
+                        <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(ticket.projekt.abschlussdatum)}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{msg['PROJEKTTABELLE.CHOOSE']}</f:facet>
+                        <p:commandButton action="#{ticketController.editTicket(ticket.id)}"
+                                         value="#{msg['PROJEKTANSICHT.CHANGETICKET']}"/>
                     </p:column>
                 </p:dataTable>
             </ui:insert>
@@ -108,6 +150,7 @@
                 <p>Ticketsystem GmbH</p>
             </div>
             <div id="Adresse">
+                <p>Max Musetermann</p>
                 <p>Taunustor Nr.2</p>
                 <p>60310 Frankfurt am Main</p>
                 <p>Deutschland</p>
@@ -119,4 +162,5 @@
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 <f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
+<f:event type="preRenderView" listener="#{loginController.userawareHome}"/>
 </html>

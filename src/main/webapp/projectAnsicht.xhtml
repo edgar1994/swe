@@ -91,13 +91,13 @@
                         </p:column>
                     </p:dataTable>
                 </ui:insert>
-                <div id="footer">
+                <!--<div id="footer">
                     <ui:insert name="footer">
                         <p:outputLabel
                                 rendered="#{projektController.isTicketsEmpty()}">#{msg['PROJEKTANSICHT.ISEMPTY']}
                         </p:outputLabel>
                     </ui:insert>
-                </div>
+                </div>-->
                 <p:commandButton action="#{ticketController.newTicket()}"
                                  value="#{msg['PROJEKTANSICHT.BUTTON.NEU']}"
                                  rendered="#{projektController.isLeader(loginController.user,
@@ -153,9 +153,19 @@
                 </div>
             </div>
         </div>
+        <div id="footer">
+            <div id="Firma">
+                <p>Ticketsystem GmbH</p>
+            </div>
+            <div id="Adresse">
+                <p>Taunustor Nr.2</p>
+                <p>60310 Frankfurt am Main</p>
+                <p>Deutschland</p>
+            </div>
+        </div>
     </h:form>
 </h:body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
-<f:event type="preRenderView" listener="#{loginController.userAwareProjectTable}"/>
+<f:event type="preRenderView" listener="#{loginController.userawareAll}"/>
 </html>

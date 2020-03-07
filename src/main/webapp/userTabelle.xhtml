@@ -65,7 +65,7 @@
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
                     <f:facet name="header">
-
+                        #{msg['USER.BEZEICHNUNG']}
                     </f:facet>
                     <p:column headerText="#{msg['USER.NACHNAME']}" filterBy="#{user.nachname}"
                               filterMatchMode="contains">
@@ -115,4 +115,5 @@
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
 <f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
+<f:event type="preRenderView" listener="#{loginController.userawareAdmin}"/>
 </html>
