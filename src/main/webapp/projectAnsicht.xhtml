@@ -15,8 +15,11 @@
         <div id="header">
             <div id="connectoren">
 
-                <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
-                                 immediate="true"/>
+                <p:commandButton id="mainpage"
+                                 action="${indexController.switchToIndex}"
+                                 immediate="true"
+                                 icon="fa fa-home black"
+                                 title="#{buttonTitleController.getButtonTitle('HOME')}"/>
                 <p:commandButton rendered="#{loginController.adminRole()}"
                                  value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
                                  action="${userController.switchToUser()}"
@@ -40,8 +43,13 @@
                                  update="userForm">
                     <p:ajax event="click"/>
                 </p:commandButton>
-                <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
+                <p:commandButton action='#{userController.editOwnUser(loginController.user)}'
+                                 icon="fa fa-user black"
+                                 title="#{buttonTitleController.getButtonTitle('USER.EIGEN_BEARBEITEN')}"
                                  immediate="true"/>
+                <p:commandButton action='${loginController.logout}'
+                                 immediate="true" icon="fa fa-sign-out black"
+                                 title="#{buttonTitleController.getButtonTitle('LOGIN.AUSLOGGEN')}"/>
             </div>
         </div>
 

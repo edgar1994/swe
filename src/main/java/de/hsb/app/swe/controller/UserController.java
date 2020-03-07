@@ -219,12 +219,24 @@ public class UserController extends AbstractCrudRepository<User> {
     }
 
     /**
-     * Sucht den zu bearbeitenden {@link User} raus und redirected auf {@link RedirectUtils#NEUER_USER_XHTML}
+     * Sucht den zu bearbeitenden {@link User} raus und redirected auf {@link RedirectUtils#NEUER_USER_XHTML}.
      *
      * @return {@link RedirectUtils#NEUER_USER_XHTML}
      */
     public String edit() {
         this.selectedEntity = this.entityList.getRowData();
+        this.existingUser = true;
+        return RedirectUtils.NEUER_USER_XHTML;
+    }
+
+    /**
+     * Setzt den eigenen {@link User} und redirectet auf {@link RedirectUtils#NEUER_USER_XHTML}.
+     *
+     * @param user {@link User}
+     * @return {@link RedirectUtils#NEUER_USER_XHTML}
+     */
+    public String editOwnUser(final User user) {
+        this.selectedEntity = user;
         this.existingUser = true;
         return RedirectUtils.NEUER_USER_XHTML;
     }

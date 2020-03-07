@@ -3,8 +3,9 @@ body {
     font-size: 12px;
 }
 
-.deutsch {
-    background-image: url("swe/src/main/webapp/resources/deutsch.png") !important;
+.ui-icon.fa {
+    text-indent: 0px;
+    background-image: none;
 }
 
 #content {
