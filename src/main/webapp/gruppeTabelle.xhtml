@@ -59,6 +59,9 @@
                              paginator="true" rows="15"
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
+                    <f:facet name="header">
+                        #{msg['GRUPPENTABELLE.TITEL']}
+                    </f:facet>
                     <p:column headerText="#{msg['GRUPPENTABELLE.GRUPPENTITEL']}" filterBy="#{gruppe.titel}"
                               filterMatchMode="contains">
                         <h:outputText value="#{gruppe.titel}"/>
@@ -90,13 +93,15 @@
                         </h:outputText>
                     </p:column>
                     <p:column class="menueButton">
-                        <p:menuButton value="#{msg['USER.TABELLE.MENUE']}">
+                        <p:menuButton value="#{msg['USER.TABELLE.MENUE']}"
+                                      rendered="#{loginController.adminRole() || gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}">
                             <p:menuitem value="#{msg['BUTTON.EDIT']}"
                                         action="#{gruppeController.userAwareEditGroup(loginController.user)}"
                                         update="growl"
                                         actionListener="#{userController.updateGroupMemberSet(gruppe.mitglieder)}"/>
                             <p:menuitem value="#{msg['BUTTON.REMOVE']}"
                                         action="#{gruppeController.deleteGruppe(loginController.user, gruppe.id)}"
+
                                         update="growl"/>
                             <p:separator/>
                         </p:menuButton>

@@ -44,31 +44,32 @@
         </div>
     </div>
 
+    <div id="login">
+        <p:hotkey bind="return" action="${loginController.login}"/>
+        <p:panelGrid id="grid" columns="2">
+            <f:facet name="header">#{msg['LOGIN.ANMELDUNG']}</f:facet>
+            <p:outputLabel value="#{msg['LOGIN.USERNAME']}" for="username"/>
+            <h:panelGroup>
+                <p:inputText id="username" required="true"
+                             value="#{loginController.username}"/>
+                <p:message for="username" styleClass="message"/>
+            </h:panelGroup>
 
-    <p:hotkey bind="return" action="${loginController.login}"/>
-    <p:panelGrid id="grid" columns="2">
-        <f:facet name="header">#{msg['LOGIN.ANMELDUNG']}</f:facet>
-        <p:outputLabel value="#{msg['LOGIN.USERNAME']}" for="username"/>
-        <h:panelGroup>
-            <p:inputText id="username" required="true"
-                         value="#{loginController.username}"/>
-            <p:message for="username" styleClass="message"/>
-        </h:panelGroup>
-
-        <p:outputLabel value="#{msg['LOGIN.PASSWORT']}" for="password"/>
-        <h:panelGroup>
-            <p:password id="password" required="true"
-                        value="#{loginController.passwort}"/>
-            <p:message for="password" styleClass="message"/>
-        </h:panelGroup>
-        <h:panelGroup/>
-        <h:panelGroup>
-            <h:commandLink value="#{msg['LOGIN.REGISTRIEREN']}" action="#{loginController.registrieren}"
-                           immediate="true"/>
-        </h:panelGroup>
-        <h:panelGroup/>
-        <p:commandButton action="${loginController.login}" value="#{msg['LOGIN.LOGIN']}" update="growl"/>
-    </p:panelGrid>
+            <p:outputLabel value="#{msg['LOGIN.PASSWORT']}" for="password"/>
+            <h:panelGroup>
+                <p:password id="password" required="true"
+                            value="#{loginController.passwort}"/>
+                <p:message for="password" styleClass="message"/>
+            </h:panelGroup>
+            <h:panelGroup/>
+            <h:panelGroup>
+                <h:commandLink value="#{msg['LOGIN.REGISTRIEREN']}" action="#{loginController.registrieren}"
+                               immediate="true"/>
+            </h:panelGroup>
+            <h:panelGroup/>
+            <p:commandButton action="${loginController.login}" value="#{msg['LOGIN.LOGIN']}" update="growl"/>
+        </p:panelGrid>
+    </div>
 
     <div id="footer">
         <div id="Firma">
