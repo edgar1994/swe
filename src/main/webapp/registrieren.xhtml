@@ -1,47 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
 >
 <h:head>
     <title>#{msg['SIGNUP.TITEL']}</title>
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <body>
-<h:form>
-    <div id="contentheader">
-        <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
-                         immediate="true"/>
-        <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
-                         action="${userController.switchToUser()}"
-                         immediate="true"/>
-        <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
-                         action="${gruppeController.switchToGruppe()}"
-                         immediate="true"/>
-        <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
-                         action="${projektController.switchToProjekt()}"
-                         immediate="true"/>
+<!--<h:form>-->
+<h:form id="userForm">
+    <div id="header">
+        <div id="connectoren">
 
-        <div id="spracheLogout">
-            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
-                             action='#{languageHandler.actionLanguage("de")}'/>
-            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
-                             action='#{languageHandler.actionLanguage("en")}'>
-                <p:ajax event="click"/>
-            </p:commandButton>
-            <p:commandButton id="buttonAusloggen" value="#{msg['LOGIN.AUSLOGGEN']}"
-                             action='${loginController.logout}'
+            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
+                             immediate="true"/>
+            <p:commandButton rendered="#{loginController.adminRole()}"
+                             value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
+                             action="${userController.switchToUser()}"
+                             immediate="true"/>
+            <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
+                             action="${gruppeController.switchToGruppe()}"
+                             immediate="true"/>
+            <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
+                             action="${projektController.switchToProjekt()}"
                              immediate="true"/>
         </div>
-
+        <div id="header-right">
+            <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
+                             action='#{languageHandler.actionLanguage("de")}'
+                             update="userForm"/>
+            <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
+                             action='#{languageHandler.actionLanguage("en")}'
+                             update="userForm">
+                <p:ajax event="click"/>
+            </p:commandButton>
+            <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
+                             immediate="true"/>
+        </div>
     </div>
-</h:form>
-<div id="content">
-    <ui:insert name="content">
-        <h:form>
+    <!-- </h:form>-->
+    <div id="content">
+        <ui:insert name="content">
+            <!--<h:form>-->
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <h:panelGrid var="user" value="#{userController.selectedEntity}" columns="2"
                          headerClass="header"
@@ -109,9 +113,19 @@
                     update="growl"/>
             <p:commandButton action="#{userController.switchToUser}" value="#{msg['BUTTON.ABBRECHEN']}"
                              immediate="true"/>
-        </h:form>
-    </ui:insert>
-</div>
-
+            <!-- </h:form> -->
+        </ui:insert>
+    </div>
+    <div id="footer">
+        <div id="Firma">
+            <p>Ticketsystem GmbH</p>
+        </div>
+        <div id="Adresse">
+            <p>Taunustor Nr.2</p>
+            <p>60310 Frankfurt am Main</p>
+            <p>Deutschland</p>
+        </div>
+    </div>
+</h:form>
 </body>
 </html>

@@ -11,7 +11,6 @@ body {
     width: 100%;
     flex: 0 0 75%;
     position: relative;
-
 }
 
 #header {
@@ -23,6 +22,11 @@ body {
 
 #connectoren {
     float: left;
+}
+
+#change {
+    float: left;
+    position: absolute;
 }
 
 #namelogin {
@@ -59,6 +63,7 @@ body {
 }
 
 #wrapper {
+    float: left;
     display: flex;
 }
 
@@ -73,6 +78,7 @@ body {
 }
 
 #right {
+
     flex: 1;
     width: 250px;
 }

@@ -13,20 +13,26 @@
 <h:body>
     <p:growl id="growl" showDetail="true" sticky="true"/>
     <h:form id="userForm">
-        <div id="contentheader">
-            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
-                             immediate="true"/>
-            <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
-                             action="${userController.switchToUser()}"
-                             immediate="true"/>
-            <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
-                             action="${gruppeController.switchToGruppe()}"
-                             immediate="true"/>
-            <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
-                             action="${projektController.switchToProjekt()}"
-                             immediate="true"/>
+        <div id="header">
+            <div id="connectoren">
 
-            <div id="spracheLogout">
+                <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
+                                 immediate="true"/>
+                <p:commandButton rendered="#{loginController.adminRole()}"
+                                 value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
+                                 action="${userController.switchToUser()}"
+                                 immediate="true"/>
+                <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
+                                 action="${gruppeController.switchToGruppe()}"
+                                 immediate="true"/>
+                <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
+                                 action="${projektController.switchToProjekt()}"
+                                 immediate="true"/>
+            </div>
+            <div id="namelogin">
+                <p>User: #{userController.formatedName(loginController.user.id, loginController.user.rolle)}</p>
+            </div>
+            <div id="header-right">
                 <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
                                  action='#{languageHandler.actionLanguage("de")}'
                                  update="userForm"/>
@@ -35,11 +41,9 @@
                                  update="userForm">
                     <p:ajax event="click"/>
                 </p:commandButton>
-                <p:commandButton id="buttonAusloggen" value="#{msg['LOGIN.AUSLOGGEN']}"
-                                 action='${loginController.logout}'
+                <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
                                  immediate="true"/>
             </div>
-
         </div>
 
         <div id="content">
@@ -50,7 +54,7 @@
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
                              filteredValue="#{gruppeController.filteredList}"
                              rowClasses="odd,even" headerClass="header"
-                             paginator="true" rows="10"
+                             paginator="true" rows="15"
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
                     <p:column headerText="#{msg['PROJEKTTABELLE.TITEL']}" filterBy="#{projekt.titel}"
@@ -98,6 +102,16 @@
             <p:commandButton action="#{projektController.newProject(loginController.user)}"
                              value="#{msg['PROJEKTTABELLE.BUTTON.NEU']}"
                              rendered="#{gruppeController.userAwareNewGroup(loginController.user)}"/>
+        </div>
+        <div id="footer">
+            <div id="Firma">
+                <p>Ticketsystem GmbH</p>
+            </div>
+            <div id="Adresse">
+                <p>Taunustor Nr.2</p>
+                <p>60310 Frankfurt am Main</p>
+                <p>Deutschland</p>
+            </div>
         </div>
     </h:form>
 

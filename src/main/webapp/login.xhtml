@@ -14,28 +14,29 @@
 <p:growl id="growl" showDetail="true" sticky="true"/>
 </body>
 <h:form id="userForm">
-    <div id="contentheader">
-        <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
-                         immediate="true"/>
-        <p:commandButton value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
-                         action="${userController.switchToUser()}"
-                         immediate="true"/>
-        <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
-                         action="${gruppeController.switchToGruppe()}"
-                         immediate="true"/>
-        <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
-                         action="${projektController.switchToProjekt()}"
-                         immediate="true"/>
+    <div id="header">
+        <div id="connectoren">
 
-        <div id="spracheLogout">
+            <p:commandButton value="Mainpage" id="mainpage" action="${indexController.switchToIndex}"
+                             immediate="true"/>
+            <p:commandButton rendered="#{loginController.adminRole()}"
+                             value="#{msg['USER.BEZEICHNUNG']}" id="mitarbeiter"
+                             action="${userController.switchToUser()}"
+                             immediate="true"/>
+            <p:commandButton value="#{msg['GRUPPENTABELLE.TITEL']}" id="Gruppe"
+                             action="${gruppeController.switchToGruppe()}"
+                             immediate="true"/>
+            <p:commandButton value="#{msg['PROJEKTTABELLE.TITEL']}" id="Projekt"
+                             action="${projektController.switchToProjekt()}"
+                             immediate="true"/>
+        </div>
+        <div id="header-right">
             <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
                              action='#{languageHandler.actionLanguage("de")}'
-                             update="userForm"
-                             immediate="true"/>
+                             update="userForm"/>
             <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
                              action='#{languageHandler.actionLanguage("en")}'
-                             update="userForm"
-                             immediate="true">
+                             update="userForm">
                 <p:ajax event="click"/>
             </p:commandButton>
             <p:commandButton value="#{msg['LOGIN.AUSLOGGEN']}" action='${loginController.logout}'
@@ -68,6 +69,17 @@
         <h:panelGroup/>
         <p:commandButton action="${loginController.login}" value="#{msg['LOGIN.LOGIN']}" update="growl"/>
     </p:panelGrid>
+
+    <div id="footer">
+        <div id="Firma">
+            <p>Ticketsystem GmbH</p>
+        </div>
+        <div id="Adresse">
+            <p>Taunustor Nr.2</p>
+            <p>60310 Frankfurt am Main</p>
+            <p>Deutschland</p>
+        </div>
+    </div>
 </h:form>
 <f:event listener="#{initializerController.emptyMethod}" type="preRenderComponent"/>
 </html>

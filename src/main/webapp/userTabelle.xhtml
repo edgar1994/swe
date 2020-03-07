@@ -33,7 +33,7 @@
                 <p>User: #{userController.formatedName(loginController.user.id, loginController.user.rolle)}</p>
             </div>
             <div id="header-right">
-                <p:commandButton icon="deutsch"
+                <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
                                  action='#{languageHandler.actionLanguage("de")}'
                                  update="userForm"/>
                 <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
@@ -53,7 +53,7 @@
                 <p:dataTable var="user" value="#{userController.entityList}" widgetVar="userTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
                              filteredValue="#{userController.filteredList}"
-                             paginator="true" rows="10"
+                             paginator="true" rows="15"
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
                     <f:facet name="header">
