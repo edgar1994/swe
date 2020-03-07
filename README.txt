@@ -9,6 +9,15 @@
   - Maven
   - Eclipse Jee 2019-06
 - Ticket System GmbH
+  - Login / Userdaten
+  - Registrieren
+  - Usertabelle
+  - Gruppentabelle
+  - Projekttabelle
+  - Projektansicht
+  - Neues Projekt
+  - Ticket
+  
   
 
 *******************************************************
