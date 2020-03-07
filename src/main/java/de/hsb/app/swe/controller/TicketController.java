@@ -1,5 +1,6 @@
 package de.hsb.app.swe.controller;
 
+import de.hsb.app.swe.enumeration.Rolle;
 import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.Ticket;
 import de.hsb.app.swe.model.User;
@@ -99,7 +100,6 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
                 return RedirectUtils.NEUES_TICKET_XHTML;
             }
             projekt.getTicket().removeIf(ticket -> ticket.getId() == this.selectedEntity.getId());
-            projekt.getTicket().add(this.selectedEntity);
             this.selectedEntity.setProjekt(projekt);
             try {
                 this.utx.begin();
@@ -134,10 +134,63 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
             final Query query = this.em.createQuery("Select t from Ticket t where t.bearbeiterId = :userID");
             query.setParameter("userID", loggedUser.getId());
 
-            return uncheckedSolver(query.getResultList());
+            return this.uncheckedSolver(query.getResultList());
         }
 
         return Collections.emptyList();
+    }
+
+    /**
+     * Wenn der {@link User} berichtigt ist loescht die Funktion das uebergebene Ticket.
+     *
+     * @param ticket     {@link Ticket}
+     * @param loggedUser {@link User}
+     * @return {@link RedirectUtils#PROJEKT_ANSICHT_XHTML}
+     */
+    public String deleteTicket(Ticket ticket, final User loggedUser) {
+        final FacesContext context = FacesContext.getCurrentInstance();
+        if (loggedUser != null && ticket != null) {
+            if (loggedUser.getRolle() == Rolle.ADMIN || loggedUser.getRolle() == Rolle.MITARBEITER) {
+                try {
+                    this.utx.begin();
+                    ticket = this.em.merge(ticket);
+                    final Projekt projekt = this.em.merge(ticket.getProjekt());
+                    projekt.getTicket().remove(ticket);
+                    this.em.persist(projekt);
+                    ticket.setProjekt(null);
+                    this.em.remove(ticket);
+                    this.em.flush();
+                    this.utx.commit();
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                            this.messageService.getMessage("TICKET.VALIDATOR.MESSAGE.DELETE.SUMMARY.SUCCESS"),
+                            this.messageService.getMessage("TICKET.VALIDATOR.MESSAGE.DELETE.DETAIL.SUCCESS",
+                                    ticket.getTitel())
+                    ));
+                    return RedirectUtils.PROJEKT_ANSICHT_XHTML;
+                } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
+                        RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            this.messageService.getMessage("TICKET.VALIDATOR.MESSAGE.DELETE.SUMMARY.FAILED"),
+                            this.messageService.getMessage("TICKET.VALIDATOR.MESSAGE.DELETE.DETAIL.FAILED")
+                    ));
+                    this.logger.error("TICKET.LOG.MESSAGE.DELETE.DETAIL.FAILED");
+                }
+            } else {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        this.messageService.getMessage("TICKET.VALIDATOR.MESSAGE.DELETE.SUMMARY.FAILED"),
+                        this.messageService.getMessage("TICKET.VALIDATOR.MESSAGE.DELETE.DETAIL.NOT_ALLOWED")
+                ));
+                this.logger.error("TICKET.LOG.MESSAGE.DELETE.DETAIL.NOT_ALLOWED");
+            }
+        } else {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    this.messageService.getMessage("TICKET.VALIDATOR.MESSAGE.DELETE.SUMMARY.FAILED"),
+                    this.messageService.getMessage("TICKET.VALIDATOR.MESSAGE.DELETE.DETAIL.FAILED")
+            ));
+            this.logger.error("TICKET.LOG.MESSAGE.DELETE.DETAIL.FAILED");
+        }
+
+        return null;
     }
 
     /**

@@ -62,6 +62,11 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
         return true;
     }
 
+    public void updateProjekt(final int id) {
+        final Optional<Projekt> projekt = this.findById(id);
+        projekt.ifPresent(value -> this.selectedEntity = value);
+    }
+
     /**
      * Findet alle Titel die existierende Projekte haben und liefert sie als {@link List<String>} zurueck.
      *

@@ -101,6 +101,10 @@
                         action="#{ticketController.saveNewTicketToProject(projektController.selectedEntity)}"
                         value="#{msg['BUTTON.SPEICHERN']}"
                         update="growl"/>
+                <p:commandButton
+                        action="#{ticketController.deleteTicket(ticketController.selectedEntity, loginController.user)}"
+                        value="#{msg['BUTTON.DELETE']}"
+                        update="growl"/>
             </h:form>
         </div>
         <div id="rightAnsicht">
