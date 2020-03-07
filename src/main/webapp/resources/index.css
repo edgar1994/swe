@@ -1,24 +1,61 @@
 body {
-
-    margin: 10px;
-    padding: 10px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 12px;
+}
+
+.deutsch {
+    background-image: url("swe/src/main/webapp/resources/deutsch.png") !important;
 }
 
 #content {
     width: 100%;
     flex: 0 0 75%;
     position: relative;
-    margin-top: 5px;
 }
 
-#contentheader {
-    height: 10%;
+#header {
+    background-color: #ccd2d3;
+    height: 30px;
+    border: 1px;
+    border-radius: 2px;
 }
 
-#spracheLogout {
+#connectoren {
+    float: left;
+}
+
+#change {
+    float: left;
+    position: absolute;
+}
+
+#namelogin {
+    float: left;
+    margin-left: 20px;
+}
+
+#footer {
+    background-color: #ccd2d3;
+    position: fixed;
+    bottom: 0px;
+    height: 120px;
+    width: 99%;
+    border: 1px;
+    border-radius: 2px;
+}
+
+#Firma {
+    float: left;
+}
+
+#Adresse {
     float: right;
+    margin-right: 10px;
+}
+
+
+#header-right {
+    margin-left: 84%;
 }
 
 .menueButton {
@@ -26,6 +63,7 @@ body {
 }
 
 #wrapper {
+    float: left;
     display: flex;
 }
 
@@ -40,19 +78,17 @@ body {
 }
 
 #right {
+
     flex: 1;
     width: 250px;
 }
 
 #rightAnsicht {
-
     float: right;
-
 }
 
 .customerButton {
     width: 100%;
-
 }
 
 #customerTable {
