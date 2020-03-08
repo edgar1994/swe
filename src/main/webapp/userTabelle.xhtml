@@ -58,7 +58,7 @@
             <ui:insert name="content">
 
 
-                <p:dataTable var="user" value="#{userController.entityList}" widgetVar="userTabelleJS"
+                <p:dataTable id="userTabelle" var="user" value="#{userController.entityList}" widgetVar="userTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
                              filteredValue="#{userController.filteredList}"
                              paginator="true" rows="15"
@@ -86,7 +86,7 @@
                                         update="growl"/>
                             <p:menuitem value="#{msg['USER.LOESCHEN']}"
                                         action="${userController.deleteRow(loginController.user)}"
-                                        update="growl"/>
+                                        update="growl userTabelle"/>
                             <p:separator/>
                         </p:menuButton>
                     </p:column>

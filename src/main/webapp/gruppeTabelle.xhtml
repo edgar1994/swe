@@ -105,7 +105,7 @@
                                         actionListener="#{userController.updateGroupMemberSet(gruppe.mitglieder)}"/>
                             <p:menuitem value="#{msg['BUTTON.REMOVE']}"
                                         action="#{gruppeController.deleteGruppe(loginController.user, gruppe.id)}"
-                                        update="growl"/>
+                                        update="growl gruppeTabelle"/>
                             <p:separator/>
                         </p:menuButton>
                     </p:column>

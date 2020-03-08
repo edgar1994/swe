@@ -274,7 +274,7 @@ public class UserController extends AbstractCrudRepository<User> {
                     this.em.remove(this.selectedEntity);
                     this.entityList.setWrappedData(this.em.createNamedQuery(this.getSelect()).getResultList());
                     this.utx.commit();
-                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
                             this.messageService.getMessage("GRUPPE.DELETE.MESSAGE.SUCCESS.SUMMARY"),
                             this.messageService.getMessage("GRUPPE.DELETE.MESSAGE.SUCCESS.DETAIL")
                     ));

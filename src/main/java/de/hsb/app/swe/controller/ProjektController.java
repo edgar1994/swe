@@ -287,7 +287,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     public String deleteProject(final User loggedUser, Projekt project) {
         final FacesContext context = FacesContext.getCurrentInstance();
         if (project != null && loggedUser != null) {
-            if (UserUtils.compareUserById(project.getLeiterId(), loggedUser)) {
+            if (UserUtils.compareUserById(project.getLeiterId(), loggedUser) || loggedUser.getRolle() == Rolle.ADMIN) {
                 try {
                     this.utx.begin();
                     project = this.em.merge(project);
