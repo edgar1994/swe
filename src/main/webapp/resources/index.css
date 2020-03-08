@@ -58,6 +58,12 @@ body {
     float: left;
 }
 
+#mid {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
 #Adresse {
     float: right;
     margin-right: 10px;

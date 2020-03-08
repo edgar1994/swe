@@ -92,6 +92,17 @@ public class UserController extends AbstractCrudRepository<User> {
     }
 
     /**
+     * Bricht den aktuellen Vorgang ab und leitet zurueck auf {@link RedirectUtils#IMPRINT_XHTML}.
+     *
+     * @return {@link RedirectUtils#USER_TABELLE_XHTML}
+     */
+    public String switchToImprint() {
+        this.existingUser = false;
+        return RedirectUtils.IMPRINT_XHTML;
+    }
+
+
+    /**
      * Formatiert die Adresse nach folgenden Format: Straße Hausnummer, Stadt, Postleitzahl.
      *
      * @param user {@link User}

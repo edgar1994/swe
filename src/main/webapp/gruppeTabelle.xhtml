@@ -18,7 +18,7 @@
             <div id="connectoren">
 
                 <p:commandButton id="mainpage"
-                                 action="${indexController.switchToIndex}"
+                                 action="${indexController.switchToIndex(loginController.user)}"
                                  immediate="true"
                                  icon="fa fa-home black"
                                  title="#{buttonTitleController.getButtonTitle('HOME')}"/>
@@ -57,19 +57,17 @@
 
         <div id="content">
 
-
+            <h3> #{msg['GRUPPENTABELLE.TITEL']}</h3>
             <ui:insert name="content">
                 <p:dataTable id="gruppeTabelle" var="gruppe"
                              value="#{gruppeController.userAwareFindAllGruppen(loginController.user)}"
                              widgetVar="gruppeTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
                              filteredValue="#{gruppeController.filteredList}"
-                             paginator="true" rows="15"
+                             paginator="true" rows="10"
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
-                    <f:facet name="header">
-                        #{msg['GRUPPENTABELLE.TITEL']}
-                    </f:facet>
+
                     <p:column headerText="#{msg['GRUPPENTABELLE.GRUPPENTITEL']}" filterBy="#{gruppe.titel}"
                               filterMatchMode="contains">
                         <h:outputText value="#{gruppe.titel}"/>
@@ -90,13 +88,11 @@
                                 value="#{userController.formatedName(userController.getKundeUser(gruppe.mitglieder),
                                     enumController.getRolleCustomer())}"/>
                     </p:column>
-                    <p:column filterBy="#{gruppe.erstellungsdatum}"
-                              filterMatchMode="contains"
-                              rendered="#{loginController.adminRole()}">
+                    <p:column rendered="#{loginController.adminRole()}">
 
                         <f:facet name="header">
                             #{msg['GRUPPENTABELLE.ERSTELLUNGSDATUM']}</f:facet>
-                        <h:outputText value="#{gruppe.erstellungsdatum}">
+                        <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(gruppe.erstellungsdatum)}">
 
                         </h:outputText>
                     </p:column>
@@ -126,6 +122,10 @@
         <div id="footer">
             <div id="Firma">
                 <p>Ticketsystem GmbH</p>
+            </div>
+            <div id="mid">
+                <h:commandLink value="#{msg['IMPRINT']}" action="#{userController.switchToImprint}"
+                               immediate="true"/>
             </div>
             <div id="Adresse">
                 <p>Taunustor Nr.2</p>

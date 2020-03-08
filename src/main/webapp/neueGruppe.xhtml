@@ -16,7 +16,7 @@
         <div id="connectoren">
 
             <p:commandButton id="mainpage"
-                             action="${indexController.switchToIndex}"
+                             action="${indexController.switchToIndex(loginController.user)}"
                              immediate="true"
                              icon="fa fa-home black"
                              title="#{buttonTitleController.getButtonTitle('HOME')}"/>
@@ -56,6 +56,7 @@
     <div id="content">
 
         <ui:insert name="content">
+            <h3>#{msg['GRUPPENTABELLE.BUTTON.NEU']}</h3>
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <h:panelGrid var="gruppe" value="#{gruppeController.selectedEntity}" columns="2"
                          headerClass="header"
@@ -72,6 +73,9 @@
                          paginator="true" rows="10"
                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                          rowsPerPageTemplate="5,10,15">
+                <f:facet name="header">
+                    #{msg['NEWGROUP.USER']}
+                </f:facet>
                 <p:column>
                     <f:facet name="header">#{msg['NEUERUSER.ROLLE']}</f:facet>
                     <h:outputText value="#{msg[user.rolle.rolle]}"/>
@@ -113,6 +117,10 @@
     <div id="footer">
         <div id="Firma">
             <p>Ticketsystem GmbH</p>
+        </div>
+        <div id="mid">
+            <h:commandLink value="#{msg['IMPRINT']}" action="#{userController.switchToImprint}"
+                           immediate="true"/>
         </div>
         <div id="Adresse">
             <p>Taunustor Nr.2</p>

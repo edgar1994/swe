@@ -17,7 +17,7 @@
             <div id="connectoren">
 
                 <p:commandButton id="mainpage"
-                                 action="${indexController.switchToIndex}"
+                                 action="${indexController.switchToIndex(loginController.user)}"
                                  immediate="true"
                                  icon="fa fa-home black"
                                  title="#{buttonTitleController.getButtonTitle('HOME')}"/>
@@ -56,18 +56,17 @@
 
         <div id="content">
             <ui:insert name="content">
+                <h3>#{msg['PROJEKTTABELLE.TITEL']}</h3>
                 <p:dataTable id="projektTabelle" var="projekt"
                              value="#{projektController.userAwareFindAllByGruppe(loginController.user)}"
                              widgetVar="projektTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
                              filteredValue="#{gruppeController.filteredList}"
                              rowClasses="odd,even" headerClass="header"
-                             paginator="true" rows="15"
+                             paginator="true" rows="10"
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
-                    <f:facet name="header">
-                        #{msg['PROJEKTTABELLE.TITEL']}
-                    </f:facet>
+
                     <p:column headerText="#{msg['PROJEKTTABELLE.TITEL']}" filterBy="#{projekt.titel}"
                               filterMatchMode="contains">
                         <h:outputText value="#{projekt.titel}"/>
@@ -116,6 +115,10 @@
         <div id="footer">
             <div id="Firma">
                 <p>Ticketsystem GmbH</p>
+            </div>
+            <div id="mid">
+                <h:commandLink value="#{msg['IMPRINT']}" action="#{userController.switchToImprint}"
+                               immediate="true"/>
             </div>
             <div id="Adresse">
                 <p>Taunustor Nr.2</p>

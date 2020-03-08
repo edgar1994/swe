@@ -19,7 +19,7 @@
             <div id="connectoren">
 
                 <p:commandButton id="mainpage"
-                                 action="${indexController.switchToIndex}"
+                                 action="${indexController.switchToIndex(loginController.user)}"
                                  immediate="true"
                                  icon="fa fa-home black"
                                  title="#{buttonTitleController.getButtonTitle('HOME')}"/>
@@ -60,7 +60,7 @@
         <div id="content">
             <ui:insert name="content">
 
-
+                <h2>#{msg['INDEX.HEADER']}</h2>
                 <p:dataTable id="kundeTabelle" var="projekt"
                              rendered="#{loginController.customerRole()}"
                              value="#{projektController.userAwareFindAllByGruppe(loginController.user)}"
@@ -68,12 +68,9 @@
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
                              filteredValue="#{gruppeController.filteredList}"
                              rowClasses="odd,even" headerClass="header"
-                             paginator="true" rows="15"
+                             paginator="true" rows="10"
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
-                    <f:facet name="header">
-                        #{msg['INDEX.CUSTEMER.HEADER']}
-                    </f:facet>
                     <p:column headerText="#{msg['PROJEKTTABELLE.TITEL']}" filterBy="#{projekt.titel}"
                               filterMatchMode="contains">
                         <h:outputText value="#{projekt.titel}"/>
@@ -118,9 +115,7 @@
                              paginator="true" rows="15"
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
-                    <f:facet name="header">
-                        #{msg['INDEX.HEADER']}
-                    </f:facet>
+
                     <p:column headerText="#{msg['PROJEKTTABELLE.TITEL']}" filterBy="#{ticket.projekt.titel}"
                               filterMatchMode="contains">
                         <h:outputText value="#{ticket.projekt.titel}"/>
@@ -149,6 +144,10 @@
             <div id="Firma">
                 <p>Ticketsystem GmbH</p>
             </div>
+            <div id="mid">
+                <h:commandLink value="#{msg['IMPRINT']}" action="#{userController.switchToImprint}"
+                               immediate="true"/>
+            </div>
             <div id="Adresse">
                 <p>Max Musetermann</p>
                 <p>Taunustor Nr.2</p>
@@ -162,5 +161,4 @@
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>
 <f:event type="preRenderView" listener="#{loginController.updateCurrentUser}"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
-<f:event type="preRenderView" listener="#{loginController.userawareHome}"/>
 </html>

@@ -12,7 +12,6 @@
 </h:head>
 <body>
 <p:growl id="growl" showDetail="true" sticky="true"/>
-</body>
 <h:form id="userForm">
     <div id="header">
         <div id="connectoren">
@@ -33,6 +32,9 @@
                              action="${projektController.switchToProjekt()}"
                              immediate="true"/>
         </div>
+        <div id="namelogin">
+            <p>User: #{userController.formatedName(loginController.user.id, loginController.user.rolle)}</p>
+        </div>
         <div id="header-right">
             <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
                              action='#{languageHandler.actionLanguage("de")}'
@@ -51,34 +53,16 @@
                              title="#{buttonTitleController.getButtonTitle('LOGIN.AUSLOGGEN')}"/>
         </div>
     </div>
+    <div id="change">
+        <p><strong>#{msg['IMPRINT']}"</strong></p>
+        <p>#{msg['IMPRINT.PROVIDERS']}:<br/>Max Mustermann<br/>Taunustor Nr.2<br/>60310 Frankfurt am Main</p>
+        <p>#{msg['IMPRINT.CONTACT']}":<br/>#{msg['IMPRINT.PHONE']}": 089/1234567-8<br/>E-Mail: mail@mustermann.de<br/>
+        </p>
+        <p></p>
+        <p>Bei redaktionellen Inhalten:</p>
+        <p>Verantwortlich nach § 55 Abs.2 RStV<br/>Moritz Schreiberling<br/>Musterstraße 2<br/>80999 München</p>
 
-    <div id="login">
-        <p:hotkey bind="return" action="${loginController.login}"/>
-        <p:panelGrid id="grid" columns="2">
-            <f:facet name="header">#{msg['LOGIN.ANMELDUNG']}</f:facet>
-            <p:outputLabel value="#{msg['LOGIN.USERNAME']}" for="username"/>
-            <h:panelGroup>
-                <p:inputText id="username" required="true"
-                             value="#{loginController.username}"/>
-                <p:message for="username" styleClass="message"/>
-            </h:panelGroup>
-
-            <p:outputLabel value="#{msg['LOGIN.PASSWORT']}" for="password"/>
-            <h:panelGroup>
-                <p:password id="password" required="true"
-                            value="#{loginController.passwort}"/>
-                <p:message for="password" styleClass="message"/>
-            </h:panelGroup>
-            <h:panelGroup/>
-            <h:panelGroup>
-                <h:commandLink value="#{msg['LOGIN.REGISTRIEREN']}" action="#{loginController.registrieren}"
-                               immediate="true"/>
-            </h:panelGroup>
-            <h:panelGroup/>
-            <p:commandButton action="${loginController.login}" value="#{msg['LOGIN.LOGIN']}" update="growl"/>
-        </p:panelGrid>
     </div>
-
     <div id="footer">
         <div id="Firma">
             <p>Ticketsystem GmbH</p>
@@ -94,5 +78,6 @@
         </div>
     </div>
 </h:form>
-<f:event listener="#{initializerController.emptyMethod}" type="preRenderComponent"/>
+</body>
+<f:event listener="#{loginController.checkLoggedIn}" type="preRenderComponent"/>
 </html>

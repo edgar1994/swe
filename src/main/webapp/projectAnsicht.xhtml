@@ -16,7 +16,7 @@
             <div id="connectoren">
 
                 <p:commandButton id="mainpage"
-                                 action="${indexController.switchToIndex}"
+                                 action="${indexController.switchToIndex(loginController.user)}"
                                  immediate="true"
                                  icon="fa fa-home black"
                                  title="#{buttonTitleController.getButtonTitle('HOME')}"/>
@@ -56,13 +56,13 @@
         <div id="wrapper">
 
             <div id="content">
-
+                <h3>#{msg['PROJEKT.VIEWPROJEKT']}</h3>
                 <p:growl id="growl" showDetail="true" sticky="true"/>
                 <ui:insert name="content">
                     <p:dataTable id="ticketTabelle" var="ticket"
                                  value="#{projektController.selectedEntity.ticket}"
                                  rowClasses="odd,even" headerClass="header"
-                                 paginator="true" rows="15"
+                                 paginator="true" rows="10"
                                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                                  rowsPerPageTemplate="5,10,15">
                         <p:column>
@@ -100,8 +100,7 @@
                 </div>-->
                 <p:commandButton action="#{ticketController.newTicket()}"
                                  value="#{msg['PROJEKTANSICHT.BUTTON.NEU']}"
-                                 rendered="#{projektController.isLeader(loginController.user,
-                                    projektController.selectedEntity)}"/>
+                                 rendered="#{loginController.employeeRole()}"/>
 
             </div>
             <div id="right">
@@ -156,6 +155,10 @@
         <div id="footer">
             <div id="Firma">
                 <p>Ticketsystem GmbH</p>
+            </div>
+            <div id="mid">
+                <h:commandLink value="#{msg['IMPRINT']}" action="#{userController.switchToImprint}"
+                               immediate="true"/>
             </div>
             <div id="Adresse">
                 <p>Taunustor Nr.2</p>

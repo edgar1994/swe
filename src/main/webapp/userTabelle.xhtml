@@ -17,7 +17,7 @@
             <div id="connectoren">
 
                 <p:commandButton id="mainpage"
-                                 action="${indexController.switchToIndex}"
+                                 action="${indexController.switchToIndex(loginController.user)}"
                                  immediate="true"
                                  icon="fa fa-home black"
                                  title="#{buttonTitleController.getButtonTitle('HOME')}"/>
@@ -57,16 +57,14 @@
         <div id="content">
             <ui:insert name="content">
 
-
+                <h3>#{msg['USER.BEZEICHNUNG']}</h3>
                 <p:dataTable var="user" value="#{userController.entityList}" widgetVar="userTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
                              filteredValue="#{userController.filteredList}"
-                             paginator="true" rows="15"
+                             paginator="true" rows="10"
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
-                    <f:facet name="header">
-                        #{msg['USER.BEZEICHNUNG']}
-                    </f:facet>
+
                     <p:column headerText="#{msg['USER.NACHNAME']}" filterBy="#{user.nachname}"
                               filterMatchMode="contains">
                         <h:outputText value="#{user.nachname}"/>
@@ -101,6 +99,10 @@
         <div id="footer">
             <div id="Firma">
                 <p>Ticketsystem GmbH</p>
+            </div>
+            <div id="mid">
+                <h:commandLink value="#{msg['IMPRINT']}" action="#{userController.switchToImprint}"
+                               immediate="true"/>
             </div>
             <div id="Adresse">
                 <p>Taunustor Nr.2</p>
