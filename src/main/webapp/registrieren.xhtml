@@ -17,7 +17,7 @@
         <div id="connectoren">
 
             <p:commandButton id="mainpage"
-                             action="${indexController.switchToIndex}"
+                             action="${indexController.switchToIndex(loginController.user)}"
                              immediate="true"
                              icon="fa fa-home black"
                              title="#{buttonTitleController.getButtonTitle('HOME')}"/>
@@ -51,7 +51,7 @@
         </div>
     </div>
     <!-- </h:form>-->
-    <div id="content">
+    <div id="login">
         <ui:insert name="content">
             <!--<h:form>-->
             <p:growl id="growl" showDetail="true" sticky="true"/>
@@ -128,6 +128,10 @@
     <div id="footer">
         <div id="Firma">
             <p>Ticketsystem GmbH</p>
+        </div>
+        <div id="mid">
+            <h:commandLink value="#{msg['IMPRINT']}" action="#{userController.switchToImprint}"
+                           immediate="true"/>
         </div>
         <div id="Adresse">
             <p>Taunustor Nr.2</p>

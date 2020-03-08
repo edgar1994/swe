@@ -17,7 +17,7 @@
             <div id="connectoren">
 
                 <p:commandButton id="mainpage"
-                                 action="${indexController.switchToIndex}"
+                                 action="${indexController.switchToIndex(loginController.user)}"
                                  immediate="true"
                                  icon="fa fa-home black"
                                  title="#{buttonTitleController.getButtonTitle('HOME')}"/>
@@ -56,15 +56,17 @@
 
         <div id="content">
             <ui:insert name="content">
+                <h3>#{msg['PROJEKTTABELLE.TITEL']}</h3>
                 <p:dataTable id="projektTabelle" var="projekt"
                              value="#{projektController.userAwareFindAllByGruppe(loginController.user)}"
                              widgetVar="projektTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
                              filteredValue="#{gruppeController.filteredList}"
                              rowClasses="odd,even" headerClass="header"
-                             paginator="true" rows="15"
+                             paginator="true" rows="10"
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
+
                     <p:column headerText="#{msg['PROJEKTTABELLE.TITEL']}" filterBy="#{projekt.titel}"
                               filterMatchMode="contains">
                         <h:outputText value="#{projekt.titel}"/>
@@ -92,18 +94,17 @@
                         <f:facet name="header">#{msg['PROJEKTTABELLE.CREATEDDATE']}</f:facet>
                         <h:outputText value="#{dateController.getFormatedDateDDMMYYYY(projekt.erstellungsdatum)}"/>
                     </p:column>
-                    <p:column>
-                        <f:facet name="header">#{msg['PROJEKTTABELLE.CHOOSE']}</f:facet>
-                        <p:commandButton
-                                value="#{msg['PROJEKTTABELLE.CHOOSE']}"
-                                action="#{projektController.chooseProject(projekt.id)}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">#{msg['PROJEKTTABELLE.DELETE']}</f:facet>
-                        <p:commandButton
-                                value="#{msg['PROJEKTTABELLE.DELETE']}"
-                                action="#{projektController.deleteProject(loginController.user, projekt)}"
-                                update="growl projektTabelle"/>
+                    <p:column class="menueButton">
+                        <p:menuButton value="#{msg['USER.TABELLE.MENUE']}">
+                            <p:menuitem value="#{msg['PROJEKTTABELLE.CHOOSE']}"
+                                        action="#{projektController.chooseProject(projekt.id)}"/>
+                            <p:menuitem value="#{msg['PROJEKTTABELLE.DELETE']}"
+                                        rendered="#{loginController.adminRole() || projektController.isLeader(loginController.user, projekt)}"
+                                        action="#{projektController.deleteProject(loginController.user, projekt)}"
+
+                                        update="growl projektTabelle"/>
+                            <p:separator/>
+                        </p:menuButton>
                     </p:column>
                 </p:dataTable>
             </ui:insert>
@@ -114,6 +115,10 @@
         <div id="footer">
             <div id="Firma">
                 <p>Ticketsystem GmbH</p>
+            </div>
+            <div id="mid">
+                <h:commandLink value="#{msg['IMPRINT']}" action="#{userController.switchToImprint}"
+                               immediate="true"/>
             </div>
             <div id="Adresse">
                 <p>Taunustor Nr.2</p>
@@ -126,5 +131,5 @@
 </h:body>
 <f:event type="preRenderView" listener="#{loginController.checkLoggedIn}"/>
 <f:event type="preRenderView" listener="#{loginController.checkFirstLogin}"/>
-<f:event type="preRenderView" listener="#{loginController.userAwareProjectTable}"/>
+<f:event type="preRenderView" listener="#{loginController.userawareAll}"/>
 </html>

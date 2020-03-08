@@ -44,4 +44,6 @@ public class RedirectUtils {
 
     public static final String CHANGE_PASSWORD_XHTML = "changePassword.xhtml";
 
+    public static final String IMPRINT_XHTML = "imprint.xhtml";
+
 }

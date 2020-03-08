@@ -18,7 +18,7 @@
         <div id="connectoren">
 
             <p:commandButton id="mainpage"
-                             action="${indexController.switchToIndex}"
+                             action="${indexController.switchToIndex(loginController.user)}"
                              immediate="true"
                              icon="fa fa-home black"
                              title="#{buttonTitleController.getButtonTitle('HOME')}"/>
@@ -56,10 +56,10 @@
     </div>
 
 
-    <div id="content">
+    <div id="change">
 
         <ui:insert name="content">
-
+            <h3>#{msg['USER.NEU']}</h3>
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <p:panelGrid var="user" value="#{userController.selectedEntity}" columns="2"
                          headerClass="header"
@@ -137,6 +137,10 @@
     <div id="footer">
         <div id="Firma">
             <p>Ticketsystem GmbH</p>
+        </div>
+        <div id="mid">
+            <h:commandLink value="#{msg['IMPRINT']}" action="#{userController.switchToImprint}"
+                           immediate="true"/>
         </div>
         <div id="Adresse">
             <p>Taunustor Nr.2</p>
