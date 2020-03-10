@@ -80,6 +80,9 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
         }
     }
 
+    /**
+     * Aktualisiert den aktuellen {@link User}
+     */
     public void updateCurrentUser() {
         final Query query = this.em.createQuery("select u from User u " +
                 "where u.username = :username and u.passwort = :passwort ");
@@ -192,10 +195,12 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
                     context.getApplication().getNavigationHandler().
                             handleNavigation(context, null,
                                     RedirectUtils.LOGIN_INDEX_XHTML);
+                    break;
                 case MITARBEITER:
                     context.getApplication().getNavigationHandler().
                             handleNavigation(context, null,
                                     RedirectUtils.LOGIN_INDEX_XHTML);
+                    break;
                 case USER:
                     context.getApplication().getNavigationHandler().
                             handleNavigation(context, null,
@@ -318,7 +323,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     }
 
     /**
-     * Prueft ob der angemeldete User admin ist.
+     * Prueft ob der angemeldete User Admin ist.
      */
     public boolean adminRole() {
         if (this.user != null) {
@@ -348,7 +353,7 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
     }
 
     /**
-     * Checked ob der angemeldete {@link User} {@link Rolle#KUNDE} oder {@link Rolle#USER} hat.
+     * Prueft ob der angemeldete {@link User} {@link Rolle#KUNDE} oder {@link Rolle#USER} hat.
      *
      * @param loggedUser eingeloggter {@link User}
      * @return boolean

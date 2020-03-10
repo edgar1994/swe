@@ -7,6 +7,9 @@ import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.Date;
 
+/**
+ * {@link Ticket}-Model
+ */
 @NamedQuery(name = Ticket.NAMED_QUERY_NAME, query = Ticket.NAMED_QUERY_QUERY)
 @Entity
 public class Ticket {

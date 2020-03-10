@@ -7,6 +7,9 @@ import de.hsb.app.swe.utils.UserUtils;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+/**
+ * Controller für die Index-Seite
+ */
 @ManagedBean(name = "indexController")
 @SessionScoped
 public class IndexController {

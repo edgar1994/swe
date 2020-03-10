@@ -1,6 +1,5 @@
 package de.hsb.app.swe.utils;
 
-import de.hsb.app.swe.model.Gruppe;
 import de.hsb.app.swe.model.Projekt;
 
 /**
@@ -28,18 +27,6 @@ public class ProjectUtils {
      */
     public static boolean compareUserById(final int projektId, final Projekt projektToCheck) {
         return projektToCheck.getId() == projektId;
-    }
-
-    /**
-     * Prueft  ob die uebergebene {@link Gruppe} die Gruppe des {@link Projekt}es ist.
-     *
-     * @param projekt {@link Projekt}
-     * @param gruppe  {@link Gruppe}
-     * @return boolean
-     */
-    public static boolean isChoosenGroup(final Projekt projekt, final Gruppe gruppe) {
-//        return projekt.getGruppenId() == gruppe.getLeiterName();
-        return false;
     }
 
 }

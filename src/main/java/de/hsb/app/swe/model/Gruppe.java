@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * {@link Gruppe}-Model
+ */
 @NamedQuery(name = Gruppe.NAMED_QUERY_NAME, query = Gruppe.NAMED_QUERY_QUERY)
 @Entity
 public class Gruppe {

@@ -7,6 +7,9 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.util.Locale;
 
+/**
+ * Controller fuer die Sprachen.
+ */
 @ManagedBean(name = "languageHandler")
 @SessionScoped
 public class LanguageController {
@@ -14,7 +17,7 @@ public class LanguageController {
     private String language = Language.DEUTSCH.getLanguage();
 
     /**
-     * Getter für language
+     * Getter für language.
      *
      * @return String
      */
@@ -23,7 +26,7 @@ public class LanguageController {
     }
 
     /**
-     * Setter für language
+     * Setter für language.
      *
      * @param language {@link Language}
      */

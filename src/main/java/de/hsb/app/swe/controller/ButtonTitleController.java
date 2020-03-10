@@ -15,10 +15,10 @@ public class ButtonTitleController {
     protected final MessageService messageService = new MessageService();
 
     /**
-     * Hole uebersetzte Message fuer
+     * Hole uebersetzte Message fuer die Buttontitel
      *
-     * @param message
-     * @return
+     * @param message Message
+     * @return Uebersetzte Message
      */
     public String getButtonTitle(final String message) {
         return this.messageService.getMessage(message);

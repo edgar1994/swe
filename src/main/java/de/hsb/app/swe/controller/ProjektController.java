@@ -7,7 +7,10 @@ import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.Ticket;
 import de.hsb.app.swe.model.User;
 import de.hsb.app.swe.repository.AbstractCrudRepository;
-import de.hsb.app.swe.utils.*;
+import de.hsb.app.swe.utils.GruppeUtils;
+import de.hsb.app.swe.utils.RedirectUtils;
+import de.hsb.app.swe.utils.StringUtils;
+import de.hsb.app.swe.utils.UserUtils;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -62,6 +65,11 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
         return true;
     }
 
+    /**
+     * Aktualisiert das aktuell ausgewählte {@link Projekt}.
+     *
+     * @param id ID
+     */
     public void updateProjekt(final int id) {
         final Optional<Projekt> projekt = this.findById(id);
         projekt.ifPresent(value -> this.selectedEntity = value);
@@ -99,6 +107,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     /**
      * Erstellt ein neues {@link Projekt} und redirected auf {@link RedirectUtils#NEUES_PROJEKT_XHTML}.
      *
+     * @param projektLeiter Projektleiter ({@link User})
      * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
      */
     public String newProject(final User projektLeiter) {
@@ -130,7 +139,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     }
 
     /**
-     * Zaehlt wie viele Tickets {@link de.hsb.app.swe.enumeration.Status#OFFEN} sind.
+     * Zaehlt wie viele Tickets {@link Status#OFFEN} sind.
      *
      * @param projekt {@link Projekt}
      * @return Anzahl der offenen Tickets
@@ -209,17 +218,6 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     }
 
     /**
-     * Prueft ob die Gruppe die Gruppe des Projektes ist.
-     *
-     * @param projekt {@link Projekt}
-     * @param gruppe  {@link Gruppe}
-     * @return boolean
-     */
-    public boolean isChoosenGroup(final Projekt projekt, final Gruppe gruppe) {
-        return ProjectUtils.isChoosenGroup(projekt, gruppe);
-    }
-
-    /**
      * Setzt die ausgewaehlte Gruppe fuer das {@link Projekt}. Redirected auf {@link RedirectUtils#NEUES_PROJEKT_XHTML}.
      *
      * @param gruppe {@link Gruppe}
@@ -231,7 +229,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     }
 
     /**
-     * Speicher das {@link Projekt} und fuehr zureuck auf {@link RedirectUtils#NEUES_PROJEKT_XHTML}
+     * Speichert das {@link Projekt} und fuehr zureuck auf {@link RedirectUtils#NEUES_PROJEKT_XHTML}
      *
      * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}
      */
@@ -262,6 +260,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
                                     "PROJECT.VALIDATOR.MESSAGE.SAVE.DETAIL.EDIT", this.selectedEntity.getTitel())));
                 }
                 this.logger.info("LOG.PROJECT.INFO.SAVE.SUCCESSFUL", this.selectedEntity.getId());
+                this.choosenGroupId = 0;
                 return RedirectUtils.PROJEKT_TABELLE_XHTML;
             } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                     RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
@@ -274,6 +273,7 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
         } else {
             this.logger.error("LOG.PROJECT.ERROR.SAVE.NOPROJECT");
         }
+        this.choosenGroupId = 0;
         return RedirectUtils.PROJEKT_TABELLE_XHTML;
     }
 

@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * {@link Projekt}-Model
+ */
 @NamedQuery(name = Projekt.NAMED_QUERY_NAME, query = Projekt.NAMED_QUERY_QUERY)
 @Entity
 public class Projekt {

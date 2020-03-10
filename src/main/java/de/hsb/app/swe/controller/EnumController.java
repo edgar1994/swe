@@ -6,6 +6,9 @@ import de.hsb.app.swe.enumeration.Status;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
+/**
+ * Controller fuer Enum.
+ */
 @ManagedBean(name = "enumController")
 @ApplicationScoped
 public class EnumController {

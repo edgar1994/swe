@@ -59,7 +59,11 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
 
     /**
      * Loescht eine {@link Gruppe} und entfernt vorher dessen {@link User}. Das {@link Projekt} an dem die {@link Gruppe}
-     * gearbeitet hat wird nicht gelöscht bekommt aber keine {@link Gruppe} mehr zugewissen.
+     * gearbeitet hat wird nicht gelöscht bekommt aber keine {@link Gruppe} mehr zugewissen. (Muss von einem Admin
+     * geloescht werden)
+     *
+     * @param loggedUser Eingeloggter {@link User}
+     * @param group      {@link Gruppe}
      */
     private void deleteGruppe(final User loggedUser, final Gruppe group) {
         final FacesContext context = FacesContext.getCurrentInstance();
@@ -67,17 +71,21 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
             if (group != null) {
                 try {
                     this.utx.begin();
+                    // Loesche die Gruppe aus dem User
                     for (final User user : this.selectedEntity.getMitglieder()) {
                         user.getGruppen().remove(this.selectedEntity);
                     }
                     final Query query = this.em.createQuery("select pr from Projekt pr where pr.gruppenId = :groupId");
                     query.setParameter("groupId", group.getId());
+                    // Loesche die Gruppen aus dem Projekt
                     for (final Projekt projekt : ListUtils.uncheckedSolverProjekt(query.getResultList())) {
                         projekt.setGruppenId(0);
                         this.em.persist(projekt);
                     }
+                    // Leere die MitgliederListe
                     this.selectedEntity.setMitglieder(new HashSet<>());
                     this.selectedEntity = this.em.merge(this.selectedEntity);
+                    // Loesche die Gruppe
                     this.em.remove(this.selectedEntity);
                     this.entityList.setWrappedData(this.userAwareFindAllGruppen(loggedUser).getWrappedData());
                     context.addMessage(null, new FacesMessage(
@@ -178,7 +186,8 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
         this.checkEntityList();
         this.isNewGroup = false;
         final Gruppe gruppeToCheck = this.entityList.getRowData();
-        if (gruppeToCheck != null && (UserUtils.compareUserById(gruppeToCheck.getLeiterId(), user) || UserUtils.isAdmin(user))) {
+        if (gruppeToCheck != null && (UserUtils.compareUserById(gruppeToCheck.getLeiterId(), user) ||
+                UserUtils.isAdmin(user))) {
             this.selectedEntity = gruppeToCheck;
             return RedirectUtils.NEUE_GRUPPE_XHTML;
         }
@@ -186,7 +195,8 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
     }
 
     /**
-     * Setzt die Mitglieder der gewaehlten {@link Gruppe} und speichert sie. Redirected auf {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
+     * Setzt die Mitglieder der gewaehlten {@link Gruppe} und speichert sie. Redirected auf
+     * {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      *
      * @return {@link RedirectUtils#GRUPPE_TABELLE_XHTML}
      */
