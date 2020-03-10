@@ -234,10 +234,21 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
         return result;
     }
 
+    /**
+     * getter fuer ticketList.
+     *
+     * @return ticketList
+     */
+
     public List<Ticket> getTicketList() {
         return this.ticketList;
     }
 
+    /**
+     * setter fuer ticketList
+     *
+     * @param ticketList
+     */
     public void setTicketList(final List<Ticket> ticketList) {
         this.ticketList = ticketList;
     }

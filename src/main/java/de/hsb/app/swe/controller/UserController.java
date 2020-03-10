@@ -20,7 +20,7 @@ import javax.transaction.*;
 import java.util.*;
 
 /**
- * UserController
+ * UserController Link {@User}
  */
 @ManagedBean(name = "userController")
 @SessionScoped
@@ -94,7 +94,7 @@ public class UserController extends AbstractCrudRepository<User> {
     /**
      * Bricht den aktuellen Vorgang ab und leitet zurueck auf {@link RedirectUtils#IMPRINT_XHTML}.
      *
-     * @return {@link RedirectUtils#USER_TABELLE_XHTML}
+     * @return {@link RedirectUtils#IMPRINT_XHTML}
      */
     public String switchToImprint() {
         this.existingUser = false;
@@ -141,6 +141,14 @@ public class UserController extends AbstractCrudRepository<User> {
                 .orElseGet(() -> UserUtils.formatedNameDummy(rolle));
     }
 
+    /**
+     * Liefert den Vor- und Nachnamen im Format "Nachname, Vorname" zurueck. Ist der Vorname oder Nachname leer wird ein
+     * {@link UserUtils#SELECT_ONE_USER} zurueckgeliefert.
+     *
+     * @param user  {@link User}
+     * @param rolle {@link Rolle} fuer die Dummy-Option
+     * @return "Nachname, Vorname"
+     */
     public String formatedNameForDropdown(final User user, final Rolle rolle) {
         if (user != null && (user.getId() == 0 || StringUtils.isEmptyOrNullOrBlank(user.getVorname()) ||
                 StringUtils.isEmptyOrNullOrBlank(user.getNachname()))) {
@@ -471,10 +479,16 @@ public class UserController extends AbstractCrudRepository<User> {
         this.groupmembersSet = groupmembersSet;
     }
 
+    /**
+     * getter fuer existingUser.
+     */
     public boolean isExistingUser() {
         return this.existingUser;
     }
 
+    /**
+     * Setter fuer existingUser.
+     */
     public void setExistingUser(final boolean existingUser) {
         this.existingUser = existingUser;
     }

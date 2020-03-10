@@ -34,6 +34,12 @@ public class StringUtils {
         return String.format(INITIALIZER_CONSOLE_PB_TMPL, DateUtils.formatedDateHMSS(date), pbLabel);
     }
 
+    /**
+     * Soll die Warnung "Unchecked cast" loesen.
+     *
+     * @param var
+     * @return List<String>
+     */
     public static List<String> uncheckedSolver(final Object var) {
         final List<String> result = new ArrayList<>();
         if (var instanceof List) {
