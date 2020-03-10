@@ -67,11 +67,12 @@
 
                 <h:outputLabel for="rolle" value="#{msg['NEUERUSER.ROLLE']}"/>
                 <h:panelGroup>
-                    <h:selectOneMenu id="rolle" value="#{userController.selectedEntity.rolle}">
+                    <p:selectOneMenu id="rolle" value="#{userController.selectedEntity.rolle}"
+                                     disabled="#{!loginController.adminRole()}">
                         <f:selectItems var="form" value="#{enumController.getRolleValues()}" itemValue="#{form}"
                                        itemLabel="#{msg[form.rolle]}"/>
                         <p:ajax event="change"/>
-                    </h:selectOneMenu>
+                    </p:selectOneMenu>
                 </h:panelGroup>
 
                 <h:outputLabel for="username" value="#{msg['NEUERUSER.USERNAME']}"/>
