@@ -8,6 +8,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.ValidatorException;
 
+/**
+ * Nachname Validator
+ */
 @FacesValidator(value = "lastnameValidator")
 public class LastnameValidator extends AbstractValidator {
 

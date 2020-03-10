@@ -9,6 +9,9 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.ValidatorException;
 import java.util.regex.Pattern;
 
+/**
+ * Postleitzahl Validator
+ */
 @FacesValidator(value = "zipValidator")
 public class ZipValidator extends AbstractValidator {
 

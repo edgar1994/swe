@@ -9,9 +9,19 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+/**
+ * Datums Validator
+ */
 @FacesValidator(value = "dateAfterValidator")
 public class DateAfterValidator extends AbstractValidator {
-
+    /**
+     * Liefert eine Error-Message zurueck wenn das Datum leer ist oder in der Vergangenheit liegt.
+     *
+     * @param context
+     * @param component
+     * @param value
+     * @throws ValidatorException
+     */
     @Override
     public void validate(final FacesContext context, final UIComponent component, final Object value) throws ValidatorException {
         final Date date = (Date) value;

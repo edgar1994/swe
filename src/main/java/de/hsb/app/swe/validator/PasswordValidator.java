@@ -7,9 +7,19 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.ValidatorException;
 import java.util.regex.Pattern;
 
+/**
+ * Passwort Validator
+ */
 @FacesValidator(value = "passwordValidator")
 public class PasswordValidator extends AbstractValidator {
-
+    /**
+     * Liefert eine Error-Message zurueck wenn das Passwort nicht dem Pattern entspricht.
+     *
+     * @param context
+     * @param component
+     * @param value
+     * @throws ValidatorException
+     */
     @Override
     public void validate(final FacesContext context, final UIComponent component, final Object value) throws ValidatorException {
         final String password = String.valueOf(value);

@@ -10,6 +10,9 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
+/**
+ * Username Validator
+ */
 @FacesValidator(value = "usernameValidator")
 public class UsernameValidator implements Validator {
 

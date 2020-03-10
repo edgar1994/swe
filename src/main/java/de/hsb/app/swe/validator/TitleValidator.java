@@ -8,6 +8,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.ValidatorException;
 
+/**
+ * Titel Validator
+ */
 @FacesValidator(value = "titleValidator")
 public class TitleValidator extends AbstractValidator {
 

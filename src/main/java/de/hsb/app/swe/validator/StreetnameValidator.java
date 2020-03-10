@@ -8,6 +8,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.ValidatorException;
 
+/**
+ * Strassenname Validator
+ */
 @FacesValidator(value = "streetnameValidator")
 public class StreetnameValidator extends AbstractValidator {
 

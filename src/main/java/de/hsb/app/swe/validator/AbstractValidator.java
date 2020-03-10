@@ -5,6 +5,9 @@ import de.hsb.app.swe.service.MessageService;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 
+/**
+ * Basisklasse für Validator
+ */
 @FacesValidator
 public abstract class AbstractValidator implements Validator {
 
