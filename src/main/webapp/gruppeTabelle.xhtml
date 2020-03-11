@@ -101,7 +101,6 @@
                                       rendered="#{loginController.adminRole() || gruppeController.userAwareIsGroupLeader(loginController.user, gruppe)}">
                             <p:menuitem value="#{msg['BUTTON.EDIT']}"
                                         action="#{gruppeController.userAwareEditGroup(loginController.user)}"
-                                        update="growl"
                                         actionListener="#{userController.updateGroupMemberSet(gruppe.mitglieder)}"/>
                             <p:menuitem value="#{msg['BUTTON.REMOVE']}"
                                         action="#{gruppeController.deleteGruppe(loginController.user, gruppe.id)}"

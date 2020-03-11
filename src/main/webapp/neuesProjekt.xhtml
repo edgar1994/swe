@@ -115,8 +115,9 @@
                     <f:facet name="header">#{msg['NEUESPROJEKT.WORKING.GROUP']}</f:facet>
                     <p:commandButton action="#{projektController.addGroupToProjekt(gruppe)}"
                                      value="#{msg['BUTTON.ADD']}"
-                                     immediate="true"
-                                     rendered="#{!projektController.isChoosenGroup(gruppe)}"/>
+
+                                     rendered="#{!projektController.isChoosenGroup(gruppe)}"
+                                     update="userForm"/>
                     <h:outputText value="#{msg['NEUESPROJEKT.CHOOSENGROUP']}"
                                   rendered="#{projektController.isChoosenGroup(gruppe)}"/>
                 </p:column>

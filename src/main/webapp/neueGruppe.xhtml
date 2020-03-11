@@ -97,11 +97,13 @@
                     <p:commandButton actionListener="#{userController.addUser(user.id)}"
                                      value="#{msg['NEUEGRUPPE.BUTTON.ADD']}"
                                      immediate="true"
-                                     rendered="#{!userController.isAdded(user)}"/>
+                                     rendered="#{!userController.isAdded(user)}"
+                                     update="userForm"/>
                     <p:commandButton actionListener="#{userController.removeUser(user.id)}"
                                      value="#{msg['NEUEGRUPPE.BUTTON.REMOVE']}"
                                      immediate="true"
-                                     rendered="#{userController.isAdded(user)}"/>
+                                     rendered="#{userController.isAdded(user)}"
+                                     update="userForm"/>
                 </p:column>
             </p:dataTable>
             <p:commandButton

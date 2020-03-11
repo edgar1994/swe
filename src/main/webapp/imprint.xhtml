@@ -32,9 +32,6 @@
                              action="${projektController.switchToProjekt()}"
                              immediate="true"/>
         </div>
-        <div id="namelogin">
-            <p>User: #{userController.formatedName(loginController.user.id, loginController.user.rolle)}</p>
-        </div>
         <div id="header-right">
             <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
                              action='#{languageHandler.actionLanguage("de")}'
@@ -79,5 +76,4 @@
     </div>
 </h:form>
 </body>
-<f:event listener="#{loginController.checkLoggedIn}" type="preRenderComponent"/>
 </html>
