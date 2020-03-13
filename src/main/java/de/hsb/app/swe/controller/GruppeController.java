@@ -97,6 +97,13 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                     // Zweites loeschen, da nach ersten mal nur Mitglieder entfernt.
                     this.utx.begin();
                     this.selectedEntity = this.em.merge(this.selectedEntity);
+                    final Query q = this.em.createQuery("select p from Projekt p where p.gruppenId = :gruppenId");
+                    q.setParameter("gruppenId", group.getId());
+                    for (final Projekt p : ListUtils.uncheckedSolverProjekt(q.getResultList())) {
+                        p.setGruppenId(0);
+                        p.setLeiterId(0);
+                        this.em.remove(p);
+                    }
                     this.em.remove(this.selectedEntity);
                     this.utx.commit();
                 } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
