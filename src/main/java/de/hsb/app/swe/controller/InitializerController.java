@@ -111,7 +111,7 @@ public class InitializerController {
 
         final List<Ticket> hsTickets = new ArrayList<>();
         final Ticket hs_1 = new Ticket(dueDate2, "Funktionelle Anforderung", ListUtils.uncheckedSolverUser(
-                this.em.createQuery("select u from User u where u.username = 'mmarlitz'").getResultList())
+                this.em.createQuery("select u from User u where u.username = 'mmalitz'").getResultList())
                 .get(0).getId(), Status.IN_BEARBEITUNG, "Anzeige aller Entitäten (Übersicht) 5\n" +
                 "Detailansicht von Entitäten 5\n" +
                 "Login / Registrierung möglich 6\n" +
@@ -121,7 +121,7 @@ public class InitializerController {
                 "Editieren von Entitäten 6");
         hsTickets.add(hs_1);
         final Ticket hs_2 = new Ticket(dueDate2, "Technologische Anforderungen", ListUtils.uncheckedSolverUser(
-                this.em.createQuery("select u from User u where u.username = 'mmarlitz'").getResultList())
+                this.em.createQuery("select u from User u where u.username = 'mmalitz'").getResultList())
                 .get(0).getId(), Status.IN_BEARBEITUNG, "J2EE 7 2\n" +
                 "Maven 3.6.x 2\n" +
                 "WildFly 10 1\n" +
@@ -132,7 +132,7 @@ public class InitializerController {
                 "Verwendung von Stylesheets 2");
         hsTickets.add(hs_2);
         final Ticket hs_3 = new Ticket(dueDate2, "Dokumentation", ListUtils.uncheckedSolverUser(
-                this.em.createQuery("select u from User u where u.username = 'mmarlitz'").getResultList())
+                this.em.createQuery("select u from User u where u.username = 'mmalitz'").getResultList())
                 .get(0).getId(), Status.IN_BEARBEITUNG, "Beschreibung des Gesamtsystems (max. eine Seite) 3\n" +
                 "Anforderungsdefinition (Use Cases, Aktivitätsdiagramme) 3\n" +
                 "Aufwandsschätzung 1\n" +
@@ -141,16 +141,16 @@ public class InitializerController {
                 "Javadoc (zumindest an komplexen Stellen) 1");
         hsTickets.add(hs_3);
         final Ticket hs_4 = new Ticket(dueDate2, "Deployment", ListUtils.uncheckedSolverUser(
-                this.em.createQuery("select u from User u where u.username = 'mmarlitz'").getResultList())
+                this.em.createQuery("select u from User u where u.username = 'mmalitz'").getResultList())
                 .get(0).getId(), Status.IN_BEARBEITUNG, "Projekt liegt als war vor 2\n" +
                 "Lauffähig 3");
         hsTickets.add(hs_4);
         final Ticket hs_5 = new Ticket(dueDate2, "Komplexität der Anwendung im Verhältnis zur Anzahl der Teammitglieder",
-                ListUtils.uncheckedSolverUser(this.em.createQuery("select u from User u where u.username = 'mmarlitz'").getResultList())
+                ListUtils.uncheckedSolverUser(this.em.createQuery("select u from User u where u.username = 'mmalitz'").getResultList())
                         .get(0).getId(), Status.IN_BEARBEITUNG, "Komplexität der Anwendung im Verhältnis zur Anzahl der Teammitglieder 5");
         hsTickets.add(hs_5);
         final Ticket hs_6 = new Ticket(dueDate2, "Präsentationsbewertung",
-                ListUtils.uncheckedSolverUser(this.em.createQuery("select u from User u where u.username = 'mmarlitz'").getResultList())
+                ListUtils.uncheckedSolverUser(this.em.createQuery("select u from User u where u.username = 'mmalitz'").getResultList())
                         .get(0).getId(), Status.ABGESCHLOSSEN, "Präsentationsbewertung 27");
         hsTickets.add(hs_6);
 
@@ -282,14 +282,14 @@ public class InitializerController {
         final List<String> nameList = new ArrayList<>();
         nameList.add("mschmeyers");
         nameList.add("egrischenko");
-        User marlitz = new User();
+        User malitz = new User();
 
         final Set<User> hochschulGroup = new HashSet<>();
 
         for (final User user : employeeResultList) {
-            if ("mmarlitz".equals(user.getUsername())) {
+            if ("mmalitz".equals(user.getUsername())) {
                 hochschulGroup.add(user);
-                marlitz = user;
+                malitz = user;
             }
         }
 
@@ -385,8 +385,8 @@ public class InitializerController {
             this.saveGroup(group20, groupMemberSet2);
             pb.step();
 
-            final Gruppe hsGroup = new Gruppe(marlitz.getId(), new HashSet<>(), "SWE III Bewertung",
-                    UserUtils.getNachnameVornameString(marlitz));
+            final Gruppe hsGroup = new Gruppe(malitz.getId(), new HashSet<>(), "SWE III Bewertung",
+                    UserUtils.getNachnameVornameString(malitz));
             this.saveGroup(hsGroup, hochschulGroup);
             pb.step();
         }
@@ -462,9 +462,9 @@ public class InitializerController {
             users.add(user10);
             pb.step();
 
-            final User marlitz = new User("Marcel", "Marlitz", hochschule, "mmarlitz",
+            final User malitz = new User("Marcel", "Malitz", hochschule, "mmarlitz",
                     password, Rolle.MITARBEITER, new HashSet<>());
-            users.add(marlitz);
+            users.add(malitz);
             pb.step();
 
             final User marc = new User("Marc", "Schmeyers", hochschule, "mschmeyers",

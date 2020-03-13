@@ -145,10 +145,10 @@ einzugeben.
 
 Vorinitialisierte Rollen
 
-Loggen Sie sich zuerst mit ihrem Account ein (mmarlitz)
+Loggen Sie sich zuerst mit ihrem Account ein (mmalitz)
 
 Username        Passwort   Rolle
-mmarlitz        Passwort+  Mitarbeiter
+mmalitz        Passwort+  Mitarbeiter
 mschmeyers      Passwort+  Kunde
 egrischenko     Passwort+  Kunde
 admin           Passwort+  Admin
