@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <h:body>
-    <!-- <h:form id="userForm">-->
     <h:form id="userForm">
         <div id="header">
             <div id="connectoren">
@@ -57,12 +56,11 @@
                                  title="#{buttonTitleController.getButtonTitle('LOGIN.AUSLOGGEN')}"/>
             </div>
         </div>
-        <!-- </h:form>-->
-        <!--<h:form>-->
         <div id="content">
             <ui:insert name="content">
 
-                <h2>#{msg['INDEX.HEADER']}</h2>
+                <h2>#{indexController.indexHeader(loginController.user)}</h2>
+                <p>#{indexController.userInformation(loginController.user)}</p>
                 <p:dataTable id="kundeTabelle" var="projekt"
                              rendered="#{loginController.customerRole()}"
                              value="#{projektController.userAwareFindAllByGruppe(loginController.user)}"
@@ -157,7 +155,6 @@
                 <p>Deutschland</p>
             </div>
         </div>
-        <!--</h:form>-->
     </h:form>
 </h:body>
 <f:event listener="#{loginController.checkLoggedIn}" type="preRenderView"/>

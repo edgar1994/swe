@@ -93,16 +93,11 @@
                         </p:column>
                     </p:dataTable>
                 </ui:insert>
-                <!--<div id="footer">
-                    <ui:insert name="footer">
-                        <p:outputLabel
-                                rendered="#{projektController.isTicketsEmpty()}">#{msg['PROJEKTANSICHT.ISEMPTY']}
-                        </p:outputLabel>
-                    </ui:insert>
-                </div>-->
                 <p:commandButton action="#{ticketController.newTicket()}"
                                  value="#{msg['PROJEKTANSICHT.BUTTON.NEU']}"
                                  rendered="#{loginController.employeeRole()}"/>
+                <p:commandButton action="#{projektController.switchToProjekt()}"
+                                 value="#{msg['PROJECT.BUTTON.BACK']}"/>
 
             </div>
             <div id="right">

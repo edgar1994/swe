@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="resources/index.css" type="text/css"/>
 </h:head>
 <body>
-<!--<h:form>-->
 <h:form id="userForm">
     <div id="header">
         <div id="connectoren">
@@ -52,10 +51,8 @@
                              title="#{buttonTitleController.getButtonTitle('LOGIN.AUSLOGGEN')}"/>
         </div>
     </div>
-    <!-- </h:form>-->
     <div id="login">
         <ui:insert name="content">
-            <!--<h:form>-->
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <h:panelGrid var="user" value="#{userController.selectedEntity}" columns="2"
                          headerClass="header"
@@ -124,7 +121,6 @@
                     update="growl"/>
             <p:commandButton action="#{userController.switchToUser}" value="#{msg['BUTTON.ABBRECHEN']}"
                              immediate="true"/>
-            <!-- </h:form> -->
         </ui:insert>
     </div>
     <div id="footer">
