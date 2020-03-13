@@ -462,7 +462,7 @@ public class InitializerController {
             users.add(user10);
             pb.step();
 
-            final User malitz = new User("Marcel", "Malitz", hochschule, "mmarlitz",
+            final User malitz = new User("Marcel", "Malitz", hochschule, "mmalitz",
                     password, Rolle.MITARBEITER, new HashSet<>());
             users.add(malitz);
             pb.step();
