@@ -107,7 +107,7 @@
 
                 <p:dataTable id="ticketTabelle" var="ticket"
                              rendered="#{loginController.employeeRole()}"
-                             value="#{ticketController.findAllUserTickets(loginController.user)}"
+                             value="#{ticketController.findAllOpenUserTickets(loginController.user)}"
                              widgetVar="ticketTabelleJS"
                              emptyMessage="#{msg['TABELLE.EMPTY']}"
                              filteredValue="#{gruppeController.filteredList}"
@@ -135,6 +135,7 @@
                     <p:column>
                         <f:facet name="header">#{msg['PROJEKTTABELLE.CHOOSE']}</f:facet>
                         <p:commandButton action="#{ticketController.editTicket(ticket.id)}"
+                                         actionListener="#{projektController.setSelectedEntity(ticket.projekt)}"
                                          value="#{msg['PROJEKTANSICHT.CHANGETICKET']}"/>
                     </p:column>
                 </p:dataTable>

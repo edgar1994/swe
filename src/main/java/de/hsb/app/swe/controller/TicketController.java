@@ -1,6 +1,7 @@
 package de.hsb.app.swe.controller;
 
 import de.hsb.app.swe.enumeration.Rolle;
+import de.hsb.app.swe.enumeration.Status;
 import de.hsb.app.swe.model.Projekt;
 import de.hsb.app.swe.model.Ticket;
 import de.hsb.app.swe.model.User;
@@ -139,6 +140,24 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
         if (loggedUser != null) {
             final Query query = this.em.createQuery("Select t from Ticket t where t.bearbeiterId = :userID");
             query.setParameter("userID", loggedUser.getId());
+
+            return this.uncheckedSolver(query.getResultList());
+        }
+
+        return Collections.emptyList();
+    }
+
+    /**
+     * Suche nach allen offenen {@link Ticket}s die zu einem {@link User} zugewiesen sind.
+     *
+     * @param loggedUser eingeloggter {@link User}
+     * @return List<Tickets>
+     */
+    public List<Ticket> findAllOpenUserTickets(final User loggedUser) {
+        if (loggedUser != null) {
+            final Query query = this.em.createQuery("Select t from Ticket t where t.bearbeiterId = :userID and t.status <> :status");
+            query.setParameter("userID", loggedUser.getId());
+            query.setParameter("status", Status.ABGESCHLOSSEN);
 
             return this.uncheckedSolver(query.getResultList());
         }
