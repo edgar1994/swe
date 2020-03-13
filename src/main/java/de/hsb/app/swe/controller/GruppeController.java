@@ -94,6 +94,11 @@ public class GruppeController extends AbstractCrudRepository<Gruppe> {
                                     this.selectedEntity.getTitel())));
                     this.logger.info("LOG.GROUP.DELETE.SUCCSESS", this.selectedEntity.getTitel(), group.getId());
                     this.utx.commit();
+                    // Zweites loeschen, da nach ersten mal nur Mitglieder entfernt.
+                    this.utx.begin();
+                    this.selectedEntity = this.em.merge(this.selectedEntity);
+                    this.em.remove(this.selectedEntity);
+                    this.utx.commit();
                 } catch (final NotSupportedException | SystemException | SecurityException | IllegalStateException |
                         RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
