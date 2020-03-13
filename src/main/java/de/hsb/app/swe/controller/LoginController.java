@@ -224,7 +224,11 @@ public class LoginController extends AbstractCrudRepository<User> implements Ser
             this.user.setPasswort(this.passwort);
             this.user.setFirstLogin(false);
             this.save(this.user);
-            return RedirectUtils.PROJEKT_INDEX_XHTML;
+            if (!UserUtils.isAdmin(this.user)) {
+                return RedirectUtils.PROJEKT_INDEX_XHTML;
+            } else {
+                return RedirectUtils.GRUPPE_TABELLE_XHTML;
+            }
         }
 
         return null;
