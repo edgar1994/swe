@@ -40,10 +40,12 @@
             <div id="header-right">
                 <p:commandButton value="#{msg['SPRACHE.DEUTSCH']}"
                                  action='#{languageHandler.actionLanguage("de")}'
-                                 update="userForm"/>
+                                 update="userForm"
+                                 immediate="true"/>
                 <p:commandButton value="#{msg['SPRACHE.ENGLISCH']}"
                                  action='#{languageHandler.actionLanguage("en")}'
-                                 update="userForm">
+                                 update="userForm"
+                                 immediate="true">
                     <p:ajax event="click"/>
                 </p:commandButton>
                 <p:commandButton action='#{userController.editOwnUser(loginController.user)}'
