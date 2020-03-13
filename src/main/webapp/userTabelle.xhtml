@@ -65,6 +65,10 @@
                              paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                              rowsPerPageTemplate="5,10,15">
 
+                    <p:column headerText="#{msg['NEUERUSER.ROLLE']}" filterBy="#{user.rolle}"
+                              filterMatchMode="contains">
+                        <h:outputText value="#{msg['ROLLE.'.concat( user.rolle)]}"/>
+                    </p:column>
                     <p:column headerText="#{msg['USER.NACHNAME']}" filterBy="#{user.nachname}"
                               filterMatchMode="contains">
                         <h:outputText value="#{user.nachname}"/>

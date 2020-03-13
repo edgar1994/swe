@@ -229,6 +229,15 @@ public class ProjektController extends AbstractCrudRepository<Projekt> {
     }
 
     /**
+     * Redirected auf {@link RedirectUtils#PROJEKT_ANSICHT_XHTML}.
+     *
+     * @return {@link RedirectUtils#PROJEKT_ANSICHT_XHTML}
+     */
+    public String switchToProjectAnsicht() {
+        return RedirectUtils.PROJEKT_ANSICHT_XHTML;
+    }
+
+    /**
      * Speichert das {@link Projekt} und fuehr zureuck auf {@link RedirectUtils#NEUES_PROJEKT_XHTML}
      *
      * @return {@link RedirectUtils#NEUES_PROJEKT_XHTML}

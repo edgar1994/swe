@@ -53,7 +53,6 @@
             </div>
         </div>
 
-        <!-- <div id="change">-->
         <div id="change">
             <h3>#{msg['PROJEKT.TICKETVIEW']}</h3>
             <h:form>
@@ -105,7 +104,12 @@
                 <p:commandButton
                         action="#{ticketController.deleteTicket(ticketController.selectedEntity, loginController.user)}"
                         value="#{msg['BUTTON.DELETE']}"
+                        rendered="#{!ticketController.newTicket}"
                         update="growl"/>
+                <p:commandButton
+                        action="#{projektController.switchToProjectAnsicht()}"
+                        value="#{msg['BUTTON.ABBRECHEN']}"
+                        immediate="true"/>
             </h:form>
         </div>
         <div id="rightAnsicht">
@@ -155,7 +159,6 @@
                 #{dateController.getFormatedDateDDMMYYYY(projekt.abschlussdatum)}
             </p:dataList>
         </div>
-        <!-- </div>-->
         <div id="footer">
             <div id="Firma">
                 <p>Ticketsystem GmbH</p>

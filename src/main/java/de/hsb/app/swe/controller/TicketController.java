@@ -129,6 +129,12 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
         return RedirectUtils.PROJEKT_ANSICHT_XHTML;
     }
 
+    /**
+     * Suche nach allen {@link Ticket}s die zu einem {@link User} zugewiesen sind.
+     *
+     * @param loggedUser eingeloggter {@link User}
+     * @return List<Tickets>
+     */
     public List<Ticket> findAllUserTickets(final User loggedUser) {
         if (loggedUser != null) {
             final Query query = this.em.createQuery("Select t from Ticket t where t.bearbeiterId = :userID");
@@ -234,22 +240,19 @@ public class TicketController extends AbstractCrudRepository<Ticket> {
         return result;
     }
 
-    /**
-     * getter fuer ticketList.
-     *
-     * @return ticketList
-     */
-
     public List<Ticket> getTicketList() {
         return this.ticketList;
     }
 
-    /**
-     * setter fuer ticketList
-     *
-     * @param ticketList
-     */
     public void setTicketList(final List<Ticket> ticketList) {
         this.ticketList = ticketList;
+    }
+
+    public boolean isNewTicket() {
+        return this.isNewTicket;
+    }
+
+    public void setNewTicket(final boolean newTicket) {
+        this.isNewTicket = newTicket;
     }
 }
